@@ -16,11 +16,11 @@ sys.path.append(project_root)
 
 django.project('owri')
 
-REPOSITORY = ''
+REPOSITORY = 'https://github.com/kingsdigitallab/languageacts-django.git'
 
 env.user = settings.FABRIC_USER
-env.hosts = ['']
-env.root_path = '/vol/owri/webroot/'
+env.hosts = ['languageacts.kdl.kcl.ac.uk']
+env.root_path = '/vol/languageacts/webroot/'
 env.envs_path = os.path.join(env.root_path, 'envs')
 
 
@@ -63,6 +63,26 @@ def set_srvr_vars():
                             'owri-django')
     env.within_virtualenv = 'source {}'.format(
         os.path.join(env.envs_path, env.srvr, 'bin', 'activate'))
+
+
+@task
+def install_system_packages():
+    sudo('apt-get -y --force-yes install apt-transport-https')
+    sudo(('wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | '
+          'apt-key add -'))
+    sudo(('echo '
+          '"deb https://packages.elastic.co/elasticsearch/2.x/debian '
+          'stable main" | '
+          'tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list'))
+    sudo('apt-get update')
+    sudo(('apt-get -y --force-yes install '
+          'python-dev python-pip python-setuptools python-virtualenv '
+          'openjdk-7-jre elasticsearch '
+          'libjpeg-dev libxml2-dev libxslt-dev '
+          'libldap2-dev libsasl2-dev '
+          'libpq-dev postgresql-client '
+          'git git-core'))
+    sudo('sudo update-rc.d elasticsearch defaults 95 10')
 
 
 @task
