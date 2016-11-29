@@ -154,7 +154,7 @@ def deploy(version=None):
     collect_static()
     # update_index()
     # clear_cache()
-    touch_wsgi()
+    restart_uwsgi()
 
 
 @task
@@ -194,14 +194,14 @@ def fix_permissions():
     with quiet():
         log_path = os.path.join(env.path, 'logs', 'django.log')
         if run('ls {}'.format(log_path)).succeeded:
-            sudo('setfacl -R -m g:www-data:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -d -m g:www-data:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -m g:kdl-staff:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -d -m g:kdl-staff:rwx {}/logs {}/static'.format(
-                env.path))
+            sudo('setfacl -R -m g:www-data:rwx {p}/logs {p}/static'.format(
+                p=env.path))
+            sudo('setfacl -R -d -m g:www-data:rwx {p}/logs {p}/static'.format(
+                p=env.path))
+            sudo('setfacl -R -m g:kdl-staff:rwx {p}/logs {p}/static'.format(
+                p=env.path))
+            sudo('setfacl -R -d -m g:kdl-staff:rwx {p}/logs {p}/static'.format(
+                p=env.path))
             sudo('chgrp -Rf kdl-staff {}'.format(env.path))
             sudo('chmod -Rf g+w {}'.format(env.path))
 
@@ -244,9 +244,5 @@ def clear_cache():
 
 
 @task
-def touch_wsgi():
-    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
-
-    with cd(os.path.join(env.path, 'owri')), \
-            prefix(env.within_virtualenv):
-        run('touch wsgi.py')
+def restart_uwsgi():
+    sudo('service uwsgi restart django-{}'.format(env.srvr))
