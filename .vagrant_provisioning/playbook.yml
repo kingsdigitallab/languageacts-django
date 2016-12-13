@@ -6,23 +6,6 @@
   become: true
 
   tasks:
-  - name: fix debian sudoers file
-    become: yes
-    lineinfile:
-      dest: /etc/sudoers
-      backup: yes
-      regexp: '^%sudo\\s+ALL=\\(ALL:ALL\\)\\s+ALL$'
-      line: '%sudo   ALL=(ALL) NOPASSWD: ALL'
-    tags:
-      - system
-
-  - name: apt | add wheezy backports
-    apt_repository:
-      repo: deb http://http.debian.net/debian wheezy-backports main
-      state: present
-    tags:
-      - system
-
   - name: apt | install https transport for apt
     apt:
       pkg: apt-transport-https
@@ -74,9 +57,6 @@
     become: yes
     service: name=apache2 state=stopped
   - service: name=exim4 state=stopped
-  - service: name=mcollective state=stopped
-  - service: name=puppet state=stopped
-  - service: name=pxp-agent state=stopped
     tags:
       - system
 
@@ -85,21 +65,37 @@
     - vars.yml
   gather_facts: false
   tasks:
-  - name: pip | setup virtualenv
+  - name: python | easy install pip
+    become: yes
+    easy_install: name=pip state=latest
+    tags:
+      - python
+
+  - name: python | install setuptools
+    become: yes
+    pip: name=setuptools state=latest
+    tags:
+      - python
+
+  - name: python | install virtualenv
+    become: yes
+    pip: name=virtualenv state=latest
+    tags:
+      - python
+
+  - name: python | install psycopg2
+    become: yes
+    pip: name=psycopg2 state=latest
+    tags:
+      - python
+
+  - name: python | setup virtualenv
     file: path={{ python.virtualenv_location }} state=directory
   - command: virtualenv {{ python.virtualenv_location }}
     tags:
       - python
 
-  - name: pip | update setuptools
-    pip:
-      name: setuptools
-      virtualenv: '{{ python.virtualenv_location }}'
-      state: latest
-    tags:
-      - python
-
-  - name: pip | update pip
+  - name: python | update pip
     pip:
       name: pip
       virtualenv: '{{ python.virtualenv_location }}'
@@ -107,7 +103,7 @@
     tags:
       - python
 
-  - name: pip | ensure python requirements are installed to latest version
+  - name: python | ensure python requirements are installed to latest version
     pip:
       requirements: '{{ project_root }}/{{ python.requirements }}'
       virtualenv: '{{ python.virtualenv_location }}'
@@ -132,7 +128,7 @@
     lineinfile:
       dest: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
       backup: yes
-      regexp: '^local\\s+all\\s+{{ postgresql.admin_user }}\\s+peer$'
+      regexp: '^local\s+all\s+{{ postgresql.admin_user }}\s+peer$'
       line: 'local    all    {{ postgresql.admin_user }}    {{ postgresql.default_auth_method }}'
     tags:
       - db
@@ -142,7 +138,7 @@
     lineinfile:
       dest: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
       backup: yes
-      regexp: '^local\\s+all\\s+all\\s+peer$'
+      regexp: '^local\s+all\s+all\s+peer$'
       line: 'local    all    all    {{ postgresql.default_auth_method }}'
     notify:
       - postgresql | restart postgres
