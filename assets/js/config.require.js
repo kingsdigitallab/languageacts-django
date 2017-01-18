@@ -122,9 +122,9 @@ requirejs.config({
                 'foundation',
                 'foundation.util.triggers',
                 'foundation.util.mediaQuery',
-                'foundation.util.accordionMenu',
-                'foundation.util.drilldown',
-                'foundation.util.dropdownMenu'
+                'foundation.accordionMenu',
+                'foundation.drilldown',
+                'foundation.dropdownMenu'
             ],
         },
         'foundation.responsiveToggle': {
