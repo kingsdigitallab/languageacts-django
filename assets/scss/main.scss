@@ -6,3 +6,41 @@
 @include foundation-everything;
 
 /** Your custom scss here **/
+
+
+/** Globals **/
+
+.active {
+	font-weight: 700;
+}
+
+/** Header **/
+header {
+	background: url('/static/images/lawm-pattern.svg') $dark-blue;
+	background-size: rem-calc(45);
+	max-height: rem-calc(150);
+}
+
+.header {
+	svg {
+		background: $dark-blue;
+		bottom: -0.5rem;
+		display: block;
+		fill: $bright-blue;
+		max-height: rem-calc(160);
+		max-width: rem-calc(300);
+	}
+}
+
+/** Navigation **/
+
+/** Main content **/
+
+/** Footer **/
+
+footer {
+	.kcl-kdl-logo {
+		max-width: rem-calc(120);
+		float: right;
+	}
+}

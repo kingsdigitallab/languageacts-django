@@ -49,8 +49,8 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: rgb(241, 133, 58),
-  secondary: rgb(45, 18, 11),
+  primary: rgb(45, 18, 11),
+  secondary: rgb(241, 133, 58),
   success: #3adb76,
   warning: #ffae00,
   alert: #ec5840,
@@ -61,15 +61,19 @@ $dark-gray: #8a8a8a;
 $dark-brown: rgb(130, 44, 17);
 $dark-orange: rgb(186, 75, 22);
 $orange: rgb(236, 101, 9);
-$light-blue: rgb(5, 180, 221);
-$dark-blue: rgb(22, 46, 59);
+// $light-blue: rgb(5, 180, 221);
+$light-blue: rgb(0, 191, 223); // hex #00bfdf
+$bright-blue: rgb(20, 177, 231);
+$blue-gray: rgb(0, 45, 59); // hex #002d3b
+// $dark-blue: rgb(22, 46, 59);
+$dark-blue: rgb(0, 45, 59); // hex #002d3b
 $turquoise: rgb(90, 188, 221);
 $light-yellow: rgb(251, 246, 215);
 $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $white;
 $body-font-color: $black;
-$body-font-family: 'Archivo Narrow', sans-serif;
+$body-font-family: 'proxima-nova', 'Archivo Narrow', sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
 $global-padding: 1rem;
@@ -390,7 +394,8 @@ $menu-margin: 0;
 $menu-margin-nested: 1rem;
 $menu-item-padding: 0.7rem 1rem;
 $menu-item-color-active: $white;
-$menu-item-background-active: map-get($foundation-palette, primary);
+// $menu-item-background-active: map-get($foundation-palette, primary);
+$menu-item-background-active: $dark-blue;
 $menu-icon-spacing: 0.25rem;
 
 // 23. Meter
@@ -572,9 +577,11 @@ $tooltip-radius: $global-radius;
 // 36. Top Bar
 // -----------
 
-$topbar-padding: 0.5rem;
-$topbar-background: $light-gray;
-$topbar-submenu-background: $topbar-background;
+// $topbar-padding: 0.5rem;
+$topbar-padding: 0;
+// $topbar-background: $light-gray;
+$topbar-background: transparent;
+$topbar-submenu-background: $blue-gray;
 $topbar-title-spacing: 1rem;
 $topbar-input-width: 200px;
 $topbar-unstack-breakpoint: medium;
