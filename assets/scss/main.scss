@@ -28,7 +28,6 @@ header {
 .header {
 	svg {
 		background: $dark-blue;
-		bottom: -0.5rem;
 		display: block;
 		fill: $bright-blue;
 		max-height: rem-calc(160);
@@ -38,9 +37,9 @@ header {
 
 /** Navigation **/
 
-// nav {
-// 	background: $white;
-// }
+nav {
+	margin-bottom: rem-calc(24)
+}
 
 /** Main content **/
 
@@ -48,18 +47,34 @@ header {
 
 footer {
 	background: $white;
+	margin-top: rem-calc(24);
 	padding: rem-calc(24 0);
 
 	.kcl-kdl-logo {
+		margin-top: rem-calc(16);
 		max-width: rem-calc(100);
-		float: right;
+
+		@include breakpoint(medium up) {
+
+			float: right;
+			margin-top: 0;
+
+			img {
+				float: right !important;
+			}
+		}
 	}
 
 	svg {
 		background: $secondary-color;
-		bottom: -0.5rem;
 		display: block;
 		fill: $dark-blue;
 		max-width: rem-calc(200);
 	}
 }
+
+/** Media queries **/
+
+@include breakpoint(medium up) {
+}
+
