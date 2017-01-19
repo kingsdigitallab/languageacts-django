@@ -10,6 +10,10 @@
 
 /** Globals **/
 
+body {
+	background: rgba($dark-blue, .05);
+}
+
 .active {
 	font-weight: 700;
 }
@@ -34,13 +38,28 @@ header {
 
 /** Navigation **/
 
+// nav {
+// 	background: $white;
+// }
+
 /** Main content **/
 
 /** Footer **/
 
 footer {
+	background: $white;
+	padding: rem-calc(24 0);
+
 	.kcl-kdl-logo {
-		max-width: rem-calc(120);
+		max-width: rem-calc(100);
 		float: right;
+	}
+
+	svg {
+		background: $secondary-color;
+		bottom: -0.5rem;
+		display: block;
+		fill: $dark-blue;
+		max-width: rem-calc(200);
 	}
 }
