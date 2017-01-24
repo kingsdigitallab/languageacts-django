@@ -7,7 +7,7 @@
         {% for page in pages %}
         <div class="column">
             <div class="grid-block-list" data-equalizer-watch>
-                <h3 class="subhead">{{ page.title }}</h3>
+                <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p>{{ page.search_description }}</p>
                 <a href="{% pageurl page %}" class="more">Read more <i class="fa fa-play"></i></a>
             </div>

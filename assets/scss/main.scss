@@ -1,5 +1,5 @@
 @import 'settings';
-// @import 'font-awesome';
+@import 'font-awesome';
 @import '../vendor/foundation-sites/scss/foundation';
 @import '../vendor/motion-ui/motion-ui';
 
@@ -16,6 +16,13 @@ body {
 
 .active {
 	font-weight: 700;
+}
+
+.more {
+	i {
+		font-size: rem-calc(12);
+		padding-left: rem-calc(3);
+	}
 }
 
 /** Header **/
@@ -42,6 +49,18 @@ nav {
 }
 
 /** Main content **/
+
+section.main {
+	h1,
+	h2,
+	h3 {
+		font-weight: 700;
+	}
+
+	h1 {
+		color: $bright-blue;
+	}
+}
 
 /** Footer **/
 
