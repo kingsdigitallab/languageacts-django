@@ -1,1 +1,18 @@
 {% extends "cms/base.html" %}
+{% load cms_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+
+{% are_comments_allowed as allow_comments %}
+{% if allow_comments %}
+{% block comments %}
+<div id="disqus_thread"></div>
+{% endblock %}
+{% endif %}
+
+{% are_comments_allowed as allow_comments %}
+{% if allow_comments %}
+{% block footer_scripts %}
+{% include "cms/includes/disqus_setup.html" %}
+<script id="dsq-count-scr" src="//lawm.disqus.com/count.js" async></script>
+{% endblock %}
+{% endif %}

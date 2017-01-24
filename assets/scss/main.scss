@@ -1,8 +1,80 @@
 @import 'settings';
-@import 'font-awesome';
+// @import 'font-awesome';
 @import '../vendor/foundation-sites/scss/foundation';
 @import '../vendor/motion-ui/motion-ui';
 
 @include foundation-everything;
 
 /** Your custom scss here **/
+
+
+/** Globals **/
+
+body {
+	background: rgba($dark-blue, .05);
+}
+
+.active {
+	font-weight: 700;
+}
+
+/** Header **/
+header {
+	background: url('/static/images/lawm-pattern.svg') $dark-blue;
+	background-size: rem-calc(45);
+	max-height: rem-calc(150);
+}
+
+.header {
+	svg {
+		background: $dark-blue;
+		display: block; // It helps aligning properly to pixel values
+		fill: $bright-blue;
+		max-height: rem-calc(160);
+		max-width: rem-calc(300);
+	}
+}
+
+/** Navigation **/
+
+nav {
+	margin-bottom: rem-calc(24)
+}
+
+/** Main content **/
+
+/** Footer **/
+
+footer {
+	background: $white;
+	margin-top: rem-calc(24);
+	padding: rem-calc(24 0);
+
+	.kcl-kdl-logo {
+		margin-top: rem-calc(16);
+		max-width: rem-calc(100);
+
+		@include breakpoint(medium up) {
+
+			float: right;
+			margin-top: 0;
+
+			img {
+				float: right !important;
+			}
+		}
+	}
+
+	svg {
+		background: $secondary-color;
+		display: block; // It helps aligning properly to pixel values
+		fill: $dark-blue;
+		max-width: rem-calc(200);
+	}
+}
+
+/** Media queries **/
+
+@include breakpoint(medium up) {
+}
+

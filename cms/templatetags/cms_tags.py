@@ -1,6 +1,13 @@
 from django import template
+from django.conf import settings
 
 register = template.Library()
+
+
+@register.assignment_tag(takes_context=False)
+def are_comments_allowed():
+    """Returns True if commenting on the site is allowed, False otherwise."""
+    return getattr(settings, 'ALLOW_COMMENTS', False)
 
 
 @register.assignment_tag(takes_context=True)
