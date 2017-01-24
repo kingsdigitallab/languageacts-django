@@ -3,6 +3,7 @@ from django.utils.html import format_html, format_html_join
 from wagtail.wagtailcore import hooks
 from wagtail.wagtailcore.whitelist import attribute_rule, check_url
 
+
 def whitelister_element_rules():
     return {
         'p': attribute_rule({'class': True}),
@@ -14,6 +15,7 @@ def whitelister_element_rules():
              'frameborder': True, 'allowfullscreen': True, 'width': True,
              'height': True}),
     }
+
 
 hooks.register('construct_whitelister_element_rules',
                whitelister_element_rules)
@@ -34,5 +36,6 @@ def editor_js():
             registerHalloPlugin('editHtmlButton');
         </script>
         """)
+
 
 hooks.register('insert_editor_js', editor_js)
