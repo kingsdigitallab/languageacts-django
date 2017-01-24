@@ -19,7 +19,7 @@ body {
 }
 
 /** Header **/
-header {
+header.top-header {
 	background: url('/static/images/lawm-pattern.svg') $dark-blue;
 	background-size: rem-calc(45);
 	max-height: rem-calc(150);
