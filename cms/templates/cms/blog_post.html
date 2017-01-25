@@ -2,7 +2,26 @@
 {% load cms_tags wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block main %}
-{{ block.super }}
+
+<article class="post" id="post{{ self.id }}">
+    <header>
+        {% block blog_post_author %}
+        <p class="byline blog">Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ self.owner }}</a> 
+            <time datetime="{{ self.date|date:'c' }}">on {{ self.date }}</time>
+
+            {% are_comments_allowed as allow_comments %}
+            {% if allow_comments %}
+            {% block blog_post_comments_link %}
+             | <span class="disqus-comment-count" data-disqus-identifier="{{ self.id }}">Comments</span>
+            {% endblock %}
+            {% endif %}
+        </p>
+        {% endblock %}
+    </header>
+
+    {{ block.super }}
+</article>
+
 {% are_comments_allowed as allow_comments %}
 {% if allow_comments %}
 {% block comments %}

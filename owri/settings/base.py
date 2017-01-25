@@ -342,6 +342,8 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'cms/login.html'
+
 
 # -----------------------------------------------------------------------------
 # GLOBALS FOR JS
