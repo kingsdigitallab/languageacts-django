@@ -4,13 +4,13 @@ from django.conf import settings
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=False)
+@register.simple_tag
 def are_comments_allowed():
     """Returns True if commenting on the site is allowed, False otherwise."""
     return getattr(settings, 'ALLOW_COMMENTS', False)
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def get_site_root(context):
     """Returns the site root Page, not the implementation-specific model used.
     Object-comparison to self will return false as objects would differ.
@@ -18,6 +18,13 @@ def get_site_root(context):
     :rtype: `wagtail.wagtailcore.models.Page`
     """
     return context['request'].site.root_page
+
+
+@register.simple_tag
+def has_view_restrictions(page):
+    """Returns True if the page has view restrictions set up, False
+    otherwise."""
+    return page.view_restrictions.count() > 0
 
 
 @register.inclusion_tag('cms/tags/main_menu.html', takes_context=True)
