@@ -12,7 +12,8 @@
 
 body {
     background: rgba($dark-blue, .05);
-    -webkit-font-smoothing: antialiased;
+    // -webkit-font-smoothing: antialiased;
+    // -moz-osx-font-smoothing: grayscale;
 }
 
 .active {
@@ -54,7 +55,9 @@ nav {
 section.main {
 
     a {
+        border-bottom: 1px solid transparent;
         color: $secondary-color;
+        display: inline-block;
         font-weight: 700;
 
         &:hover {
