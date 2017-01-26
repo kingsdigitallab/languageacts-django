@@ -12,6 +12,7 @@
         <tr>
             <td>
                 <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a> <small><i class="fa fa-eye-slash"></i> <em>Private</em></small></h3>
+                <p><span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span></p>
                 <p>{{ page.search_description }}</p>
                 {# TODO: Don't display this based on title page. Create Forum type page #}
                 <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
@@ -22,6 +23,7 @@
         <tr>
             <td>
                 <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+                <p><span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span></p>
                 <p>{{ page.search_description }}</p>
                 {# TODO: Don't display this based on title page. Create Forum type page #}
                 <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
@@ -31,4 +33,12 @@
         {% endfor %}
     </tbody>
 </table>
+{% endif %}
+
+{% are_comments_allowed as allow_comments %}
+{% if allow_comments %}
+{% block footer_scripts %}
+{% include "cms/includes/disqus_setup.html" %}
+<script id="dsq-count-scr" src="//lawm.disqus.com/count.js" async></script>
+{% endblock %}
 {% endif %}
