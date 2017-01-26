@@ -40,9 +40,21 @@ h3 small {
 
 /** Header **/
 header.top-header {
-    background: url('/static/images/lawm-pattern.svg') $dark-blue;
-    background-size: rem-calc(45);
-    max-height: rem-calc(150);
+    // background: url('/static/images/lawm-pattern.svg') $dark-blue;
+    // background-size: rem-calc(45);
+    // max-height: rem-calc(150);
+
+    // No design option
+    background: $dark-blue;
+    min-height: rem-calc(150);
+
+    h1 {
+        a {
+            color: $secondary-color;
+            font-weight: 700;
+            font-size: rem-calc(36);
+        }
+    }
 }
 
 .header {

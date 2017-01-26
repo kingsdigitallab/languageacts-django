@@ -1,9 +1,13 @@
 {% load staticfiles %}
 <div class="row header">
-    <div class="large-12 columns">
-
+    <div class="small-6 medium-9 columns">
+    	<h1><a href="/">Language Acts &amp; Worldmaking</a></h1>
+    </div>
+    <div class="small-6 medium-3 columns">
     	<a class="button secondary float-right" href="{% if request.user.is_authenticated %}/wagtail/logout/{% else %}/wagtail/{% endif %}">{% if request.user.is_authenticated %}<i class="fa fa-user"></i> Log out{% else %}Log in{% endif %}</a>
-    	
+    </div>
+    	{% comment %}
+    	{# Displaying logo #}
     	<a href="/">
     		{# <img src="{% static 'images/lawm-sample-logo-black.svg' %}" class="logo"> #}
 
@@ -83,5 +87,6 @@
 			</g>
 			</svg>
     	</a>
+    	{% endcomment %}
     </div>
 </div>
