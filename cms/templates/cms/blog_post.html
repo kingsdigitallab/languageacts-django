@@ -1,6 +1,19 @@
 {% extends "cms/base.html" %}
 {% load cms_tags wagtailcore_tags wagtailroutablepage_tags %}
 
+
+{% block title %}
+<header class="section-header">
+  <h1>
+    {{ self.title }}
+    {% has_view_restrictions page as is_private %}
+    {% if is_private %}
+     <small><i class="fa fa-eye-slash"></i> <em>Private</em></small>
+    {% endif %}
+  </h1>
+</header>
+{% endblock %}
+
 {% block main %}
 
 <article class="post" id="post{{ self.id }}">

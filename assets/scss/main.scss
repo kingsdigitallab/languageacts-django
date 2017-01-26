@@ -23,6 +23,13 @@ a.more {
     }
 }
 
+small,
+h1 small,
+h2 small,
+h3 small {
+    color: $dark-gray;
+}
+
 .active {
     font-weight: 700;
 }

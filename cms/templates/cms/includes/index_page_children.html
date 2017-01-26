@@ -1,11 +1,24 @@
 {% if pages %}
-{% load wagtailcore_tags %}
+{% load cms_tags wagtailcore_tags %}
 
 <h2 class="section-title">{{ page.title }}</h2>
 
 <table class="striped">
     <tbody>
         {% for page in pages %}
+        {% has_view_restrictions page as is_private %}
+        {% if is_private %}
+        {% if request.user.is_authenticated %}
+        <tr>
+            <td>
+                <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a> <small><i class="fa fa-eye-slash"></i> <em>Private</em></small></h3>
+                <p>{{ page.search_description }}</p>
+                {# TODO: Don't display this based on title page. Create Forum type page #}
+                <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
+            </td>
+        </tr>
+        {% endif %}
+        {% else %}
         <tr>
             <td>
                 <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
@@ -14,6 +27,7 @@
                 <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
             </td>
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>
