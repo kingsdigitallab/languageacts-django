@@ -1,18 +1,34 @@
 {% if pages %}
-{% load wagtailcore_tags %}
+{% load cms_tags wagtailcore_tags %}
 
-<div class="gray-bg extra-padding-vertical">
-    <h2 class="section-title">{{ page.title }}</h2>
-    <div class="row medium-up-2 extra-margin-bottom" data-equalizer>
+<h2 class="section-title">{{ page.title }}</h2>
+
+<table class="striped">
+    <tbody>
         {% for page in pages %}
-        <div class="column">
-            <div class="grid-block-list" data-equalizer-watch>
+        {% has_view_restrictions page as is_private %}
+        {% if is_private %}
+        {% if request.user.is_authenticated %}
+        <tr>
+            <td>
+                <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a> <small><i class="fa fa-eye-slash"></i> <em>Private</em></small></h3>
+                <p>{{ page.search_description }}</p>
+                {# TODO: Don't display this based on title page. Create Forum type page #}
+                <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
+            </td>
+        </tr>
+        {% endif %}
+        {% else %}
+        <tr>
+            <td>
                 <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p>{{ page.search_description }}</p>
-                <a href="{% pageurl page %}" class="more">Read more <i class="fa fa-play"></i></a>
-            </div>
-        </div>
+                {# TODO: Don't display this based on title page. Create Forum type page #}
+                <a href="{% pageurl page %}" class="more">{% if self.title == 'Forum' %}Take part in the discussion{% else %}Read more <i class="fa fa-play"></i>{% endif %}</a>
+            </td>
+        </tr>
+        {% endif %}
         {% endfor %}
-    </div>
-</div>
+    </tbody>
+</table>
 {% endif %}

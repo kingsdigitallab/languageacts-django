@@ -12,18 +12,30 @@
 
 body {
     background: rgba($dark-blue, .05);
-    -webkit-font-smoothing: antialiased;
+    // -webkit-font-smoothing: antialiased;
+    // -moz-osx-font-smoothing: grayscale;
+}
+
+a.more {
+    i {
+        font-size: rem-calc(12);
+        padding-left: rem-calc(3);
+    }
+}
+
+small,
+h1 small,
+h2 small,
+h3 small {
+    color: $dark-gray;
 }
 
 .active {
     font-weight: 700;
 }
 
-.more {
-    i {
-        font-size: rem-calc(12);
-        padding-left: rem-calc(3);
-    }
+.border-bottom {
+    border-bottom: 1px dotted $secondary-color;
 }
 
 /** Header **/
@@ -49,16 +61,27 @@ nav {
     margin-bottom: rem-calc(24)
 }
 
+.top-bar::before {
+    display: block;
+}
+
 /** Main content **/
 
 section.main {
 
     a {
+        border-bottom: 1px solid transparent;
         color: $secondary-color;
+        display: inline-block;
         font-weight: 700;
 
         &:hover {
             border-bottom: 1px dotted $secondary-color;
+        }
+
+        &.more {
+            color: $dark-brown;
+            font-weight: normal;
         }
     }
 
