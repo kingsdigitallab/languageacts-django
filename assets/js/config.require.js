@@ -30,6 +30,8 @@ requirejs.config({
         'foundation.util.touch': '../vendor/foundation-sites/js/foundation.util.touch',
         'foundation.util.triggers': '../vendor/foundation-sites/js/foundation.util.triggers',
 
+        'jscookie': '../vendor/js-cookie/src/js.cookie',
+
         'requirejs': '../vendor/requirejs/require',
     },
     shim: {
@@ -132,6 +134,9 @@ requirejs.config({
                 'foundation',
                 'foundation.util.mediaQuery'
             ],
+        },
+        'jscookie': {
+            exports: 'JScookie'
         },
         'ga': {
             exports: '__ga__'

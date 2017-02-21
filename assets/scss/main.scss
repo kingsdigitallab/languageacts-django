@@ -40,21 +40,22 @@ h3 small {
 
 /** Header **/
 header.top-header {
-    // background: url('/static/images/lawm-pattern.svg') $dark-blue;
-    // background-size: rem-calc(45);
-    // max-height: rem-calc(150);
+    // Pattern background
+    background: url('/static/images/lawm-pattern.svg') $dark-blue;
+    background-size: rem-calc(45);
+    max-height: rem-calc(150);
 
     // No design option
-    background: $dark-blue;
-    min-height: rem-calc(150);
+    // background: $dark-blue;
+    // min-height: rem-calc(150);
 
-    h1 {
-        a {
-            color: $secondary-color;
-            font-weight: 700;
-            font-size: rem-calc(36);
-        }
-    }
+    // h1 {
+    //     a {
+    //         color: $secondary-color;
+    //         font-weight: 700;
+    //         font-size: rem-calc(36);
+    //     }
+    // }
 }
 
 .header {
@@ -136,6 +137,50 @@ footer {
         fill: $dark-blue;
         max-width: rem-calc(200);
     }
+
+    .logos-group {
+        text-align: center;
+
+        img {
+            max-height: rem-calc(80);
+        }
+
+        .column {
+            text-align: center;
+            padding: rem-calc(16);
+        }
+    }
+
+    .credits {
+        color: scale-color($dark-gray, $lightness: -30%);
+        font-size: rem-calc(12);
+        font-style: italic;
+        padding-top: rem-calc(6);
+
+        a {
+            font-weight: 700;
+            color: scale-color($dark-gray, $lightness: -30%);
+            &:hover {
+                color: $secondary-color;
+            }
+        }
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+// Cookies
+
+.cookies-box {
+    background: $light-blue;
+    opacity: 0.9;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    bottom: 0;
+    margin: 0;
 }
 
 /** Media queries **/
