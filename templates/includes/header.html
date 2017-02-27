@@ -90,13 +90,5 @@
             {% endif %}
             <a class="button secondary" href="{% if request.user.is_authenticated %}/wagtail/logout/{% else %}/wagtail/{% endif %}">{% if request.user.is_authenticated %}Log out{% else %}Log in{% endif %}</a>
         </div>
-        <div class="row">
-            <div class="large-12 columns container">
-                <ul class="menu float-right search-box">
-                    <li><input type="search" placeholder="Search"></li>
-                    <li><button type="button" class="button"><i class="fa fa-search"></i></button></li>
-                </ul>
-            </div>
-    </div>
     </div>
 </div>
