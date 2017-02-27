@@ -1,6 +1,32 @@
 {% load wagtailcore_tags %}
 
-<ul class="dropdown menu" data-dropdown-menu>
+{# Show on small screens #}
+<ul class="dropdown menu vertical show-for-small-only" data-dropdown-menu>
+    <li{% if root.active %} class="active" {% endif %}>
+        <a href="{% pageurl root %}">{{ root.title }}</a>
+    </li>
+    {% for page in menu_pages %}
+    <li{% if page.active %} class="active" {% endif %}>
+        <a href="{% pageurl page %}">{{ page.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<form class="show-for-small-only search-box">
+    <div class="row collapse">
+        <div class="small-10 columns">
+            <label>
+                <input type="search" placeholder="Search">
+            </label>
+        </div>
+        <div class="small-2 columns">
+            <button type="button" class="button search-button expanded"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+</form>
+
+{# Show on medium-up screens #}
+<ul class="dropdown menu show-for-medium" data-dropdown-menu>
     <li{% if root.active %} class="active" {% endif %}>
         <a href="{% pageurl root %}">{{ root.title }}</a>
     </li>
