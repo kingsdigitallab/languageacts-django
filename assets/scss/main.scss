@@ -13,7 +13,7 @@
 body {
     background: rgba($dark-blue, .05);
     // -webkit-font-smoothing: antialiased;
-    // -moz-osx-font-smoothing: grayscale;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a.more {
@@ -21,6 +21,11 @@ a.more {
         font-size: rem-calc(12);
         padding-left: rem-calc(3);
     }
+}
+
+button i,
+.button i {
+    font-size: rem-calc(12);
 }
 
 small,
@@ -56,6 +61,12 @@ header.top-header {
     //         font-size: rem-calc(36);
     //     }
     // }
+
+    // Fixes the issue FF has with Proxima Nova baseline
+    button,
+    .button {
+        height: rem-calc(40);
+    }
 }
 
 .header {

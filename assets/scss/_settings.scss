@@ -73,6 +73,7 @@ $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $white;
 $body-font-color: $black;
+// ISSUE: Proxima Nova seems to have a baseline alignment issue
 $body-font-family: 'proxima-nova', 'Archivo Narrow', sans-serif;
 $body-antialiased: true;
 $global-margin: 1rem;
