@@ -28,11 +28,15 @@ button i,
     font-size: rem-calc(12);
 }
 
-small,
 h1 small,
 h2 small,
-h3 small {
+h3 small,
+small {
     color: $dark-gray;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.125;
 }
 
 .active {
@@ -132,6 +136,34 @@ section.main {
 
     h1 {
         color: $bright-blue;
+    }
+}
+
+.blob {
+    // left: 50%;
+    position: absolute;
+    // top: rem-calc(-60);
+    top: rem-calc(-50);
+
+    i {
+        left: -40%;
+    }
+
+    .fa-circle:before {
+        color: $white;
+    }
+}
+
+.blocks {
+    background: rgba($blue-gray, .1);
+    margin: rem-calc(50 0 0);
+    padding: rem-calc(40 16 16);
+    position: relative;
+}
+
+span.fa-stack-1x {
+    &.number {
+        left: -40%;
     }
 }
 
