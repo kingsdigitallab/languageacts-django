@@ -35,10 +35,6 @@ small {
     color: $dark-gray;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    line-height: 1.125;
-}
-
 .active {
     font-weight: 700;
 }
@@ -254,13 +250,23 @@ footer {
 // Cookies
 
 .cookies-box {
-    background: $light-blue;
-    opacity: 0.9;
-    position: fixed;
-    width: 100%;
-    text-align: center;
+    background: $blue-gray;
     bottom: 0;
+    color: $white;
     margin: 0;
+    opacity: 0.95;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+
+    button,
+    .button {
+        font-weight: 700;
+    }
+
+    p {
+        margin-bottom: rem-calc(16);
+    }
 }
 
 /** Media queries **/
