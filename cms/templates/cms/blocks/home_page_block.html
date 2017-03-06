@@ -1,0 +1,14 @@
+{% load wagtailcore_tags %}
+<div class="column column-block">
+    <div class="blocks" data-equalizer-watch>
+        <div class="blob text-center">
+            <span class="fa-stack fa-3x">
+                <i class="fa fa-circle fa-stack-2x"></i>
+                <span class="fa-stack-1x number">{{value.number}}</span>
+            </span>
+        </div>
+        <h2 class="text-center">{{value.title}}</h2>
+        {{value.caption|safe}}
+    </div>
+    <a href="{% if value.url %}{{ value.url }}{% else %}{% pageurl value.page %}{% endif %}" class="button expanded">Explore</a>
+</div>
