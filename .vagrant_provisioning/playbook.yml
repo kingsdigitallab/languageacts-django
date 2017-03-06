@@ -249,6 +249,11 @@
     tags:
       - django
 
+  - name: django | update undex
+    command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py update_index'
+    tags:
+      - django
+
 - hosts: all
   vars_files:
       - vars.yml

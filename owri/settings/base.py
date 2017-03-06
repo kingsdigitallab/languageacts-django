@@ -336,14 +336,14 @@ WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch2',
         'AUTO_UPDATE': False,
-        'URLS': ['http://localhost:9200'],
+        'URLS': ['http://127.0.0.1:9200'],
         'INDEX': 'owri_wagtail',
         'TIMEOUT': 5,
     }
 }
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'cms/login.html'
-
+WAGTAILSEARCH_RESULTS_TEMPLATE = 'cms/search_results.html'
 
 # -----------------------------------------------------------------------------
 # GLOBALS FOR JS
