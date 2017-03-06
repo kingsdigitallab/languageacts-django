@@ -72,7 +72,22 @@ class PullQuoteBlock(StructBlock):
         template = 'cms/blocks/pull_quote_block.html'
 
 
+class HomePageBlock(StructBlock):
+    url = URLBlock(required=False)
+    page = PageChooserBlock(required=False)
+    number = CharBlock()
+    title = CharBlock()
+    caption = RichTextBlock()
+
+    class Meta:
+        template = 'cms/blocks/home_page_block.html'
+        help_text = '''
+        Use either URL or page, if both are filled in URL takes precedence.'''
+
+
 class CMSStreamBlock(StreamBlock):
+    home = HomePageBlock(icon='grip', label='Homepage Block')
+
     h2 = CharBlock(icon='title', classname='title')
     h3 = CharBlock(icon='title', classname='title')
     h4 = CharBlock(icon='title', classname='title')
