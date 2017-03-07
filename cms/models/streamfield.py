@@ -79,7 +79,7 @@ class HomePageBlock(StructBlock):
     description = RichTextBlock()
 
     class Meta:
-        # template = 'cms/blocks/home_page_block.html'
+        template = 'cms/blocks/home_page_block.html'
         help_text = '''
         Use either URL or page, if both are filled in URL takes precedence.'''
 
