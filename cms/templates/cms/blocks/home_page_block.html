@@ -8,7 +8,7 @@
             </span>
         </div>
         <h2 class="text-center">{{value.title}}</h2>
-        {{value.caption|safe}}
+        {{value.description|safe}}
     </div>
     <a href="{% if value.url %}{{ value.url }}{% else %}{% pageurl value.page %}{% endif %}" class="button expanded">Explore</a>
 </div>

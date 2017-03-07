@@ -1,12 +1,41 @@
 {% extends "cms/base.html" %}
+{% load wagtailcore_tags %}
 
 {% block title %}
 {% endblock %}
 
 {% block main %}
-<div class="row small-up-1 medium-up-2 large-up-3" data-equalizer>
+<div class="row">
+    <div class="large-12 columns">
+    {% for block in page.body %}
+        {% if block.block_type == 'intro' %}
+            {{ block.value }}
+        {% endif %}
+    {% endfor %}
+    </div>
+</div>
 
-{% include "cms/includes/streamfield_home.html" with blocks=self.body %}
+<div class="row small-up-1 medium-up-2 large-up-3" data-equalizer>
+    {% for block in page.body %}
+        {% if block.block_type == 'home' %}
+            <div class="column column-block">
+                <div class="blocks" data-equalizer-watch>
+                    <div class="blob text-center">
+                        <span class="fa-stack fa-3x">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <span class="fa-stack-1x number">{{ block.value.number }}</span>
+                        </span>
+                    </div>
+                    <h2 class="text-center">{{ block.value.title }}</h2>
+                    {{ block.value.description|safe }}
+                </div>
+                <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}" class="button expanded">Explore</a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+{# include "cms/includes/streamfield_home.html" with blocks=self.body #}
 
 </div>
 {% endblock %}
