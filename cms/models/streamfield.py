@@ -75,9 +75,8 @@ class PullQuoteBlock(StructBlock):
 class HomePageBlock(StructBlock):
     url = URLBlock(required=False)
     page = PageChooserBlock(required=False)
-    number = CharBlock()
     title = CharBlock()
-    caption = RichTextBlock()
+    description = RichTextBlock()
 
     class Meta:
         template = 'cms/blocks/home_page_block.html'
