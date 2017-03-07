@@ -1,19 +1,5 @@
 {% load wagtailcore_tags %}
 
-{% comment %}
 {% for block in blocks %}
   {% include_block block %}
-{% endfor %}
-{% endcomment %}
-
-
-{# Streamfield sample code #}
-{% for block in page.body %}
-    {% if block.block_type == 'heading' %}
-        <h1>{{ block.value }}</h1>
-    {% else %}
-        <section class="block-{{ block.block_type }}">
-            {% include_block block %}
-        </section>
-    {% endif %}
 {% endfor %}
