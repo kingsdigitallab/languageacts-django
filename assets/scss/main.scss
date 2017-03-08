@@ -73,9 +73,16 @@ header.top-header {
     svg {
         background: $dark-blue;
         display: block; // It helps aligning properly to pixel values
-        fill: $white;
         max-height: rem-calc(160);
         max-width: rem-calc(300);
+
+        .st0{
+            fill: #fff;
+        }
+        
+        .st1{
+            fill: #009ee2;
+        }
     }
 }
 
