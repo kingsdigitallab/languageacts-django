@@ -304,7 +304,7 @@ Animating the logo's diactrics
 #diactric6,
 #diactric7,
 #diactric8 {
-    fill: transparent;
+    fill: rgba($bright-blue, 0);
 }
 
 @keyframes hideshow {
@@ -366,7 +366,6 @@ Animating the logo's diactrics
     animation-fill-mode: forwards;
     -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
     animation-iteration-count: 2;
-    fill: rgba($bright-blue, 1);
 }
 
 /** Media queries **/
