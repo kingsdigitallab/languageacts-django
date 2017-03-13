@@ -277,6 +277,97 @@ footer {
     }
 }
 
+// SVG logo animation
+
+/**
+
+Animating the logo's diactrics
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8
+
+**/
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8 {
+    fill: transparent;
+}
+
+@keyframes hideshow {
+    from { fill: rgba($bright-blue, 0); }
+    to { fill: rgba($bright-blue, 1); }
+}
+
+@keyframes popup {
+    0% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+#diactric1,
+#diactric8  {
+    animation: hideshow 3s ease-in-out;
+}
+
+#diactric3a,
+#diactric3b {
+    animation: hideshow 2s 1s ease-in-out;
+}
+
+#diactric2 {
+    animation: hideshow 4s 2s ease-in-out;
+}
+
+#diactric4 {
+    animation: hideshow 2s 0.5s ease-in-out;
+}
+
+#diactric5 {
+    animation: hideshow 3s 4s ease;
+}
+
+#diactric6 {
+    animation: hideshow 3s 3s ease-in-out;
+}
+
+#diactric7 {
+    animation: hideshow 2s 1.5s ease-in-out;
+}
+
+
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8 {
+    -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
+    animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
+    animation-iteration-count: 2;
+}
+
 /** Media queries **/
 
 @include breakpoint(medium up) {
