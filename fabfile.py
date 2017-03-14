@@ -108,6 +108,14 @@ def create_virtualenv():
     run('virtualenv {}'.format(env_vpath))
 
 
+def get_virtual_env_path():
+    '''Returns the absolute path to the python virtualenv for the server
+    (dev, stg, live) we are working on.
+    E.g. /vol/tvof/webroot/envs/dev
+    '''
+    return os.path.join(env.envs_path, env.srvr)
+
+
 @task
 def clone_repo():
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
@@ -188,22 +196,44 @@ def own_django_log():
 
 
 @task
-def fix_permissions():
+def fix_permissions(category='static'):
+    '''
+    Reset the permissions on various paths.
+    category: determines which set of paths to work on:
+        'static' (default): django static path + general project path
+        'virtualenv': fix the virtualenv permissions
+    '''
+    # GN: why do we need VE?
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
 
+    processed = False
+
     with quiet():
-        log_path = os.path.join(env.path, 'logs', 'django.log')
-        if run('ls {}'.format(log_path)).succeeded:
-            sudo('setfacl -R -m g:www-data:rwx {p}/logs {p}/static'.format(
-                p=env.path))
-            sudo('setfacl -R -d -m g:www-data:rwx {p}/logs {p}/static'.format(
-                p=env.path))
-            sudo('setfacl -R -m g:kdl-staff:rwx {p}/logs {p}/static'.format(
-                p=env.path))
-            sudo('setfacl -R -d -m g:kdl-staff:rwx {p}/logs {p}/static'.format(
-                p=env.path))
-            sudo('chgrp -Rf kdl-staff {}'.format(env.path))
-            sudo('chmod -Rf g+w {}'.format(env.path))
+        if category == 'static':
+            processed = True
+            log_path = os.path.join(env.path, 'logs', 'django.log')
+            if run('ls {}'.format(log_path)).succeeded:
+                sudo('setfacl -R -m g:www-data:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -d -m g:www-data:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -m g:kdl-staff:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -d -m g:kdl-staff:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('chgrp -Rf kdl-staff {}'.format(env.path))
+                sudo('chmod -Rf g+w {}'.format(env.path))
+        if category == 'virtualenv':
+            path = get_virtual_env_path()
+            sudo('chgrp -Rf kdl-staff {}'.format(path))
+            sudo('chmod -Rf g+rw {}'.format(path))
+            processed = True
+
+    if not processed:
+        raise Exception(
+            'fix_permission(category="{}"): unrecognised category name.'.
+            format(category)
+        )
 
 
 @task
