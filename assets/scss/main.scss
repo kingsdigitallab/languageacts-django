@@ -170,16 +170,21 @@ section.main {
     font-style: italic;
 }
 
-.float-left {
-    .img-wrapper {
-        padding: rem-calc(0 24 24 0);
+h1, h2, h3 {
+    clear: left;
+}
+
+.img-wrapper {
+    &.float-left {
+        padding: rem-calc(0 24 0 0);
+    }
+    &.float-right {
+        padding: rem-calc(0 0 0 24);
     }
 }
 
-.float-right {
-    .img-wrapper {
-        padding: rem-calc(0 0 24 24);
-    }
+.rich-text {
+    clear: right;
 }
 
 span.fa-stack-1x {
