@@ -170,16 +170,18 @@ section.main {
     font-style: italic;
 }
 
-h1, h2, h3 {
-    overflow: auto;
-}
-
 .img-wrapper {
     &.float-left {
         padding: rem-calc(0 24 0 0);
     }
     &.float-right {
         padding: rem-calc(0 0 0 24);
+    }
+}
+
+.page-content {
+    h1, h2, h3, h4, h5, h6 {
+        clear: both;
     }
 }
 
