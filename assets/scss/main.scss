@@ -165,6 +165,23 @@ section.main {
     position: relative;
 }
 
+.caption {
+    color: scale-color($dark-gray, $lightness: -20%);
+    font-style: italic;
+}
+
+.float-left {
+    .img-wrapper {
+        padding: rem-calc(0 24 24 0);
+    }
+}
+
+.float-right {
+    .img-wrapper {
+        padding: rem-calc(0 0 24 24);
+    }
+}
+
 span.fa-stack-1x {
     &.number {
         left: -40%;
