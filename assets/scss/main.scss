@@ -43,6 +43,28 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.custom-counter {
+    margin-left: 0;
+    padding-right: 0;
+    list-style-type: none;
+
+    li {
+        counter-increment: step-counter;
+
+        &:before {
+            background: rgb(255, 255, 255);
+            border-radius: 50% 50% 0 0;
+            content: counter(step-counter);
+            display: inline-block;
+            font-size: rem-calc(48);
+            //margin-left: rem-calc(-30);
+            padding: rem-calc(0 24);
+            text-align: center;
+            width: rem-calc(80);
+        }
+    }
+}
+
 /** Header **/
 header.top-header {
     // Pattern background
@@ -50,19 +72,7 @@ header.top-header {
     background-size: rem-calc(45);
     max-height: rem-calc(150);
 
-    // No design option
-    // background: $dark-blue;
-    // min-height: rem-calc(150);
-
-    // h1 {
-    //     a {
-    //         color: $secondary-color;
-    //         font-weight: 700;
-    //         font-size: rem-calc(36);
-    //     }
-    // }
-
-    // Fixes the issue FF has with Proxima Nova baseline
+    // Fixes the issue FF has with Proxima Nova's baseline
     button,
     .button {
         height: rem-calc(36);
@@ -159,8 +169,9 @@ section.main {
 }
 
 .blocks {
-    background: rgba($blue-gray, .1);
-    margin: rem-calc(50 0 0);
+    //background: rgba($blue-gray, .1);
+    background: #d9dfe2;
+    // margin: rem-calc(50 0 0);
     padding: rem-calc(40 16 16);
     position: relative;
 }
@@ -189,11 +200,11 @@ section.main {
     overflow: auto;
 }
 
-span.fa-stack-1x {
-    &.number {
-        left: -40%;
-    }
-}
+// span.fa-stack-1x {
+//     &.number {
+//         left: -40%;
+//     }
+// }
 
 /** Search **/
 

@@ -1,15 +1,17 @@
 {% load wagtailcore_tags %}
-<div class="column column-block block-{{ block.block_type }}">
+<li class="column column-block block-{{ block.block_type }}">
     <div class="blocks" data-equalizer-watch>
+        {% comment %}
         <div class="blob text-center">
             <span class="fa-stack fa-3x">
                 <i class="fa fa-circle fa-stack-2x"></i>
                 {# I've used counter0 to hack the list, but it would be better if the counter started on this for loop instead #}
-                <span class="fa-stack-1x number">{{ forloop.counter0 }}</span>
+                <span class="fa-stack-1x number">{{ forloop.counter }}</span>
             </span>
         </div>
+        {% endcomment %}
         <h3 class="text-center">{{ block.value.title }}</h3>
         {{ block.value.description|safe }}
     </div>
     <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}" class="button expanded">Explore</a>
-</div>
+</li>
