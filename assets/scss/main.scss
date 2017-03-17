@@ -450,7 +450,8 @@ Animating the logo's diactrics
 /* Color classes for strands
  * TO BE REPLACED */
 
-.Travelling.Concepts {
+.Travelling.Concepts,
+.Diasporic.Identities {
     color: scale-color($dark-orange, $lightness: -30%);
 
     &:before {
@@ -461,6 +462,22 @@ Animating the logo's diactrics
     button,
     .button {
         background: $dark-orange;
+        color: $white;
+    }
+}
+
+.Translation.Acts,
+.Language.Transitions {
+    color: scale-color($light-blue, $lightness: -30%);
+
+    &:before {
+        background: $light-blue;
+        color: $white;
+    }
+
+    button,
+    .button {
+        background: $light-blue;
         color: $white;
     }
 }
