@@ -43,6 +43,28 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.custom-counter {
+    margin-left: 0;
+    padding-right: 0;
+    list-style-type: none;
+
+    li {
+        counter-increment: step-counter;
+
+        &:before {
+            background: rgb(255, 255, 255);
+            border-radius: 50% 50% 0 0;
+            content: counter(step-counter);
+            display: inline-block;
+            font-size: rem-calc(48);
+            //margin-left: rem-calc(-30);
+            padding: rem-calc(0 24);
+            text-align: center;
+            width: rem-calc(80);
+        }
+    }
+}
+
 /** Header **/
 header.top-header {
     // Pattern background
@@ -50,19 +72,7 @@ header.top-header {
     background-size: rem-calc(45);
     max-height: rem-calc(150);
 
-    // No design option
-    // background: $dark-blue;
-    // min-height: rem-calc(150);
-
-    // h1 {
-    //     a {
-    //         color: $secondary-color;
-    //         font-weight: 700;
-    //         font-size: rem-calc(36);
-    //     }
-    // }
-
-    // Fixes the issue FF has with Proxima Nova baseline
+    // Fixes the issue FF has with Proxima Nova's baseline
     button,
     .button {
         height: rem-calc(36);
@@ -159,17 +169,42 @@ section.main {
 }
 
 .blocks {
-    background: rgba($blue-gray, .1);
-    margin: rem-calc(50 0 0);
+    //background: rgba($blue-gray, .1);
+    background: #d9dfe2;
+    // margin: rem-calc(50 0 0);
     padding: rem-calc(40 16 16);
     position: relative;
 }
 
-span.fa-stack-1x {
-    &.number {
-        left: -40%;
+.caption {
+    color: scale-color($dark-gray, $lightness: -20%);
+    font-style: italic;
+}
+
+.img-wrapper {
+    &.float-left {
+        padding: rem-calc(0 24 0 0);
+    }
+    &.float-right {
+        padding: rem-calc(0 0 0 24);
     }
 }
+
+.page-content {
+    h1, h2, h3, h4, h5, h6 {
+        clear: both;
+    }
+}
+
+.rich-text {
+    overflow: auto;
+}
+
+// span.fa-stack-1x {
+//     &.number {
+//         left: -40%;
+//     }
+// }
 
 /** Search **/
 
@@ -340,7 +375,7 @@ Animating the logo's diactrics
 }
 
 #diactric5 {
-    animation: hideshow 3s 4s ease;
+    animation: hideshow 3s 4s easein-out;
 }
 
 #diactric6 {
@@ -350,8 +385,6 @@ Animating the logo's diactrics
 #diactric7 {
     animation: hideshow 2s 1.5s ease-in-out;
 }
-
-
 
 #diactric1,
 #diactric2,
@@ -364,11 +397,114 @@ Animating the logo's diactrics
 #diactric8 {
     -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
     animation-fill-mode: forwards;
-    -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
-    animation-iteration-count: 2;
+    -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    animation-direction: alternate;
+    -webkit-animation-iteration-count: 4; /* Safari 4.0 - 8.0 */
+    animation-iteration-count: 4;
+}
+
+/** Type fonts **/
+
+// Proxima Nova
+
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132590/cc5225e4-eeef-4026-9b23-4705456d018c.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132590/cc5225e4-eeef-4026-9b23-4705456d018c.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132590/50c8f38e-4f2b-4a0a-b65b-7fc6e078563d.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132590/e96e70c4-309b-48dd-a8b8-3d0ac4fe93aa.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132590/4b53c685-9f0f-492a-997d-de616fab68b2.ttf") format("truetype");
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132162/bc15a635-a09b-40d1-a5c4-70310166177d.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132162/bc15a635-a09b-40d1-a5c4-70310166177d.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132162/129d49d6-5492-4ed1-96f7-0528c6d53abc.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132162/9c69c878-2255-4027-8632-ed3635cddf45.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132162/b7eb3871-e910-4522-9982-effb425a2714.ttf") format("truetype");
+    font-style: italic;
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132602/809b25d3-05f6-4c13-943a-e8391c913ca9.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132602/809b25d3-05f6-4c13-943a-e8391c913ca9.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132602/c3ad482f-56b8-4e63-b412-855d1ed14f8a.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132602/9f05d60a-49c4-455c-a126-dfedb12fabda.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132602/e3428b17-9c4e-492b-b135-310aea3f8ba1.ttf") format("truetype");
+    font-weight: 700;
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132605/7f8568b9-be3e-49c1-9fa6-42d753f9248f.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132605/7f8568b9-be3e-49c1-9fa6-42d753f9248f.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132605/0038088c-27f2-4ca1-a13c-a4df6b1559a8.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132605/cd396e34-c830-4125-8ec6-1bec3b38e96e.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132605/9a873a91-7e20-4d87-acaa-29bf722eae85.ttf") format("truetype");
+    font-style: italic;
+    font-weight: 700;
 }
 
 /** Media queries **/
 
 @include breakpoint(medium up) {
+}
+
+/* Color classes for strands
+ * TO BE REPLACED */
+
+.Travelling.Concepts,
+.Diasporic.Identities,
+.Translation.Acts,
+.Language.Transitions,
+.Digital.Mediations,
+.Loaded.Meanings {
+
+    &:before {
+        color: $white;
+    }
+
+    button,
+    .button {
+        color: $white;
+    }
+
+    p,
+    .rich-text {
+        text-align: center;
+    }
+}
+
+.Travelling.Concepts,
+.Diasporic.Identities {
+    color: scale-color($dark-orange, $lightness: -30%);
+
+    &:before {
+        background: $dark-orange;
+    }
+
+    button,
+    .button {
+        background: $dark-orange;
+    }
+}
+
+.Translation.Acts,
+.Language.Transitions {
+    color: scale-color($light-blue, $lightness: -30%);
+
+    &:before {
+        background: $light-blue;
+    }
+
+    button,
+    .button {
+        background: $light-blue;
+    }
+}
+
+.Digital.Mediations,
+.Loaded.Meanings {
+    &:before {
+        background: $dark-blue;
+    }
 }
