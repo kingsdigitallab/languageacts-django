@@ -451,18 +451,37 @@ Animating the logo's diactrics
  * TO BE REPLACED */
 
 .Travelling.Concepts,
-.Diasporic.Identities {
-    color: scale-color($dark-orange, $lightness: -30%);
+.Diasporic.Identities,
+.Translation.Acts,
+.Language.Transitions,
+.Digital.Mediations,
+.Loaded.Meanings {
 
     &:before {
-        background: $dark-orange;
         color: $white;
     }
 
     button,
     .button {
-        background: $dark-orange;
         color: $white;
+    }
+
+    p {
+        text-align: center;
+    }
+}
+
+.Travelling.Concepts,
+.Diasporic.Identities {
+    color: scale-color($dark-orange, $lightness: -30%);
+
+    &:before {
+        background: $dark-orange;
+    }
+
+    button,
+    .button {
+        background: $dark-orange;
     }
 }
 
@@ -472,12 +491,17 @@ Animating the logo's diactrics
 
     &:before {
         background: $light-blue;
-        color: $white;
     }
 
     button,
     .button {
         background: $light-blue;
-        color: $white;
+    }
+}
+
+.Digital.Mediations,
+.Loaded.Meanings {
+    &:before {
+        background: $dark-blue;
     }
 }
