@@ -466,7 +466,8 @@ Animating the logo's diactrics
         color: $white;
     }
 
-    p {
+    p,
+    .rich-text {
         text-align: center;
     }
 }
