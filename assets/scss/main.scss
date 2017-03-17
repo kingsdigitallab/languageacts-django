@@ -386,8 +386,6 @@ Animating the logo's diactrics
     animation: hideshow 2s 1.5s ease-in-out;
 }
 
-
-
 #diactric1,
 #diactric2,
 #diactric3a,
@@ -447,4 +445,22 @@ Animating the logo's diactrics
 /** Media queries **/
 
 @include breakpoint(medium up) {
+}
+
+/* Color classes for strands
+ * TO BE REPLACED */
+
+.Travelling.Concepts {
+    color: scale-color($dark-orange, $lightness: -30%);
+
+    &:before {
+        background: $dark-orange;
+        color: $white;
+    }
+
+    button,
+    .button {
+        background: $dark-orange;
+        color: $white;
+    }
 }
