@@ -1,5 +1,5 @@
 {% load wagtailcore_tags %}
-<li class="column column-block block-{{ block.block_type }}">
+<li class="column column-block block-{{ block.block_type }} {{ block.value.title }}">
     <div class="blocks" data-equalizer-watch>
         {% comment %}
         <div class="blob text-center">
