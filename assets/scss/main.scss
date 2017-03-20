@@ -3,6 +3,13 @@
 @import '../vendor/foundation-sites/scss/foundation';
 @import '../vendor/motion-ui/motion-ui';
 
+@import 'strand-1-tc',
+        'strand-2-ta',
+        'strand-3-dm',
+        'strand-4-lm',
+        'strand-5-di',
+        'strand-6-lt';
+
 @include foundation-everything;
 
 /** Your custom scss here **/
@@ -57,7 +64,7 @@ small {
             content: counter(step-counter);
             display: inline-block;
             font-size: rem-calc(48);
-            //margin-left: rem-calc(-30);
+            // margin-left: rem-calc(-30);
             padding: rem-calc(0 24);
             text-align: center;
             width: rem-calc(80);
