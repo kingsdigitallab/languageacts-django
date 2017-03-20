@@ -21,6 +21,18 @@ class AlignedHTMLBlock(StructBlock):
     alignment = HTMLAlignmentChoiceBlock()
 
 
+class HomePageBlock(StructBlock):
+    url = URLBlock(required=False)
+    page = PageChooserBlock(required=False)
+    title = CharBlock()
+    description = RichTextBlock()
+
+    class Meta:
+        template = 'cms/blocks/home_page_block.html'
+        help_text = '''
+        Use either URL or page, if both are filled in URL takes precedence.'''
+
+
 class ImageFormatChoiceBlock(FieldBlock):
     field = forms.ChoiceField(choices=(
         ('left', 'Wrap left'), ('right', 'Wrap right'),
@@ -70,18 +82,6 @@ class PullQuoteBlock(StructBlock):
 
     class Meta:
         template = 'cms/blocks/pull_quote_block.html'
-
-
-class HomePageBlock(StructBlock):
-    url = URLBlock(required=False)
-    page = PageChooserBlock(required=False)
-    title = CharBlock()
-    description = RichTextBlock()
-
-    class Meta:
-        template = 'cms/blocks/home_page_block.html'
-        help_text = '''
-        Use either URL or page, if both are filled in URL takes precedence.'''
 
 
 class CMSStreamBlock(StreamBlock):
