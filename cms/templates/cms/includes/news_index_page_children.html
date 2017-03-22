@@ -10,7 +10,7 @@
             {% if page.specific.feed_image %}
             {% image page.specific.feed_image max-600x300 as tmp_image %}
             <a href="{% pageurl page %}">
-                <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+                <img class="full-width" src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
             </a>
             {% endif %}
 

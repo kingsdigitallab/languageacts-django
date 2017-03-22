@@ -29,8 +29,9 @@
         </p>
     </header>
 
+    {# TODO: Add feed image, if any - Needs fixing #}
     {% if self.specific.feed_image %}
-    <img class="full-width" src="{{ self.specific.feed_image.url }}" alt="{{ self.specific.feed_image.alt }}">
+    <img src="{{ self.specific.feed_image.url }}" alt="{{ self.specific.feed_image.alt }}">
     {% endif %}
 
     {{ block.super }}
