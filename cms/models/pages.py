@@ -40,7 +40,9 @@ class HomePage(Page, WithStreamField):
         index.SearchField('body'),
     ]
 
-    subpage_types = ['BlogIndexPage', 'IndexPage', 'RichTextPage']
+    subpage_types = [
+        'BlogIndexPage', 'IndexPage', 'NewsIndexPage', 'RichTextPage'
+    ]
 
 
 HomePage.content_panels = [
@@ -161,6 +163,90 @@ BlogPost.content_panels = [
 ]
 
 BlogPost.promote_panels = Page.promote_panels + [
+    FieldPanel('tags'),
+    ImageChooserPanel('feed_image'),
+]
+
+
+# News pages
+class NewsIndexPage(RoutablePageMixin, Page, WithStreamField):
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
+    subpage_types = ['NewsPost']
+
+    @property
+    def posts(self):
+        posts = NewsPost.objects.live().descendant_of(self)
+
+        posts = posts.order_by('-date')
+
+        return posts
+
+    @route(r'^$')
+    def all_posts(self, request):
+        posts = self.posts
+
+        return render(request, self.get_template(request),
+                      {'self': self, 'posts': _paginate(request, posts)})
+
+    @route(r'^tag/(?P<tag>[\w\- ]+)/$')
+    def tag(self, request, tag=None):
+        if not tag:
+            # Invalid tag filter
+            logger.error('Invalid tag filter')
+            return self.all_posts(request)
+
+        posts = self.posts.filter(tags__name=tag)
+
+        return render(
+            request, self.get_template(request), {
+                'self': self, 'posts': _paginate(request, posts),
+                'filter_type': 'tag', 'filter': tag
+            }
+        )
+
+
+NewsIndexPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body'),
+]
+
+NewsIndexPage.promote_panels = Page.promote_panels
+
+
+class NewsPostTag(TaggedItemBase):
+    content_object = ParentalKey('NewsPost', related_name='tagged_items')
+
+
+class NewsPost(Page, WithStreamField, WithFeedImage):
+    date = models.DateField()
+    tags = ClusterTaggableManager(through=NewsPostTag, blank=True)
+
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+        index.SearchField('date'),
+        index.RelatedFields('tags', [
+                            index.SearchField('name'),
+                            index.SearchField('slug'),
+                            ]),
+    ]
+
+    subpage_types = []
+
+    def get_index_page(self):
+        # Find closest ancestor which is a news index
+        return NewsIndexPage.objects.ancestor_of(self).last()
+
+
+NewsPost.content_panels = [
+    FieldPanel('title', classname='full title'),
+    FieldPanel('date'),
+    StreamFieldPanel('body'),
+]
+
+NewsPost.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     ImageChooserPanel('feed_image'),
 ]

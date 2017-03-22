@@ -50,6 +50,10 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.byline {
+    font-style: italic;
+}
+
 .custom-counter {
     margin-left: 0;
     padding-right: 0;
@@ -70,6 +74,11 @@ small {
             width: rem-calc(80);
         }
     }
+}
+
+.intro {
+    font-size: rem-calc(20);
+    color: scale-color($dark-gray, $lightness: -20%);
 }
 
 /** Header **/
