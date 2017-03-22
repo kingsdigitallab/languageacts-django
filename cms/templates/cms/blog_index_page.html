@@ -5,7 +5,7 @@
 {{ block.super }}
 
 {% block index_page_children %}
-{% include "cms/includes/blog_index_page_children.html" with pages=self.get_children %}
+{% include "cms/includes/blog_index_page_children.html" with pages=self.posts %}
 {% endblock %}
 
 {% endblock %}
