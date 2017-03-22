@@ -30,7 +30,7 @@
     </header>
 
     {% if self.specific.feed_image %}
-    <img src="{{ self.specific.feed_image.url }}" alt="{{ self.specific.feed_image.alt }}">
+    <img class="full-width" src="{{ self.specific.feed_image.url }}" alt="{{ self.specific.feed_image.alt }}">
     {% endif %}
 
     {{ block.super }}
