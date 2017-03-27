@@ -3,17 +3,21 @@
 <div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
     {% for page in pages %}
     <div class="column column-block">
-        <div class="card" data-equalizer-watch>
+        <div class="card blog" data-equalizer-watch>
+            {% comment %}
             {% if page.specific.feed_image %}
             {% image page.specific.feed_image max-600x300 as tmp_image %}
             <a href="{% pageurl page %}">
                 <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
             </a>
             {% endif %}
+            {% endcomment %}
 
             <div class="card-section">
                 <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline newspost">
+                    <p class="byline blog">
+                    Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ self.owner }}</a><br>
                     <time datetime="{{ page.specific.date|date:'c' }}">
                     {{ page.specific.date }}</time>
 
@@ -22,7 +26,9 @@
                      | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
                     {% endif %}
                 </p>
+                {% comment %}
                 <p>{{ page.search_description }}</p>
+                {% endcomment %}
             </div>
         </div>
     </div>

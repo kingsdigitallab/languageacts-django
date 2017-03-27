@@ -1,7 +1,7 @@
 from django import template
 from django.conf import settings
 
-from cms.models.pages import NewsPost
+from cms.models.pages import BlogPost, NewsPost
 from datetime import date
 
 register = template.Library()
@@ -18,6 +18,17 @@ def get_news_preview():
     """Returns 3 latest news posts"""
     today = date.today()
     pages = NewsPost.objects.live().filter(date__lte=today).order_by('-date')
+    if pages.count() < 3:
+        return pages
+    else:
+        return pages[:3]
+
+
+@register.assignment_tag
+def get_blog_posts_preview():
+    """Returns 3 latest blog posts"""
+    today = date.today()
+    pages = BlogPost.objects.live().filter(date__lte=today).order_by('-date')
     if pages.count() < 3:
         return pages
     else:
