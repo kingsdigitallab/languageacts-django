@@ -363,47 +363,40 @@ Animating the logo's diactrics
 }
 
 @keyframes hideshow {
-    from { fill: rgba($bright-blue, 0); }
-    to { fill: rgba($bright-blue, 1); }
-}
-
-@keyframes popup {
-    0% {
-        transform: translateY(-20px);
-    }
-    100% {
-        transform: translateY(0);
-    }
+    0% { fill: rgba($bright-blue, 0); }
+    30% { fill: rgba($bright-blue, 1); }
+    60% { fill: rgba($bright-blue, 0); }
+    100% { fill: rgba($bright-blue, 1); }
 }
 
 #diactric1,
 #diactric8  {
-    animation: hideshow 3s ease-in-out;
+    animation: hideshow 6s ease-in-out;
 }
 
 #diactric3a,
 #diactric3b {
-    animation: hideshow 2s 1s ease-in-out;
-}
-
-#diactric2 {
     animation: hideshow 4s 2s ease-in-out;
 }
 
+#diactric2 {
+    animation: hideshow 8s 4s ease-in-out;
+}
+
 #diactric4 {
-    animation: hideshow 2s 0.5s ease-in-out;
+    animation: hideshow 4s 1s ease-in-out;
 }
 
 #diactric5 {
-    animation: hideshow 3s 4s easein-out;
+    animation: hideshow 6s 8s easein-out;
 }
 
 #diactric6 {
-    animation: hideshow 3s 3s ease-in-out;
+    animation: hideshow 6s 6s ease-in-out;
 }
 
 #diactric7 {
-    animation: hideshow 2s 1.5s ease-in-out;
+    animation: hideshow 4s 3s ease-in-out;
 }
 
 #diactric1,
@@ -417,10 +410,10 @@ Animating the logo's diactrics
 #diactric8 {
     -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
     animation-fill-mode: forwards;
-    -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
-    animation-direction: alternate;
-    -webkit-animation-iteration-count: 4; /* Safari 4.0 - 8.0 */
-    animation-iteration-count: 4;
+    //-webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    //animation-direction: alternate;
+    // -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
+    // animation-iteration-count: 2;
 }
 
 /** Type fonts **/
