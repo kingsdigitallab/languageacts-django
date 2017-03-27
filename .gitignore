@@ -59,6 +59,7 @@ target/
 .DS_Store
 .babelrc
 .vagrant
+.vagrat_provisioning/*
 local.py
 logs/
 playbook.retry

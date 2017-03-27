@@ -1,5 +1,5 @@
 {% extends "cms/base.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags cms_tags %}
 
 {% block title %}
 {% endblock %}
@@ -13,10 +13,14 @@
 {% endfor %}
 
 <ol class="custom-counter">
-    <div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalizer 
+    <div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalizer
         data-equalize-by-row="true" data-equalize-on="medium">
         {% include "cms/includes/streamfield_home.html" with blocks=self.body %}
     </div>
 </ol>
+
+{% get_news_preview as news_posts %}
+{% include "cms/includes/news_preview.html" with pages=news_posts %}
+
 
 {% endblock %}
