@@ -68,14 +68,14 @@ small {
 
         &:before {
             background: rgb(255, 255, 255);
-            border-radius: 50% 50% 0 0;
+            border-radius: 50% 50% 0;
             content: counter(step-counter);
             display: inline-block;
-            font-size: rem-calc(48);
-            // margin-left: rem-calc(-30);
-            padding: rem-calc(0 24);
+            font-size: rem-calc(36);
+            margin-left: rem-calc(-25);
+            // padding: rem-calc(0 12);
             text-align: center;
-            width: rem-calc(80);
+            width: rem-calc(60);
         }
     }
 }
@@ -192,7 +192,7 @@ section.main {
     //background: rgba($blue-gray, .1);
     background: #d9dfe2;
     // margin: rem-calc(50 0 0);
-    padding: rem-calc(40 16 16);
+    padding: rem-calc(28 16 16);
     position: relative;
 }
 
