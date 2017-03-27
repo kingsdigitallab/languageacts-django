@@ -12,12 +12,8 @@
 {% endif %}
 {% endfor %}
 
-<h2>News</h2>
-
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
-
-<h2>Blog</h2>
 
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
