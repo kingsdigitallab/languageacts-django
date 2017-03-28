@@ -94,6 +94,8 @@ small {
 header.top-header {
     // Pattern background
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
+    // background: url('/static/images/lawm-pattern2.svg') $turquoise;
+    // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
     background-size: rem-calc(45);
     position: relative;
 
