@@ -17,7 +17,7 @@
                 <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline blogpost">
                     <p class="byline blog">
-                    Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ self.owner }}</a><br>
+                    Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
                     <time datetime="{{ page.specific.date|date:'c' }}">
                     {{ page.specific.date }}</time>
 
