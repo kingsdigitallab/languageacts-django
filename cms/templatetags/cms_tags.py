@@ -29,10 +29,10 @@ def get_blog_posts_preview():
     """Returns 3 latest blog posts"""
     today = date.today()
     pages = BlogPost.objects.live().filter(date__lte=today).order_by('-date')
-    if pages.count() < 3:
+    if pages.count() < 4:
         return pages
     else:
-        return pages[:3]
+        return pages[:4]
 
 
 @register.simple_tag(takes_context=True)

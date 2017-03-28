@@ -1,5 +1,5 @@
 {% extends "cms/base.html" %}
-{% load wagtailcore_tags cms_tags %}
+{% load cms_tags staticfiles wagtailcore_tags %}
 
 {% block title %}
 {% endblock %}
@@ -15,6 +15,87 @@
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 
+{# Events Placeholder #}
+<div class="row small-up-1 medium-up-2 large-up-4" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
+    <div class="column column-block">
+        <div class="card event" data-equalizer-watch>
+            <div class="card-section">
+                <h3><a href="#">Event 4</a></h3>
+                <p class="meta"><i class="fa fa-clock-o"></i> When and <i class="fa fa-map-marker"></i> Where</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+    <div class="column column-block">
+        <div class="card event" data-equalizer-watch>
+            <div class="card-section">
+                <h3><a href="#">Event 3</a></h3>
+                <p class="meta"><i class="fa fa-clock-o"></i> When and <i class="fa fa-map-marker"></i> Where</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+    <div class="column column-block">
+        <div class="card event" data-equalizer-watch>
+            <div class="card-section">
+                <h3><a href="#">Event 2</a></h3>
+                <p class="meta"><i class="fa fa-clock-o"></i> When and <i class="fa fa-map-marker"></i> Where</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+    <div class="column column-block">
+        <div class="card event" data-equalizer-watch>
+            <div class="card-section">
+                <h3><a href="#">Event 1</a></h3>
+                <p class="meta"><i class="fa fa-clock-o"></i> When and <i class="fa fa-map-marker"></i> Where</p>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Twitter Placeholder #}
+<div class="row">
+    <div class="large-12 columns">
+        <p><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i> Follow us @TwitterHandle</a></p>
+    </div>
+</div>
+<div class="row twitter-block" data-equalizer data-equalize-on="medium">
+    <div class="medium-6 large-3 columns">
+        <div data-equalizer-watch>
+            <p><i class="fa fa-twitter" aria-hidden="true"></i> Language Acts <a href="#">@languageacts</a></p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor <a href="#">incididunt</a> ut labore et dolore magna aliqua.</p>
+        </div>
+        <p class="meta"><br>Tweet's metadata</p>
+        <hr>
+    </div>
+    <div class="medium-6 large-3 columns">
+        <div data-equalizer-watch>
+            <p><i class="fa fa-retweet" aria-hidden="true"></i> Another Twitter <a href="#">@anothertwitter</a></p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco <a href="#">#laboris</a> nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <p class="meta"><br>Tweet's metadata</p>
+        <hr>
+    </div>
+    <div class="medium-6 large-3 columns">
+        <div data-equalizer-watch>
+            <p><i class="fa fa-retweet" aria-hidden="true"></i> Another Twitter <a href="#">@anothertwitter</a></p>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco <a href="#">#laboris</a> nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <p class="meta"><br>Tweet's metadata</p>
+        <hr>
+    </div>
+    <div class="medium-6 large-3 columns">
+        <div data-equalizer-watch>
+            <p><i class="fa fa-twitter" aria-hidden="true"></i> Language Acts <a href="#">@languageacts</a></p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <a href="#">@dolore</a> eu fugiat nulla pariatur.</p>
+        </div>
+        <p class="meta"><br>Tweet's metadata</p>
+        <hr>
+    </div>
+</div>
+
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
 
@@ -24,5 +105,26 @@
         {% include "cms/includes/streamfield_home.html" with blocks=self.body %}
     </div>
 </ol>
+
+{# Instagram Placeholder #}
+<div class="row">
+    <div class="large-12 columns">
+        <p><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @InstagramHandle</a></p>
+    </div>
+</div>
+<div class="row collapse">
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/placeholder-1-360x360.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/placeholder-2-360x360.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/placeholder-3-360x360.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/placeholder-4-360x360.jpg' %}" alt="Placeholder">
+    </div>
+</div>
 
 {% endblock %}
