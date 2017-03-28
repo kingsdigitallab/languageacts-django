@@ -1,9 +1,9 @@
 {% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
 
-<div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
+<div class="row small-up-1 medium-up-3" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
     {% for page in pages %}
     <div class="column column-block">
-        <div class="card" data-equalizer-watch>
+        <div class="card news" data-equalizer-watch>
             {% if page.specific.feed_image %}
             {% image page.specific.feed_image max-600x300 as tmp_image %}
             <a href="{% pageurl page %}">
