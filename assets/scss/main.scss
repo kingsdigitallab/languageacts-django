@@ -90,12 +90,18 @@ header.top-header {
     // Pattern background
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
     background-size: rem-calc(45);
-    max-height: rem-calc(150);
+    position: relative;
 
     // Fixes the issue FF has with Proxima Nova's baseline
     button,
     .button {
         height: rem-calc(36);
+    }
+
+    .strapline-block {
+        color: $light-yellow;
+        font-style: italic;
+        text-shadow: 0 0 5px $black;
     }
 }
 
@@ -460,6 +466,25 @@ Animating the logo's diactrics
 /** Media queries **/
 
 @include breakpoint(medium up) {
+    .top-header {
+        max-height: rem-calc(150);
+    }
+
+    .strapline-block {
+        bottom: 22%;
+        clear: both;
+        display: block;
+        font-size: rem-calc(32) !important;
+        position: absolute;
+    }
+}
+
+@include breakpoint(small) {
+    .strapline-block {
+        clear: both;
+        display: block;
+        font-size: rem-calc(24);
+    }
 }
 
 /* Color classes for strands
