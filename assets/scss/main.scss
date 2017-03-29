@@ -575,37 +575,82 @@ Animating the logo's diactrics
     }
 }
 
-.Travelling.Concepts,
-.Diasporic.Identities {
-    color: scale-color($dark-orange, $lightness: -30%);
+.Travelling.Concepts {
+    color: $dark-brown;
 
     &:before {
-        background: $dark-orange;
+        background: $dark-brown;
     }
 
     button,
     .button {
-        background: $dark-orange;
+        background: $dark-brown;
     }
 }
 
-.Translation.Acts,
-.Language.Transitions {
-    color: scale-color($light-blue, $lightness: -30%);
+.Translation.Acts {
+    color: $dark-blue;
 
-    &:before {
-        background: $light-blue;
-    }
-
-    button,
-    .button {
-        background: $light-blue;
-    }
-}
-
-.Digital.Mediations,
-.Loaded.Meanings {
     &:before {
         background: $dark-blue;
+    }
+
+    button,
+    .button {
+        background: $dark-blue;
+    }
+}
+
+.Digital.Mediations {
+    color: scale-color($orange, $lightness: -30%);
+
+    &:before {
+        background: $orange;
+    }
+
+    button,
+    .button {
+        background: $orange;
+    }
+}
+
+.Loaded.Meanings {
+    color: scale-color($bright-blue, $lightness: -30%);
+
+    &:before {
+        background: $bright-blue;
+    }
+
+    button,
+    .button {
+        background: $bright-blue;
+    }
+}
+
+.Diasporic.Identities {
+    color: scale-color($yellow, $lightness: -70%);
+
+    &:before {
+        background: $yellow;
+        color: $dark-blue;
+    }
+
+    button,
+    .button {
+        background: $yellow;
+        color: $dark-blue;
+    }
+}
+
+.Language.Transitions {
+    color: scale-color($turquoise, $lightness: -30%);
+
+    &:before {
+        background: $turquoise;
+    }
+
+    button,
+    .button {
+        background: $turquoise;
     }
 }
