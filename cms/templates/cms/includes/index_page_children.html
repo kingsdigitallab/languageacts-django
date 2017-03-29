@@ -1,7 +1,7 @@
 {% if pages %}
 {% load cms_tags wagtailcore_tags %}
 
-<ul>
+<ul class="menu vertical subnav">
     {% for page in pages %}
     <li><a href="{% pageurl page %}">{{ page.title }}</a></li>
     {% endfor %}
