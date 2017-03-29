@@ -6,9 +6,11 @@
         <div class="card news" data-equalizer-watch>
             {% if page.specific.feed_image %}
             {% image page.specific.feed_image max-600x300 as tmp_image %}
-            <a href="{% pageurl page %}">
-                <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
-            </a>
+            <div class="image-container">
+                <a href="{% pageurl page %}">
+                    <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+                </a>
+            </div>
             {% endif %}
 
             <div class="card-section">
