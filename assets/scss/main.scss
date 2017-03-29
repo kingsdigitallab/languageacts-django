@@ -54,10 +54,6 @@ small {
     font-style: italic;
 }
 
-.card.blog {
-    background: $light-yellow;
-}
-
 .custom-counter {
     margin-left: 0;
     padding-right: 0;
@@ -219,6 +215,7 @@ section.main {
 }
 
 .card.blog {
+    background: $light-yellow;
     &:before {
         color: $dark-gray;
         content: "\f02b";
@@ -261,6 +258,10 @@ section.main {
         position: absolute;
         right: 0;
         top: 0;
+    }
+
+    img {
+        width: 100% !important;
     }
 }
 
@@ -528,9 +529,32 @@ Animating the logo's diactrics
 
 /** Media queries **/
 
+@include breakpoint(large up) {
+
+    .card {
+        .image-container {
+            height: rem-calc(200) !important;
+            overflow: hidden;
+        }
+    }
+
+}
+
 @include breakpoint(medium up) {
-    .top-header {
-        max-height: rem-calc(150);
+
+    .card {
+        .image-container {
+            height: rem-calc(120);
+            overflow: hidden;
+
+            a,
+            a img {
+                height: auto;
+                margin-left: -5%;
+                text-align: center;
+                width: 120%;
+            }
+        }
     }
 
     .strapline-block {
@@ -540,9 +564,19 @@ Animating the logo's diactrics
         font-size: rem-calc(32) !important;
         position: absolute;
     }
+    
+    .top-header {
+        max-height: rem-calc(150);
+    }
 }
 
 @include breakpoint(small) {
+    .image-container,
+    .image-container a {
+        display: block;
+        width: 100%;
+    }
+
     .strapline-block {
         clear: both;
         display: block;
