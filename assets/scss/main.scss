@@ -50,6 +50,14 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.byline {
+    font-style: italic;
+}
+
+.card.blog {
+    background: $light-yellow;
+}
+
 .custom-counter {
     margin-left: 0;
     padding-right: 0;
@@ -60,29 +68,47 @@ small {
 
         &:before {
             background: rgb(255, 255, 255);
-            border-radius: 50% 50% 0 0;
+            border-radius: 50% 50% 0;
             content: counter(step-counter);
             display: inline-block;
-            font-size: rem-calc(48);
-            // margin-left: rem-calc(-30);
-            padding: rem-calc(0 24);
+            font-size: rem-calc(36);
+            margin-left: rem-calc(-25);
+            // padding: rem-calc(0 12);
             text-align: center;
-            width: rem-calc(80);
+            width: rem-calc(60);
         }
     }
+}
+
+.intro {
+    font-size: rem-calc(20);
+    color: scale-color($dark-gray, $lightness: -20%);
+}
+
+.meta {
+    color: $dark-gray;
+    font-style: italic;
 }
 
 /** Header **/
 header.top-header {
     // Pattern background
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
+    // background: url('/static/images/lawm-pattern2.svg') $turquoise;
+    // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
     background-size: rem-calc(45);
-    max-height: rem-calc(150);
+    position: relative;
 
     // Fixes the issue FF has with Proxima Nova's baseline
     button,
     .button {
         height: rem-calc(36);
+    }
+
+    .strapline-block {
+        color: $light-yellow;
+        font-style: italic;
+        text-shadow: 0 0 5px $black;
     }
 }
 
@@ -179,13 +205,63 @@ section.main {
     //background: rgba($blue-gray, .1);
     background: #d9dfe2;
     // margin: rem-calc(50 0 0);
-    padding: rem-calc(40 16 16);
+    padding: rem-calc(28 16 16);
     position: relative;
 }
 
 .caption {
     color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
+}
+
+.card {
+    position: relative;
+}
+
+.card.blog {
+    &:before {
+        color: $dark-gray;
+        content: "\f02b";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        position: absolute;
+        right: rem-calc(3);
+        top: 0;
+        -webkit-transform: rotate(75deg);
+        -moz-transform: rotate(75deg);
+        -o-transform: rotate(75deg);
+        -ms-transform: rotate(75deg);
+        transform: rotate(75deg);
+    }
+}
+
+.card.event {
+    background: scale-color($dark-orange, $lightness: 92%);
+    &:before {
+        color: $dark-gray;
+        content: "\f073";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        padding: rem-calc(5 7);
+        position: absolute;
+        right: rem-calc(3);
+        top: 0;
+    }
+}
+
+.card.news {
+    &:before {
+        background: $white;
+        border-radius: 0 0 0 50%;
+        color: $dark-gray;
+        content: "\f1ea";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        padding: rem-calc(5 13);
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }
 
 .img-wrapper {
@@ -212,6 +288,12 @@ section.main {
 //         left: -40%;
 //     }
 // }
+
+.twitter-block {
+    i {
+        color: $bright-blue;
+    }
+}
 
 /** Search **/
 
@@ -350,47 +432,40 @@ Animating the logo's diactrics
 }
 
 @keyframes hideshow {
-    from { fill: rgba($bright-blue, 0); }
-    to { fill: rgba($bright-blue, 1); }
-}
-
-@keyframes popup {
-    0% {
-        transform: translateY(-20px);
-    }
-    100% {
-        transform: translateY(0);
-    }
+    0% { fill: rgba($bright-blue, 0); }
+    30% { fill: rgba($bright-blue, 1); }
+    60% { fill: rgba($bright-blue, 0); }
+    100% { fill: rgba($bright-blue, 1); }
 }
 
 #diactric1,
 #diactric8  {
-    animation: hideshow 3s ease-in-out;
+    animation: hideshow 6s ease-in-out;
 }
 
 #diactric3a,
 #diactric3b {
-    animation: hideshow 2s 1s ease-in-out;
-}
-
-#diactric2 {
     animation: hideshow 4s 2s ease-in-out;
 }
 
+#diactric2 {
+    animation: hideshow 8s 4s ease-in-out;
+}
+
 #diactric4 {
-    animation: hideshow 2s 0.5s ease-in-out;
+    animation: hideshow 4s 1s ease-in-out;
 }
 
 #diactric5 {
-    animation: hideshow 3s 4s easein-out;
+    animation: hideshow 6s 8s easein-out;
 }
 
 #diactric6 {
-    animation: hideshow 3s 3s ease-in-out;
+    animation: hideshow 6s 6s ease-in-out;
 }
 
 #diactric7 {
-    animation: hideshow 2s 1.5s ease-in-out;
+    animation: hideshow 4s 3s ease-in-out;
 }
 
 #diactric1,
@@ -404,10 +479,10 @@ Animating the logo's diactrics
 #diactric8 {
     -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
     animation-fill-mode: forwards;
-    -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
-    animation-direction: alternate;
-    -webkit-animation-iteration-count: 4; /* Safari 4.0 - 8.0 */
-    animation-iteration-count: 4;
+    //-webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    //animation-direction: alternate;
+    // -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
+    // animation-iteration-count: 2;
 }
 
 /** Type fonts **/
@@ -454,6 +529,25 @@ Animating the logo's diactrics
 /** Media queries **/
 
 @include breakpoint(medium up) {
+    .top-header {
+        max-height: rem-calc(150);
+    }
+
+    .strapline-block {
+        bottom: 22%;
+        clear: both;
+        display: block;
+        font-size: rem-calc(32) !important;
+        position: absolute;
+    }
+}
+
+@include breakpoint(small) {
+    .strapline-block {
+        clear: both;
+        display: block;
+        font-size: rem-calc(24);
+    }
 }
 
 /* Color classes for strands

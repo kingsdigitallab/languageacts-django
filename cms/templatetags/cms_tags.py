@@ -1,6 +1,9 @@
 from django import template
 from django.conf import settings
 
+from cms.models.pages import BlogPost, NewsPost
+from datetime import date
+
 register = template.Library()
 
 
@@ -8,6 +11,28 @@ register = template.Library()
 def are_comments_allowed():
     """Returns True if commenting on the site is allowed, False otherwise."""
     return getattr(settings, 'ALLOW_COMMENTS', False)
+
+
+@register.assignment_tag
+def get_news_preview():
+    """Returns 3 latest news posts"""
+    today = date.today()
+    pages = NewsPost.objects.live().filter(date__lte=today).order_by('-date')
+    if pages.count() < 3:
+        return pages
+    else:
+        return pages[:3]
+
+
+@register.assignment_tag
+def get_blog_posts_preview():
+    """Returns 3 latest blog posts"""
+    today = date.today()
+    pages = BlogPost.objects.live().filter(date__lte=today).order_by('-date')
+    if pages.count() < 4:
+        return pages
+    else:
+        return pages[:4]
 
 
 @register.simple_tag(takes_context=True)
