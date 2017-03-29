@@ -146,6 +146,21 @@ nav {
     }
 }
 
+.subnav {
+    h3 {
+        color: $dark-gray;
+    }
+
+    li {
+        border-bottom: 1px solid scale-color($light-gray, $lightness: -10%);
+
+        a {
+            color: scale-color($dark-gray, $lightness: -30%) !important;
+            font-weight: 400 !important;
+        }
+    }
+}
+
 .top-bar-title {
     margin: rem-calc(8 0);
     padding: 0;
