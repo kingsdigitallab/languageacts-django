@@ -84,6 +84,10 @@ small {
 .meta {
     color: $dark-gray;
     font-style: italic;
+
+    &.info {
+        font-size: rem-calc(14);
+    }
 }
 
 /** Header **/
@@ -287,6 +291,10 @@ section.main {
     &.float-right {
         padding: rem-calc(0 0 0 24);
     }
+}
+
+.news-block {
+    margin-top: rem-calc(24);
 }
 
 .page-content {
@@ -548,7 +556,7 @@ Animating the logo's diactrics
 
     .card {
         .image-container {
-            height: rem-calc(200) !important;
+            height: rem-calc(150) !important;
             overflow: hidden;
         }
     }
