@@ -1,7 +1,7 @@
 from django import template
 from django.conf import settings
 
-from cms.models.pages import BlogPost, NewsPost
+from cms.models.pages import BlogPost, Event, NewsPost
 from datetime import date
 
 register = template.Library()
@@ -11,6 +11,18 @@ register = template.Library()
 def are_comments_allowed():
     """Returns True if commenting on the site is allowed, False otherwise."""
     return getattr(settings, 'ALLOW_COMMENTS', False)
+
+
+@register.assignment_tag
+def get_homepage_events():
+    """Returns 3 latest news posts"""
+    today = date.today()
+    events = Event.objects.live().filter(
+        date_to__gte=today).order_by('date_from')
+    if events.count() < 4:
+        return events
+    else:
+        return events[:4]
 
 
 @register.assignment_tag
