@@ -1,7 +1,6 @@
 {% extends "cms/base.html" %}
 {% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
 
-
 {% block title %}
 <header class="section-header">
   <h1>
@@ -11,16 +10,16 @@
      <small><i class="fa fa-eye-slash"></i> <em>Private</em></small>
     {% endif %}
   </h1>
-  <h2>{{self.location}}: {{self.date_from}} {%if self.date_to %} - {{self.date_to}}{% endif %} {{self.time}} {%if self.time_end %} - {{self.time_end}}{% endif %}</h2>
+  <h2>{{ self.location }}: {{ self.date_from }} {% if self.date_to %} - 
+  {{ self.date_to }}{% endif %} {{ self.time }} {% if self.time_end %} - 
+  {{ self.time_end }}{% endif %}</h2>
 </header>
 {% endblock %}
 
 {% block main %}
 
 <article>
-
 {{ self.body|safe }}
-
 </article>
 
 {% endblock %}
