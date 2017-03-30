@@ -18,7 +18,7 @@ def get_homepage_events():
     """Returns 3 latest news posts"""
     today = date.today()
     events = Event.objects.live().filter(
-        date_to__gte=today).order_by('date_from')
+        date_from__gte=today).order_by('date_from')
     if events.count() < 4:
         return events
     else:

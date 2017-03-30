@@ -265,7 +265,7 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     def events(self):
         # Events that have not ended.
         today = date.today()
-        events = Event.objects.live().filter(date_to__gte=today).order_by(
+        events = Event.objects.live().filter(date_from__gte=today).order_by(
             'date_from')
         return events
 
@@ -312,7 +312,7 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
     def events(self):
         # Events that have not ended.
         today = date.today()
-        events = Event.objects.live().filter(date_to__lt=today).order_by(
+        events = Event.objects.live().filter(date_from__lt=today).order_by(
             '-date_from')
         return events
 
