@@ -12,10 +12,12 @@
                         <i class="fa fa-clock-o"></i>
                     </div>
                     <div class="small-11 columns">
-                        {{ event.date_from|date:'jS F Y' }} 
-                        {% if event.date_to %} - {{ event.date_to|date:'jS F Y' }}{% endif %}<br>
+                        <time datetime="{{ page.specific.date }}">
+                        {{ event.date_from|date:'jS b Y' }} 
+                        {% if event.date_to %} - {{ event.date_to|date:'jS b Y' }}{% endif %}<br>
                         {{ event.time|date:'H:i' }} 
                         {% if event.time_end %} - {{ event.time_end|date:'H:i' }}{% endif %}
+                        </time>
                     </div>
                 </div>
                 <div class="row collapse meta info bottom-margin">

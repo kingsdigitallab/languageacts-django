@@ -42,6 +42,10 @@ small {
     color: $dark-gray;
 }
 
+time {
+    text-transform: capitalize;
+}
+
 .active {
     font-weight: 700;
 }
