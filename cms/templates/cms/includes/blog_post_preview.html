@@ -9,7 +9,7 @@
                 <p class="byline blogpost">
                     <p class="byline blog">
                     Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
-                    <time datetime="{{ page.specific.date|date:'c' }}">
+                    <time datetime="{{ page.specific.date|date:'jS F Y' }}">
                     {{ page.specific.date }}</time>
 
                     {% are_comments_allowed as allow_comments %}

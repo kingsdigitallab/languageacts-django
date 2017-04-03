@@ -355,7 +355,7 @@ class Event(Page, WithStreamField, WithFeedImage):
     date_from = models.DateField(verbose_name="Start Date")
     date_to = models.DateField(verbose_name="End Date (Leave blank if\
                                not required)", blank=True, null=True)
-    time = models.TimeField(verbose_name="Time of Event", blank=True)
+    time = models.TimeField(verbose_name="Time of Event")
     time_end = models.TimeField(verbose_name="End Time (leave blank if\
                                 not required)", blank=True, null=True)
 
