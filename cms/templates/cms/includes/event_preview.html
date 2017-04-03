@@ -13,8 +13,8 @@
                     </div>
                     <div class="small-11 columns">
                         <time datetime="{{ page.specific.date }}">
-                        {{ event.date_from|date:'jS b Y' }} 
-                        {% if event.date_to %} - {{ event.date_to|date:'jS b Y' }}{% endif %}<br>
+                        {{ event.date_from|date:'j b Y' }} 
+                        {% if event.date_to %} - {{ event.date_to|date:'j b Y' }}{% endif %}<br>
                         {{ event.time|date:'H:i' }} 
                         {% if event.time_end %} - {{ event.time_end|date:'H:i' }}{% endif %}
                         </time>
