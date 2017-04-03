@@ -259,7 +259,7 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
         index.SearchField('body'),
     ]
 
-    subpage_types = ['Event']
+    subpage_types = ['Event', 'PastEventIndexPage']
 
     @property
     def events(self):

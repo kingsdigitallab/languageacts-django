@@ -6,7 +6,7 @@
     <div class="column column-block">
         <div class="card event" data-equalizer-watch>
             <div class="card-section">
-                <h3><a href="{% pageurl event %}">{{ event.title }}</a></h3>
+                <h3 class="title"><a href="{% pageurl event %}">{{ event.title }}</a></h3>
                 <div class="row collapse meta info">
                     <div class="small-1 columns">
                         <i class="fa fa-clock-o"></i>
@@ -26,6 +26,7 @@
                         {{ event.location }}
                     </div>
                 </div>
+                <hr>
                 <p>{% if event.search_description %}{{ event.search_description|safe }}{% endif %}</p>
             </div>
         </div>

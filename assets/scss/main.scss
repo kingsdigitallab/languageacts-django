@@ -82,7 +82,7 @@ small {
 }
 
 .meta {
-    color: $dark-gray;
+    color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
 
     &.info {
@@ -262,6 +262,10 @@ section.main {
         position: absolute;
         right: rem-calc(3);
         top: 0;
+    }
+
+    .title {
+        width: 90%;
     }
 }
 
