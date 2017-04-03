@@ -50,6 +50,10 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.bottom-margin {
+    margin-bottom: rem-calc(16);
+}
+
 .byline {
     font-style: italic;
 }
@@ -82,7 +86,7 @@ small {
 }
 
 .meta {
-    color: $dark-gray;
+    color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
 
     &.info {
@@ -262,6 +266,10 @@ section.main {
         position: absolute;
         right: rem-calc(3);
         top: 0;
+    }
+
+    .title {
+        width: 90%;
     }
 }
 
