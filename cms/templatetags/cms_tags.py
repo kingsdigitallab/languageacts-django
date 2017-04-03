@@ -57,6 +57,21 @@ def get_site_root(context):
     return context['request'].site.root_page
 
 
+@register.assignment_tag(takes_context=False)
+def get_twitter_name():
+    return getattr(settings, 'TWITTER_NAME')
+
+
+@register.assignment_tag(takes_context=False)
+def get_twitter_url():
+    return getattr(settings, 'TWITTER_URL')
+
+
+@register.assignment_tag(takes_context=False)
+def get_twitter_widget_id():
+    return getattr(settings, 'TWITTER_WIDGET_ID')
+
+
 @register.simple_tag
 def has_view_restrictions(page):
     """Returns True if the page has view restrictions set up, False

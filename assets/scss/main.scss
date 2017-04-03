@@ -415,6 +415,8 @@ footer {
     }
 }
 
+/* Twitter */
+
 // Cookies
 
 .cookies-box {
@@ -571,6 +573,11 @@ Animating the logo's diactrics
             height: rem-calc(150) !important;
             overflow: hidden;
         }
+    }
+
+    .twitter-box {
+        overflow: hidden;
+        max-height: rem-calc(240);
     }
 
 }
