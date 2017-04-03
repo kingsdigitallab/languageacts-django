@@ -19,7 +19,7 @@
 <article class="post" id="post{{ self.id }}">
     <header>
         <p class="byline newspost">
-            <time datetime="{{ self.date|date:'jS F Y' }}">{{ self.date }}</time>
+            <time datetime="{{ self.date }}">{{ self.date|date:'jS F Y' }}</time>
             {% are_comments_allowed as allow_comments %}
             {% if allow_comments %}
             {% block blog_post_comments_link %}
