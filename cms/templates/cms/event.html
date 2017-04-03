@@ -13,9 +13,9 @@
 
   <p class="meta">
     <i class="fa fa-calendar"></i> {{ self.date_from|date:'jS F Y' }} 
-    {% if self.date_to %} - {{ self.date_to|date:'jS F Y' }}{% endif %}<br>
-    <i class="fa fa-clock-o"></i> {{ self.time|date:'H:i' }} 
-    {% if self.time_end %} - {{ self.time_end|date:'H:i' }}{% endif %}<br>
+    {% if self.date_to %} - {{ self.date_to|date:'jS F Y' }}{% endif %}&nbsp;
+    <i class="fa fa-clock-o"></i> {{ self.time|date:'H:i' }}&nbsp;
+    {% if self.time_end %} - {{ self.time_end|date:'H:i' }}{% endif %} 
     <i class="fa fa-map-marker"></i> {{ self.location }}
   </p>
 </header>
