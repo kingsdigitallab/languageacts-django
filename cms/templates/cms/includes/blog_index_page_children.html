@@ -3,48 +3,34 @@
 
 <h2 class="section-title">{{ page.title }}</h2>
 
-<table class="striped">
-    <tbody>
-        {% for page in pages %}
-        {% has_view_restrictions page as is_private %}
-        {% if is_private %}
-        {% if request.user.is_authenticated %}
-        <tr>
-            <td>
-                <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a> <small><i class="fa fa-eye-slash"></i> <em>Private</em></small></h3>
-                <p class="byline blog">
-                    Posted by {{ page.owner }}
-                    <time datetime="{{ page.specific.date|date:'c' }}">on {{ page.specific.date }}</time>
+{% block blogpost %}
+<div class="row small-up-1 medium-up-2 large-up-4" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
+    {% for page in pages %}
+    <div class="column column-block">
+        <div class="card blog" data-equalizer-watch>
+            <div class="card-section">
+                <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+                <p class="byline blogpost">
+                    <p class="byline blog">
+                    Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
+                    <time datetime="{{ page.specific.date }}">
+                    {{ page.specific.date|date:'jS F Y' }}</time>
 
                     {% are_comments_allowed as allow_comments %}
                     {% if allow_comments %}
                      | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
                     {% endif %}
                 </p>
-                <p>{{ page.search_description }}</p></a>
-            </td>
-        </tr>
-        {% endif %}
-        {% else %}
-        <tr>
-            <td>
-                <h3 class="subhead"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
-                <p class="byline blog">
-                    Posted by {{ page.owner }}
-                    <time datetime="{{ page.specific.date|date:'c' }}">on {{ page.specific.date }}</time>
+                <p>{{ page.search_description }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% else %}
+<p>There are no blog posts.</p>
 
-                    {% are_comments_allowed as allow_comments %}
-                    {% if allow_comments %}
-                     | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
-                    {% endif %}
-                </p>
-                <p>{{ page.search_description }}</p></a>
-            </td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
 {% endif %}
 
 {% are_comments_allowed as allow_comments %}
