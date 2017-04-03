@@ -10,8 +10,7 @@
         <div class="card blog" data-equalizer-watch>
             <div class="card-section">
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
-                <p class="byline blogpost">
-                    <p class="byline blog">
+                <p class="meta info byline blog">
                     Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
                     <time datetime="{{ page.specific.date }}">
                     {{ page.specific.date|date:'jS b Y' }}</time>
