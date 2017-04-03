@@ -4,15 +4,6 @@
     {% for page in pages %}
     <div class="column column-block">
         <div class="card blog" data-equalizer-watch>
-            {% comment %}
-            {% if page.specific.feed_image %}
-            {% image page.specific.feed_image max-600x300 as tmp_image %}
-            <a href="{% pageurl page %}">
-                <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
-            </a>
-            {% endif %}
-            {% endcomment %}
-
             <div class="card-section">
                 <h3><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline blogpost">
@@ -26,9 +17,6 @@
                      | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
                     {% endif %}
                 </p>
-                {% comment %}
-                <p>{{ page.search_description }}</p>
-                {% endcomment %}
             </div>
         </div>
     </div>

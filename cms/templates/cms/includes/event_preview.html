@@ -1,0 +1,34 @@
+{% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+<div class="row events-block small-up-1 medium-up-2 large-up-4" data-equalizer 
+    data-equalize-by-row="true" data-equalize-on="medium">
+  {% for event in events %}
+    <div class="column column-block">
+        <div class="card event" data-equalizer-watch>
+            <div class="card-section">
+                <h3><a href="{% pageurl event %}">{{ event.title }}</a></h3>
+                <div class="row collapse meta info">
+                    <div class="small-1 columns">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <div class="small-11 columns">
+                        {{ event.date_from|date:'jS F Y' }} 
+                        {% if event.date_to %} - {{ event.date_to|date:'jS F Y' }}{% endif %}<br>
+                        {{ event.time|date:'H:i' }} 
+                        {% if event.time_end %} - {{ event.time_end|date:'H:i' }}{% endif %}
+                    </div>
+                </div>
+                <div class="row collapse meta info">
+                    <div class="small-1 columns">
+                        <i class="fa fa-map-marker"></i>
+                    </div>
+                    <div class="small-11 columns">
+                        {{ event.location }}
+                    </div>
+                </div>
+                <p>{% if event.search_description %}{{ event.search_description|safe }}{% endif %}</p>
+            </div>
+        </div>
+    </div>
+  {% endfor %}
+</div>

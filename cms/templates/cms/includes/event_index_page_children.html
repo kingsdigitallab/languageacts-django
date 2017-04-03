@@ -1,10 +1,7 @@
 {% if events %}
 {% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
 
-{% for event in events %}
-<h2 class="section-title"><a href="{% pageurl event %}">{{ event.title }}</a></h2>
-<h3>{{event.location}}: {{event.date_from}} {%if event.date_to %} - {{event.date_to}}{% endif %} {{event.time}} {%if event.time_end %} - {{event.time_end}}{% endif %}</h3>
-{{event.body|safe}}
-{% endfor %}
-
+{% block eventitem %}
+{% include "cms/includes/event_preview.html" %}
+{% endblock %}
 {% endif %}
