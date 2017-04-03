@@ -18,7 +18,7 @@
                         {% if event.time_end %} - {{ event.time_end|date:'H:i' }}{% endif %}
                     </div>
                 </div>
-                <div class="row collapse meta info">
+                <div class="row collapse meta info bottom-margin">
                     <div class="small-1 columns">
                         <i class="fa fa-map-marker"></i>
                     </div>
@@ -26,7 +26,6 @@
                         {{ event.location }}
                     </div>
                 </div>
-                <hr>
                 <p>{% if event.search_description %}{{ event.search_description|safe }}{% endif %}</p>
             </div>
         </div>

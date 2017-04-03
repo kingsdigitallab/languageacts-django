@@ -50,6 +50,10 @@ small {
     border-bottom: 1px dotted $secondary-color;
 }
 
+.bottom-margin {
+    margin-bottom: rem-calc(16);
+}
+
 .byline {
     font-style: italic;
 }
