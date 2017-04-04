@@ -578,6 +578,9 @@ Animating the logo's diactrics
     .twitter-box {
         overflow: hidden;
         max-height: rem-calc(240);
+        -webkit-column-count: 4; /* Chrome, Safari, Opera */
+        -moz-column-count: 4; /* Firefox */
+        column-count: 4;
     }
 
 }
