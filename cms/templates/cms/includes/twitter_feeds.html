@@ -1,9 +1,9 @@
 {% load twitterhut_tags %}
 
 {% user_timeline screen_name as timeline %}
-<ul class="no-bullet twitter-list">
+<ul class="no-bullet twitter-list" data-equalizer data-equalize-on="medium">
     {% for tweet in timeline %}
-    <li class="gray-bg text-content">
+    <li data-equalizer-watch>
         {% if tweet.retweeted_status %}
         <p class="retweet">@{{ screen_name }} retweeted</p>
         {% endif %}
@@ -12,11 +12,11 @@
             <div class="media-object-section">
                 {% if tweet.retweeted_status %}
                 <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
-                    <img src="{{ tweet.retweeted_status.user.profile_image_url_https }}" alt="{{ tweet.retweeted_status.user.screen_name }} profile image">
+                    <img src="{{ tweet.retweeted_status.user.profile_image_url_https }}" alt="{{ tweet.retweeted_status.user.name }} profile image">
                 </a>
                 {% else %}
-                <a href="//twitter.com/{{ screen_name }}">
-                    <img src="{{ tweet.user.profile_image_url_https }}" alt="{{ screen_name }} profile image">
+                <a href="//twitter.com/{{ tweet.user.screen_name }}">
+                    <img src="{{ tweet.user.profile_image_url_https }}" alt="{{ tweet.user.name }} profile image">
                 </a>
                 {% endif %}
             </div>
@@ -31,13 +31,13 @@
                 {% if tweet.retweeted_status %}
                 <h3 class="small-heading">
                     <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
-                        @{{ tweet.retweeted_status.user.screen_name }}
+                        @{{ tweet.retweeted_status.user.name }}
                     </a>
                 </h3>
                 {% else %}
                 <h3 class="small-heading">
-                    <a href="//twitter.com/{{ screen_name }}">
-                        @{{ screen_name }}
+                    <a href="//twitter.com/{{ tweet.user.screen_name }}">
+                        @{{ tweet.user.screen_name }}
                     </a>
                 </h3>
                 {% endif %}
@@ -45,7 +45,7 @@
         </div>
 
         <p>{{ tweet|tweet_to_html }}</p>
-        <p class="tweet-datetime"><a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}">{{ tweet.created_at|tweet_date:'D d M Y' }}</a></p>
+        <p class="tweet-datetime"><a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}">{{ tweet.created_at|tweet_date:'d M Y' }}</a></p>
     </li>
     {% endfor %}
 </ul>

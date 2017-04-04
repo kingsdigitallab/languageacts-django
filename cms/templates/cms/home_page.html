@@ -41,7 +41,8 @@
     </div>
 </div>
 
-<div class="row twitter-block" data-equalizer data-equalize-on="medium">
+{% comment %}
+<div class="row twitter-block">
     <div class="medium-6 large-12 columns">
         <div class="twitter-box">
             {# Twitter will replace this anyway #}
@@ -51,6 +52,7 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
 {% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
 
