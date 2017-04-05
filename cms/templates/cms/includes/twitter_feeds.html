@@ -45,7 +45,14 @@
         </div>
 
         <p>{{ tweet|tweet_to_html }}</p>
-        <p class="tweet-datetime"><a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}">{{ tweet.created_at|tweet_date:'d M Y' }}</a></p>
+        <p class="tweet-datetime clearfix">
+            <a href="//twitter.com/intent/like?tweet_id={{ tweet.id_str }}" class="like">
+                <i class="fa fa-heart"></i>
+            </a>
+            <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
+                {{ tweet.created_at|tweet_date:'d M Y' }}
+            </a>
+        </p>
     </li>
     {% endfor %}
 </ul>

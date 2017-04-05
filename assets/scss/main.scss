@@ -438,14 +438,28 @@ footer {
     }
 
     p {
-        &.tweet-datetime {
-            font-size: rem-calc(13);
-        }
-
         line-height: rem-calc(20);
 
+        &.tweet-datetime {
+            font-size: rem-calc(13);
+            padding-right: rem-calc(24);
+        }
+
         a {
+            color: $dark-gray;
             font-weight: normal;
+
+            &:hover {
+                color: $secondary-color;
+            }
+
+            i {
+                color: scale-color($dark-gray, $lightness: 40%);
+
+                &:hover {
+                    color: $secondary-color;
+                }
+            }
         }
     }
 
