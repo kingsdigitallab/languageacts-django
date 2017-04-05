@@ -439,14 +439,11 @@ footer {
 
 .twitter-list {
     color: scale-color($dark-gray, $lightness: -30%);
+    margin-bottom: rem-calc(16);
 
     h2,
     h3 {
         margin: rem-calc(0 0 4 0);
-    }
-
-    li {
-        border-bottom: 1px solid $light-gray;
     }
 
     p {
@@ -489,6 +486,10 @@ footer {
     .small-heading {
         font-size: rem-calc(16);
         line-height: rem-calc(20);
+    }
+
+    .tweet-block {
+        border-bottom: 1px solid $light-gray;
     }
 }
 
@@ -650,12 +651,12 @@ Animating the logo's diactrics
         }
     }
 
-    .twitter-box,
-    .twitter-list {
-        -webkit-column-count: 4;
-        -moz-column-count: 4;
-        column-count: 4;
-    }
+    // .twitter-box,
+    // .twitter-list {
+    //     -webkit-column-count: 4;
+    //     -moz-column-count: 4;
+    //     column-count: 4;
+    // }
 
 }
 
@@ -695,12 +696,12 @@ Animating the logo's diactrics
         }
     }
 
-    .twitter-box,
-    .twitter-list {
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
-        column-count: 2;
-    }
+    // .twitter-box,
+    // .twitter-list {
+    //     -webkit-column-count: 2;
+    //     -moz-column-count: 2;
+    //     column-count: 2;
+    // }
 }
 
 @include breakpoint(small) {
