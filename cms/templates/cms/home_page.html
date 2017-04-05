@@ -32,26 +32,31 @@
     </div>
 </ol>
 
-{# Twitter Placeholder #}
+{# Twitter #}
 <div class="row">
     <div class="large-12 columns">
         <p>
-            <a href="https://twitter.com/languageacts" data-link-color="#ba4b16" data-chrome="noheader">
+            <a href="https://twitter.com/languageacts">
                 <i class="fa fa-twitter" aria-hidden="true"></i> Follow us @languageacts
             </a>
         </p>
     </div>
 </div>
 
-<div class="row twitter-block" data-equalizer data-equalize-on="medium">
+{% comment %}
+<div class="row twitter-block">
     <div class="medium-6 large-12 columns">
         <div class="twitter-box">
             {# Twitter will replace this anyway #}
-            <a class="twitter-timeline" href="https://twitter.com/languageacts" data-link-color="#ba4b16" data-chrome="noheader transparent" data-tweet-limit="4"></a>
-            <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            <a class="twitter-timeline" href="https://twitter.com/ginez_17" data-link-color="#ba4b16" data-chrome="noheader transparent" data-tweet-limit="4" data-aria-polite="assertive"></a>
+  
+            <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
     </div>
 </div>
+{% endcomment %}
+
+{% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
 
 {# Instagram Placeholder #}
 <div class="row">
