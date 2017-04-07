@@ -1,0 +1,14 @@
+{% extends "cms/base.html" %}
+
+{% block main %}
+<div class="row">
+    <div class="large-3 columns subnav">
+        {% block index_page_children %}
+        {% include "cms/includes/index_page_children.html" with pages=self.get_children %}
+        {% endblock %}
+    </div>
+    <div class="large-9 columns">
+    {{ block.super }}
+    </div>
+</div>
+{% endblock %}

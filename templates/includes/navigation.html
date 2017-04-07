@@ -1,22 +1,36 @@
-{% load staticfiles %}
+{% load cms_tags %}
 
 <div class="row">
   <div class="large-12 columns">
-    <div class="title-bar" data-responsive-toggle="top-menu" data-hide-for="medium">
-      <button class="menu-icon" type="button" data-toggle></button>
-      <div class="title-bar-title">Menu</div>
-    </div>
-
-    <div class="top-bar" id="top-menu">
-      <div class="top-bar-left">
-
-        {% block main_menu %}
-        {% get_site_root as site_root %}
-        {% main_menu root=site_root current_page=self %}
-        {% endblock %}
-
+    <div class="top-bar">
+      <div class="top-bar-title">
+        <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+          <button class="menu-icon dark" type="button" data-toggle></button> Menu
+        </span>
       </div>
-      <div class="top-bar-right">
+      <div id="responsive-menu">
+        <div class="top-bar-left">
+
+          {% block main_menu %}
+          {% get_site_root as site_root %}
+          {% main_menu root=site_root current_page=self %}
+          {% endblock %}
+
+        </div>
+        <div class="top-bar-right">
+          <form action="/search/" class="show-for-medium search-box" method="get">
+              <div class="row collapse">
+                  <div class="small-10 columns">
+                      <label>
+                          <input type="search" name="q" placeholder="Search" value="{{request.GET.q}}">
+                      </label>
+                  </div>
+                  <div class="small-2 columns">
+                      <button type="submit" class="button search-button"><i class="fa fa-search"></i></button>
+                  </div>
+              </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

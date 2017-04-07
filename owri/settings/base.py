@@ -12,6 +12,7 @@ import logging
 import os
 
 from ddhldap.settings import *  # noqa
+from twitterhut.settings import *  # noqa
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -88,6 +89,8 @@ INSTALLED_APPS = (
 
 INSTALLED_APPS += (
     'owri',
+    'cms',
+    'twitterhut',
 )
 
 INTERNAL_IPS = ('127.0.0.1', )
@@ -250,6 +253,13 @@ SESSION_COOKIE_SECURE = True
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
+# DISQUS
+# http://gssn.disqus.com/
+# -----------------------------------------------------------------------------
+
+ALLOW_COMMENTS = True
+
+# -----------------------------------------------------------------------------
 # Django Compressor
 # http://django-compressor.readthedocs.org/en/latest/
 # -----------------------------------------------------------------------------
@@ -314,6 +324,12 @@ REQUIRE_ENVIRONMENT = 'node'
 
 FABRIC_USER = getpass.getuser()
 
+# -----------------------------------------------------------------------------
+# Twitter
+# -----------------------------------------------------------------------------
+
+TWITTER_SCREEN_NAME = 'languageacts'
+
 
 # -----------------------------------------------------------------------------
 # Wagtail
@@ -328,12 +344,14 @@ WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch2',
         'AUTO_UPDATE': False,
-        'URLS': ['http://localhost:9200'],
+        'URLS': ['http://127.0.0.1:9200'],
         'INDEX': 'owri_wagtail',
         'TIMEOUT': 5,
     }
 }
 
+WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'cms/login.html'
+WAGTAILSEARCH_RESULTS_TEMPLATE = 'cms/search_results.html'
 
 # -----------------------------------------------------------------------------
 # GLOBALS FOR JS

@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+<li class="column column-block block-{{ block.block_type }} {{ block.value.title }}">
+    <div class="blocks" data-equalizer-watch>
+        <h3 class="text-center">{{ block.value.title }}</h3>
+        {{ block.value.description|safe }}
+    </div>
+    <a href="{% if block.value.url %}{{ block.value.url }}{% else %}{% pageurl block.value.page %}{% endif %}" class="button expanded">Explore</a>
+</li>

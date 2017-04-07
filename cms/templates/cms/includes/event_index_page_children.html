@@ -1,0 +1,9 @@
+{% if events %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block eventitem %}
+{% include "cms/includes/event_preview.html" %}
+{% endblock %}
+{% else %}
+<p>There are no events planned for the immediate future.</p>
+{% endif %}

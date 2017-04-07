@@ -1,0 +1,30 @@
+{% extends "cms/base.html" %}
+{% load wagtailcore_tags %}
+
+{% block meta_title %}Search Results{% endblock %}
+
+{# Not a fan of this, but it's the least hacky way to feed the title back. #}
+{% block title %}
+<header class="section-header">
+  <h1>Search Results for: {{ request.GET.q }}</h1>
+</header>
+{% endblock %}
+
+{% block main %}
+
+{% if search_results %}
+<ul>
+   {% for result in search_results %}
+       <li>
+           <h4><a href="{% pageurl result.specific %}">{{ result.specific }}</a></h4>
+           {% if result.specific.search_description %}
+               {{ result.specific.search_description|safe }}
+           {% endif %}
+       </li>
+   {% endfor %}
+</ul>
+{% else %}
+  <p>No results found.</p>
+{% endif %}
+
+{% endblock %}

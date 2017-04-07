@@ -1,0 +1,17 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="img-wrapper float-{{ value.alignment }}">
+    {% if value.alignment == "left" or value.alignment == "right" %}
+    {% image value.image width-300 as theimage %}
+    <img src="{{ theimage.url }}" width="{{ theimage.width }}" height="{{ theimage.height }}" alt="{{ theimage.alt }}">
+    {% else %}
+    {% image value.image width-1024 as theimage %}
+    <img src="{{ theimage.url }}" width="{{ theimage.width }}" height="{{ theimage.height }}" alt="{{ theimage.alt }}">
+    {% endif %}
+
+    {% if value.caption %}
+    <div class="caption">
+        {{ value.caption|richtext }}
+    </div>
+    {% endif %}
+</div>

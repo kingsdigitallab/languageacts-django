@@ -1,0 +1,35 @@
+{% extends "cms/base.html" %}
+{% load cms_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block meta_title %}Log in{% endblock %}
+
+{% block main %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    
+    {{ form.password.label_tag }}
+    {{ form.password }}
+
+    <input type="submit" value="Log in" class="button secondary">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+<p><a href="/wagtail/password_reset/">Lost password?</a></p>
+
+{% endblock %}

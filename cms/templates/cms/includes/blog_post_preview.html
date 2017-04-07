@@ -1,0 +1,24 @@
+{% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+<div class="row small-up-1 medium-up-2 large-up-4" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
+    {% for page in pages %}
+    <div class="column column-block">
+        <div class="card blog" data-equalizer-watch>
+            <div class="card-section">
+                <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+                <p class="byline blogpost">
+                    <p class="byline blog">
+                    Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
+                    <time datetime="{{ page.specific.date }}">
+                    {{ page.specific.date|date:'j b Y' }}</time>
+
+                    {% are_comments_allowed as allow_comments %}
+                    {% if allow_comments %}
+                     | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,314 @@
+[
+    {
+        "fields": {
+            "hostname": "localhost",
+            "is_default_site": true,
+            "port": 8000,
+            "root_page": 3,
+            "site_name": ""
+        },
+        "model": "wagtailcore.site",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "content_type": 1,
+            "depth": 1,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": null,
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": null,
+            "live": true,
+            "locked": false,
+            "numchild": 1,
+            "owner": null,
+            "path": "0001",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "root",
+            "title": "Root",
+            "url_path": "/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "content_type": 29,
+            "depth": 2,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:15:31.173Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:15:44.838Z",
+            "live": true,
+            "locked": false,
+            "numchild": 2,
+            "owner": null,
+            "path": "00010002",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "home",
+            "title": "Language Acts and Worldmaking",
+            "url_path": "/home/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "content_type": 32,
+            "depth": 3,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:16:40.050Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:16:40.028Z",
+            "live": true,
+            "locked": false,
+            "numchild": 3,
+            "owner": null,
+            "path": "000100020001",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "about",
+            "title": "About",
+            "url_path": "/home/about/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "content_type": 31,
+            "depth": 4,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:17:10.154Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:17:10.132Z",
+            "live": true,
+            "locked": false,
+            "numchild": 0,
+            "owner": null,
+            "path": "0001000200010001",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "travelling-concepts",
+            "title": "Travelling Concepts",
+            "url_path": "/home/about/travelling-concepts/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "content_type": 31,
+            "depth": 4,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:17:29.701Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:17:29.680Z",
+            "live": true,
+            "locked": false,
+            "numchild": 0,
+            "owner": null,
+            "path": "0001000200010002",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "translation-acts",
+            "title": "Translation Acts",
+            "url_path": "/home/about/translation-acts/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "content_type": 31,
+            "depth": 4,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:17:48.036Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:17:48.009Z",
+            "live": true,
+            "locked": false,
+            "numchild": 0,
+            "owner": null,
+            "path": "0001000200010003",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "digital-mediations",
+            "title": "Digital Mediations",
+            "url_path": "/home/about/digital-mediations/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "content_type": 27,
+            "depth": 3,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:18:01.117Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:18:01.094Z",
+            "live": true,
+            "locked": false,
+            "numchild": 2,
+            "owner": null,
+            "path": "000100020002",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "blog",
+            "title": "Blog",
+            "url_path": "/home/blog/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "content_type": 30,
+            "depth": 4,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:18:55.847Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:18:55.812Z",
+            "live": true,
+            "locked": false,
+            "numchild": 0,
+            "owner": null,
+            "path": "0001000200020001",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "post-1",
+            "title": "Post 1",
+            "url_path": "/home/blog/post-1/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "content_type": 30,
+            "depth": 4,
+            "expire_at": null,
+            "expired": false,
+            "first_published_at": "2017-01-11T12:21:42.126Z",
+            "go_live_at": null,
+            "has_unpublished_changes": false,
+            "latest_revision_created_at": "2017-01-11T12:21:42.092Z",
+            "live": true,
+            "locked": false,
+            "numchild": 0,
+            "owner": null,
+            "path": "0001000200020002",
+            "search_description": "",
+            "seo_title": "",
+            "show_in_menus": false,
+            "slug": "post-2",
+            "title": "Post 2",
+            "url_path": "/home/blog/post-2/"
+        },
+        "model": "wagtailcore.page",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.homepage",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.indexpage",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.richtextpage",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.richtextpage",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.richtextpage",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "body": "[]"
+        },
+        "model": "cms.blogindexpage",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "content_object": 10,
+            "tag": 1
+        },
+        "model": "cms.blogposttag",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "body": "[]",
+            "date": "2017-01-11",
+            "feed_image": null
+        },
+        "model": "cms.blogpost",
+        "pk": 10
+    },
+    {
+        "fields": {
+            "body": "[]",
+            "date": "2017-01-11",
+            "feed_image": null
+        },
+        "model": "cms.blogpost",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "name": "news",
+            "slug": "news"
+        },
+        "model": "taggit.tag",
+        "pk": 1
+    }
+]

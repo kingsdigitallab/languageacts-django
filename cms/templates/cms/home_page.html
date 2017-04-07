@@ -1,0 +1,82 @@
+{% extends "cms/base.html" %}
+{% load cms_tags staticfiles wagtailcore_tags %}
+
+{% block title %}
+{% endblock %}
+
+{% block bodyclass %} class="homepage"{% endblock %}
+
+{% block main %}
+
+{% for block in self.body %}
+{% if block.block_type != 'home' %}
+    {{ block.value }}
+{% endif %}
+{% endfor %}
+
+{% get_news_preview as news_posts %}
+{% include "cms/includes/news_preview.html" with pages=news_posts %}
+
+{# Events Placeholder #}
+{% get_homepage_events as events %}
+{% include "cms/includes/event_preview.html" with event=event_posts %}
+
+
+{% get_blog_posts_preview as blog_posts %}
+{% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
+
+<ol class="custom-counter">
+    <div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalizer
+        data-equalize-by-row="true" data-equalize-on="medium">
+        {% include "cms/includes/streamfield_home.html" with blocks=self.body %}
+    </div>
+</ol>
+
+{# Twitter #}
+<div class="row">
+    <div class="large-12 columns">
+        <p>
+            <a href="https://twitter.com/languageacts">
+                <i class="fa fa-twitter" aria-hidden="true"></i> Follow us @languageacts
+            </a>
+        </p>
+    </div>
+</div>
+
+{% comment %}
+<div class="row twitter-block">
+    <div class="medium-6 large-12 columns">
+        <div class="twitter-box">
+            {# Twitter will replace this anyway #}
+            <a class="twitter-timeline" href="https://twitter.com/ginez_17" data-link-color="#ba4b16" data-chrome="noheader transparent" data-tweet-limit="4" data-aria-polite="assertive"></a>
+  
+            <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
+</div>
+{% endcomment %}
+
+{% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
+
+{# Instagram Placeholder #}
+<div class="row">
+    <div class="large-12 columns">
+        <p><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @InstagramHandle</a></p>
+    </div>
+</div>
+<div class="row collapse instagram-block">
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/IMG_5258-640x640.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/Language-Teacher-640x640.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/IMG_2868-640x640.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        <img src="{% static '/images/placeholders/IMG_4021-640x640.jpg' %}" alt="Placeholder">
+    </div>
+</div>
+
+{% endblock %}

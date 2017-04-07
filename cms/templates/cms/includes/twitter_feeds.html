@@ -1,0 +1,72 @@
+{% load twitterhut_tags %}
+
+{% user_timeline screen_name as timeline %}
+<div class="row twitter-list" data-equalizer data-equalize-on="medium">
+{% comment %}
+<ul class="no-bullet twitter-list" data-equalizer data-equalize-on="medium">
+{% endcomment %}
+    {% for tweet in timeline %}
+    {% comment %}
+    <li data-equalizer-watch>
+    {% endcomment %}
+    <div class="medium-6 large-3 columns">
+        <div class="tweet-block" data-equalizer-watch>
+            {% if tweet.retweeted_status %}
+            <p class="retweet"><a href="//twitter.com/{{ tweet.user.screen_name }}">@{{ tweet.user.screen_name }}</a> retweeted</p>
+            {% endif %}
+
+            <div class="media-object">
+                <div class="media-object-section">
+                    {% if tweet.retweeted_status %}
+                    <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
+                        <img src="{{ tweet.retweeted_status.user.profile_image_url_https }}" alt="{{ tweet.retweeted_status.user.name }} profile image">
+                    </a>
+                    {% else %}
+                    <a href="//twitter.com/{{ tweet.user.screen_name }}">
+                        <img src="{{ tweet.user.profile_image_url_https }}" alt="{{ tweet.user.name }} profile image">
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="media-object-section">
+                    <h2 class="small-heading">
+                        {% if tweet.retweeted_status %}
+                        {{ tweet.retweeted_status.user.name }}
+                        {% else %}
+                        {{ tweet.user.name }}
+                        {% endif %}
+                    </h2>
+                    {% if tweet.retweeted_status %}
+                    <h3 class="small-heading">
+                        <a href="//twitter.com/{{ tweet.retweeted_status.user.screen_name }}">
+                            @{{ tweet.retweeted_status.user.name }}
+                        </a>
+                    </h3>
+                    {% else %}
+                    <h3 class="small-heading">
+                        <a href="//twitter.com/{{ tweet.user.screen_name }}">
+                            @{{ tweet.user.screen_name }}
+                        </a>
+                    </h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <p>{{ tweet|tweet_to_html }}</p>
+            <p class="tweet-datetime clearfix">
+                <a href="//twitter.com/intent/like?tweet_id={{ tweet.id_str }}" class="like">
+                    <i class="fa fa-heart"></i>
+                </a>
+                <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
+                    {{ tweet.created_at|tweet_date:'d M Y' }}
+                </a>
+            </p>
+        </div>
+    </div>
+    {% comment %}
+    </li>
+    {% endcomment %}
+    {% endfor %}
+</div>
+{% comment %}
+</ul>
+{% endcomment %}

@@ -16,11 +16,11 @@ sys.path.append(project_root)
 
 django.project('owri')
 
-REPOSITORY = ''
+REPOSITORY = 'https://github.com/kingsdigitallab/languageacts-django.git'
 
 env.user = settings.FABRIC_USER
-env.hosts = ['']
-env.root_path = '/vol/owri/webroot/'
+env.hosts = ['languageacts.kdl.kcl.ac.uk']
+env.root_path = '/vol/languageacts/webroot/'
 env.envs_path = os.path.join(env.root_path, 'envs')
 
 
@@ -66,6 +66,26 @@ def set_srvr_vars():
 
 
 @task
+def install_system_packages():
+    sudo('apt-get -y --force-yes install apt-transport-https')
+    sudo(('wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | '
+          'apt-key add -'))
+    sudo(('echo '
+          '"deb https://packages.elastic.co/elasticsearch/2.x/debian '
+          'stable main" | '
+          'tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list'))
+    sudo('apt-get update')
+    sudo(('apt-get -y --force-yes install '
+          'python-dev python-pip python-setuptools python-virtualenv '
+          'openjdk-7-jre elasticsearch '
+          'libjpeg-dev libxml2-dev libxslt-dev '
+          'libldap2-dev libsasl2-dev '
+          'libpq-dev postgresql-client '
+          'git git-core'))
+    sudo('sudo update-rc.d elasticsearch defaults 95 10')
+
+
+@task
 def setup_environment(version=None):
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
     create_virtualenv()
@@ -86,6 +106,14 @@ def create_virtualenv():
 
     print(yellow('setting up virtual environment in [{}]'.format(env_vpath)))
     run('virtualenv {}'.format(env_vpath))
+
+
+def get_virtual_env_path():
+    '''Returns the absolute path to the python virtualenv for the server
+    (dev, stg, live) we are working on.
+    E.g. /vol/tvof/webroot/envs/dev
+    '''
+    return os.path.join(env.envs_path, env.srvr)
 
 
 @task
@@ -134,7 +162,7 @@ def deploy(version=None):
     collect_static()
     # update_index()
     # clear_cache()
-    touch_wsgi()
+    restart_uwsgi()
 
 
 @task
@@ -168,22 +196,44 @@ def own_django_log():
 
 
 @task
-def fix_permissions():
+def fix_permissions(category='static'):
+    '''
+    Reset the permissions on various paths.
+    category: determines which set of paths to work on:
+        'static' (default): django static path + general project path
+        'virtualenv': fix the virtualenv permissions
+    '''
+    # GN: why do we need VE?
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
 
+    processed = False
+
     with quiet():
-        log_path = os.path.join(env.path, 'logs', 'django.log')
-        if run('ls {}'.format(log_path)).succeeded:
-            sudo('setfacl -R -m g:www-data:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -d -m g:www-data:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -m g:kdl-staff:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('setfacl -R -d -m g:kdl-staff:rwx {}/logs {}/static'.format(
-                env.path))
-            sudo('chgrp -Rf kdl-staff {}'.format(env.path))
-            sudo('chmod -Rf g+w {}'.format(env.path))
+        if category == 'static':
+            processed = True
+            log_path = os.path.join(env.path, 'logs', 'django.log')
+            if run('ls {}'.format(log_path)).succeeded:
+                sudo('setfacl -R -m g:www-data:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -d -m g:www-data:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -m g:kdl-staff:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('setfacl -R -d -m g:kdl-staff:rwx {0}/logs {0}/static'.
+                     format(env.path))
+                sudo('chgrp -Rf kdl-staff {}'.format(env.path))
+                sudo('chmod -Rf g+w {}'.format(env.path))
+        if category == 'virtualenv':
+            path = get_virtual_env_path()
+            sudo('chgrp -Rf kdl-staff {}'.format(path))
+            sudo('chmod -Rf g+rw {}'.format(path))
+            processed = True
+
+    if not processed:
+        raise Exception(
+            'fix_permission(category="{}"): unrecognised category name.'.
+            format(category)
+        )
 
 
 @task
@@ -224,9 +274,5 @@ def clear_cache():
 
 
 @task
-def touch_wsgi():
-    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
-
-    with cd(os.path.join(env.path, 'owri')), \
-            prefix(env.within_virtualenv):
-        run('touch wsgi.py')
+def restart_uwsgi():
+    sudo('service uwsgi restart django-{}'.format(env.srvr))

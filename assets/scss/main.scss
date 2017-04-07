@@ -1,10 +1,824 @@
-@import 'settings'; /*	copy the _settings file from the vendor scss
-						folder to the project one */
-						
+@import 'settings';
+@import 'font-awesome';
 @import '../vendor/foundation-sites/scss/foundation';
-
 @import '../vendor/motion-ui/motion-ui';
+
+@import 'strand-1-tc',
+        'strand-2-ta',
+        'strand-3-dm',
+        'strand-4-lm',
+        'strand-5-di',
+        'strand-6-lt';
+
+@include foundation-everything;
 
 /** Your custom scss here **/
 
-@include foundation-everything;
+
+/** Globals **/
+
+body {
+    background: rgba($dark-blue, .05);
+    // -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a.more {
+    i {
+        font-size: rem-calc(12);
+        padding-left: rem-calc(3);
+    }
+}
+
+button i,
+.button i {
+    font-size: rem-calc(12);
+}
+
+h1 small,
+h2 small,
+h3 small,
+small {
+    color: $dark-gray;
+}
+
+time {
+    text-transform: capitalize;
+}
+
+.active {
+    font-weight: 700;
+}
+
+.border-bottom {
+    border-bottom: 1px dotted $secondary-color;
+}
+
+.bottom-margin {
+    margin-bottom: rem-calc(16);
+}
+
+.byline {
+    font-style: italic;
+}
+
+.custom-counter {
+    margin-left: 0;
+    padding-right: 0;
+    list-style-type: none;
+
+    li {
+        counter-increment: step-counter;
+
+        &:before {
+            background: rgb(255, 255, 255);
+            border-radius: 50% 50% 0;
+            content: counter(step-counter);
+            display: inline-block;
+            font-size: rem-calc(36);
+            margin-left: rem-calc(-25);
+            // padding: rem-calc(0 12);
+            text-align: center;
+            width: rem-calc(60);
+        }
+    }
+}
+
+.intro {
+    font-size: rem-calc(20);
+    color: scale-color($dark-gray, $lightness: -20%);
+}
+
+.meta {
+    color: scale-color($dark-gray, $lightness: -20%);
+    font-style: italic;
+
+    &.info {
+        font-size: rem-calc(14);
+    }
+}
+
+/** Header **/
+header.top-header {
+    // Pattern background
+    background: url('/static/images/lawm-pattern.svg') $dark-blue;
+    // background: url('/static/images/lawm-pattern2.svg') $turquoise;
+    // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
+    background-size: rem-calc(45);
+    position: relative;
+
+    // Fixes the issue FF has with Proxima Nova's baseline
+    button,
+    .button {
+        height: rem-calc(36);
+    }
+
+    .strapline-block {
+        color: $light-yellow;
+        font-style: italic;
+        text-shadow: 0 0 5px $black;
+    }
+}
+
+.header {
+    svg {
+        background: $dark-blue;
+        display: block; // It helps aligning properly to pixel values
+        max-height: rem-calc(160);
+        max-width: rem-calc(300);
+
+        .st0{
+            fill: #fff;
+        }
+        
+        .st1{
+            fill: #009ee2;
+        }
+    }
+}
+
+/** Navigation **/
+
+nav {
+    margin-bottom: rem-calc(24)
+}
+
+.top-bar {
+
+    &::before {
+        display: block;
+    }
+
+    li a {
+        padding: rem-calc(28 16 20);
+
+        &:hover {
+            background: scale-color($primary-color, $lightness: 70%);
+        }
+    }
+}
+
+.subnav {
+    h3 {
+        color: $dark-gray;
+    }
+
+    li {
+        border-bottom: 1px solid scale-color($light-gray, $lightness: -10%);
+
+        a {
+            color: scale-color($dark-gray, $lightness: -30%) !important;
+            font-weight: 400 !important;
+        }
+    }
+}
+
+.top-bar-title {
+    margin: rem-calc(8 0);
+    padding: 0;
+}
+
+/** Homepage **/
+
+.homepage {
+    section.main {
+        .rich-text:first-child p:first-of-type {
+            color: scale-color($dark-gray, $lightness: -20%);
+            font-size: rem-calc(20);
+            text-align: center;
+        }
+    }
+}
+
+/** Main content **/
+
+section.main {
+
+    a {
+        border-bottom: 1px solid transparent;
+        color: $secondary-color;
+        display: inline-block;
+        font-weight: 700;
+
+        &:hover {
+            border-bottom: 1px dotted $secondary-color;
+        }
+
+        &.more {
+            color: $dark-brown;
+            font-weight: normal;
+        }
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-weight: 700;
+    }
+
+    h1 {
+        color: $bright-blue;
+    }
+}
+
+.blob {
+    // left: 50%;
+    position: absolute;
+    // top: rem-calc(-60);
+    top: rem-calc(-50);
+
+    i {
+        left: -40%;
+    }
+
+    .fa-circle:before {
+        color: $white;
+    }
+}
+
+.blocks {
+    //background: rgba($blue-gray, .1);
+    background: #d9dfe2;
+    // margin: rem-calc(50 0 0);
+    padding: rem-calc(28 16 16);
+    position: relative;
+}
+
+.caption {
+    color: scale-color($dark-gray, $lightness: -20%);
+    font-style: italic;
+}
+
+.card {
+    position: relative;
+}
+
+.card.blog {
+    background: $light-yellow;
+    &:before {
+        color: $dark-gray;
+        content: "\f02b";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        position: absolute;
+        right: rem-calc(3);
+        top: 0;
+        -webkit-transform: rotate(75deg);
+        -moz-transform: rotate(75deg);
+        -o-transform: rotate(75deg);
+        -ms-transform: rotate(75deg);
+        transform: rotate(75deg);
+    }
+}
+
+.card.event {
+    background: scale-color($dark-orange, $lightness: 92%);
+    &:before {
+        color: $dark-gray;
+        content: "\f073";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        padding: rem-calc(5 7);
+        position: absolute;
+        right: rem-calc(3);
+        top: 0;
+    }
+
+    .title {
+        width: 90%;
+    }
+}
+
+.card.news {
+    &:before {
+        background: $white;
+        border-radius: 0 0 0 50%;
+        color: $dark-gray;
+        content: "\f1ea";
+        font-family: "FontAwesome";
+        font-size: rem-calc(24);
+        padding: rem-calc(5 13);
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    img {
+        width: 100% !important;
+    }
+}
+
+.img-wrapper {
+    &.float-left {
+        padding: rem-calc(0 24 0 0);
+    }
+    &.float-right {
+        padding: rem-calc(0 0 0 24);
+    }
+}
+
+.instagram-block {
+    img {
+        width: 100%;
+    }
+}
+
+.news-block {
+    margin-top: rem-calc(24);
+}
+
+.page-content {
+    h1, h2, h3, h4, h5, h6 {
+        clear: both;
+    }
+}
+
+.rich-text {
+    overflow: auto;
+}
+
+// span.fa-stack-1x {
+//     &.number {
+//         left: -40%;
+//     }
+// }
+
+.twitter-block {
+    i {
+        color: $bright-blue;
+    }
+}
+
+/** Search **/
+
+// Search box
+
+.search-box {
+    margin-top: rem-calc(16);
+
+    input {
+        border: none;
+        -moz-box-shadow: inset rem-calc(0 0 2) $primary-color;
+        -webkit-box-shadow: inset rem-calc(0 0 2) $primary-color;
+        box-shadow: inset rem-calc(0 0 2) $primary-color; 
+        height: rem-calc(44);
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .search-button {
+        height: rem-calc(44);
+    }
+}
+
+/** Footer **/
+
+footer {
+    background: $white;
+    margin-top: rem-calc(24);
+    padding: rem-calc(24 0);
+
+    .kcl-kdl-logo {
+        margin-top: rem-calc(16);
+        max-width: rem-calc(100);
+
+        @include breakpoint(medium up) {
+
+            float: right;
+            margin-top: 0;
+
+            img {
+                float: right !important;
+            }
+        }
+    }
+
+    svg {
+        background: $secondary-color;
+        display: block; // It helps aligning properly to pixel values
+        fill: $dark-blue;
+        max-width: rem-calc(200);
+    }
+
+    .logos-group {
+        text-align: center;
+
+        img {
+            max-height: rem-calc(80);
+        }
+
+        .column {
+            text-align: center;
+            padding: rem-calc(16);
+        }
+    }
+
+    .credits {
+        color: scale-color($dark-gray, $lightness: -30%);
+        font-size: rem-calc(12);
+        font-style: italic;
+        padding-top: rem-calc(6);
+
+        a {
+            font-weight: 700;
+            color: scale-color($dark-gray, $lightness: -30%);
+            &:hover {
+                color: $secondary-color;
+            }
+        }
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+
+
+/* Twitter */
+
+.twitter-list {
+    color: scale-color($dark-gray, $lightness: -30%);
+    margin-bottom: rem-calc(16);
+
+    h2,
+    h3 {
+        margin: rem-calc(0 0 4 0);
+    }
+
+    p {
+        line-height: rem-calc(20);
+
+        &.tweet-datetime {
+            font-size: rem-calc(13);
+            padding-right: rem-calc(24);
+        }
+
+        a {
+            color: $dark-gray;
+            font-weight: normal;
+
+            &:hover {
+                color: $secondary-color;
+            }
+
+            i {
+                color: scale-color($dark-gray, $lightness: 40%);
+
+                &:hover {
+                    color: $secondary-color;
+                }
+            }
+        }
+    }
+
+    .retweet {
+        color: scale-color($dark-gray, $lightness: -20%);
+
+        &:before {
+            content: "\f079";
+            font-family: "FontAwesome";
+            padding-right: rem-calc(8);
+            position: relative;
+        }
+    }
+
+    .small-heading {
+        font-size: rem-calc(16);
+        line-height: rem-calc(20);
+    }
+
+    .tweet-block {
+        border-bottom: 1px solid $light-gray;
+    }
+}
+
+// Cookies
+
+.cookies-box {
+    background: $blue-gray;
+    bottom: 0;
+    color: $white;
+    margin: 0;
+    opacity: 0.95;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+
+    button,
+    .button {
+        font-weight: 700;
+    }
+
+    p {
+        margin-bottom: rem-calc(16);
+    }
+}
+
+// SVG logo animation
+
+/**
+
+Animating the logo's diactrics
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8
+
+**/
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8 {
+    fill: rgba($bright-blue, 0);
+}
+
+@keyframes hideshow {
+    0% { fill: rgba($bright-blue, 0); }
+    30% { fill: rgba($bright-blue, 1); }
+    60% { fill: rgba($bright-blue, 0); }
+    100% { fill: rgba($bright-blue, 1); }
+}
+
+#diactric1,
+#diactric8  {
+    animation: hideshow 6s ease-in-out;
+}
+
+#diactric3a,
+#diactric3b {
+    animation: hideshow 4s 2s ease-in-out;
+}
+
+#diactric2 {
+    animation: hideshow 8s 4s ease-in-out;
+}
+
+#diactric4 {
+    animation: hideshow 4s 1s ease-in-out;
+}
+
+#diactric5 {
+    animation: hideshow 6s 3.5s ease-in-out;
+}
+
+#diactric6 {
+    animation: hideshow 6s 6s ease-in-out;
+}
+
+#diactric7 {
+    animation: hideshow 4s 3s ease-in-out;
+}
+
+#diactric1,
+#diactric2,
+#diactric3a,
+#diactric3b,
+#diactric4,
+#diactric5,
+#diactric6,
+#diactric7,
+#diactric8 {
+    -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
+    animation-fill-mode: forwards;
+    //-webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    //animation-direction: alternate;
+    // -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
+    // animation-iteration-count: 2;
+}
+
+/** Type fonts **/
+
+// Proxima Nova
+
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132590/cc5225e4-eeef-4026-9b23-4705456d018c.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132590/cc5225e4-eeef-4026-9b23-4705456d018c.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132590/50c8f38e-4f2b-4a0a-b65b-7fc6e078563d.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132590/e96e70c4-309b-48dd-a8b8-3d0ac4fe93aa.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132590/4b53c685-9f0f-492a-997d-de616fab68b2.ttf") format("truetype");
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132162/bc15a635-a09b-40d1-a5c4-70310166177d.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132162/bc15a635-a09b-40d1-a5c4-70310166177d.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132162/129d49d6-5492-4ed1-96f7-0528c6d53abc.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132162/9c69c878-2255-4027-8632-ed3635cddf45.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132162/b7eb3871-e910-4522-9982-effb425a2714.ttf") format("truetype");
+    font-style: italic;
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132602/809b25d3-05f6-4c13-943a-e8391c913ca9.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132602/809b25d3-05f6-4c13-943a-e8391c913ca9.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132602/c3ad482f-56b8-4e63-b412-855d1ed14f8a.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132602/9f05d60a-49c4-455c-a126-dfedb12fabda.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132602/e3428b17-9c4e-492b-b135-310aea3f8ba1.ttf") format("truetype");
+    font-weight: 700;
+}
+@font-face{
+    font-family: "Proxima Nova";
+    src:    url("/static/fonts/proxima-nova/1132605/7f8568b9-be3e-49c1-9fa6-42d753f9248f.eot?#iefix");
+    src:    url("/static/fonts/proxima-nova/1132605/7f8568b9-be3e-49c1-9fa6-42d753f9248f.eot?#iefix") format("eot"),
+            url("/static/fonts/proxima-nova/1132605/0038088c-27f2-4ca1-a13c-a4df6b1559a8.woff2") format("woff2"),
+            url("/static/fonts/proxima-nova/1132605/cd396e34-c830-4125-8ec6-1bec3b38e96e.woff") format("woff"),
+            url("/static/fonts/proxima-nova/1132605/9a873a91-7e20-4d87-acaa-29bf722eae85.ttf") format("truetype");
+    font-style: italic;
+    font-weight: 700;
+}
+
+/** Media queries **/
+
+@include breakpoint(large up) {
+
+    .card {
+        .image-container {
+            height: rem-calc(150);
+            overflow: hidden;
+        }
+    }
+
+    // .twitter-box,
+    // .twitter-list {
+    //     -webkit-column-count: 4;
+    //     -moz-column-count: 4;
+    //     column-count: 4;
+    // }
+
+}
+
+@include breakpoint(medium up) {
+
+    .card {
+        .image-container {
+            a,
+            a img {
+                height: auto;
+                margin-left: -5%;
+                text-align: center;
+                width: 120%;
+            }
+        }
+    }
+
+    .strapline-block {
+        bottom: 22%;
+        clear: both;
+        display: block;
+        font-size: rem-calc(32) !important;
+        position: absolute;
+    }
+    
+    .top-header {
+        max-height: rem-calc(150);
+    }
+}
+
+@include breakpoint(medium only) {
+
+    .card {
+        .image-container {
+            height: rem-calc(120);
+            overflow: hidden;
+        }
+    }
+
+    // .twitter-box,
+    // .twitter-list {
+    //     -webkit-column-count: 2;
+    //     -moz-column-count: 2;
+    //     column-count: 2;
+    // }
+}
+
+@include breakpoint(small) {
+    .image-container,
+    .image-container a {
+        display: block;
+        width: 100%;
+    }
+
+    .strapline-block {
+        clear: both;
+        display: block;
+        font-size: rem-calc(24);
+    }
+}
+
+/* Color classes for strands
+ * TO BE REPLACED */
+
+.Travelling.Concepts,
+.Diasporic.Identities,
+.Translation.Acts,
+.Language.Transitions,
+.Digital.Mediations,
+.Loaded.Meanings {
+
+    &:before {
+        color: $white;
+    }
+
+    button,
+    .button {
+        color: $white;
+    }
+
+    p,
+    .rich-text {
+        text-align: center;
+    }
+}
+
+.Travelling.Concepts {
+    color: $dark-brown;
+
+    &:before {
+        background: $dark-brown;
+    }
+
+    button,
+    .button {
+        background: $dark-brown;
+    }
+}
+
+.Translation.Acts {
+    color: $dark-blue;
+
+    &:before {
+        background: $dark-blue;
+    }
+
+    button,
+    .button {
+        background: $dark-blue;
+    }
+}
+
+.Digital.Mediations {
+    color: scale-color($orange, $lightness: -30%);
+
+    &:before {
+        background: $orange;
+    }
+
+    button,
+    .button {
+        background: $orange;
+    }
+}
+
+.Loaded.Meanings {
+    color: scale-color($bright-blue, $lightness: -30%);
+
+    &:before {
+        background: $bright-blue;
+    }
+
+    button,
+    .button {
+        background: $bright-blue;
+    }
+}
+
+.Diasporic.Identities {
+    color: scale-color($yellow, $lightness: -70%);
+
+    &:before {
+        background: $yellow;
+        color: $dark-blue;
+    }
+
+    button,
+    .button {
+        background: $yellow;
+        color: $dark-blue;
+    }
+}
+
+.Language.Transitions {
+    color: scale-color($turquoise, $lightness: -30%);
+
+    &:before {
+        background: $turquoise;
+    }
+
+    button,
+    .button {
+        background: $turquoise;
+    }
+}

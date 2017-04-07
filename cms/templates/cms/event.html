@@ -1,0 +1,32 @@
+{% extends "cms/base.html" %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+{% block title %}
+<header class="section-header">
+  <h1>
+    {{ self.title }}
+    {% has_view_restrictions page as is_private %}
+    {% if is_private %}
+     <small><i class="fa fa-eye-slash"></i> <em>Private</em></small>
+    {% endif %}
+  </h1>
+
+  <p class="meta">
+    <time>
+    <i class="fa fa-calendar"></i> {{ self.date_from|date:'j b Y' }} 
+    {% if self.date_to %} - {{ self.date_to|date:'j b Y' }}{% endif %}&nbsp;
+    <i class="fa fa-clock-o"></i> {{ self.time|date:'H:i' }}&nbsp;
+    {% if self.time_end %} - {{ self.time_end|date:'H:i' }}{% endif %} 
+    <i class="fa fa-map-marker"></i> {{ self.location }}
+    </time>
+  </p>
+</header>
+{% endblock %}
+
+{% block main %}
+
+<article>
+{{ self.body|safe }}
+</article>
+
+{% endblock %}

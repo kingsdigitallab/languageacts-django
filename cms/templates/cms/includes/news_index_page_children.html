@@ -1,0 +1,19 @@
+{% if pages %}
+{% load cms_tags wagtailimages_tags wagtailcore_tags wagtailroutablepage_tags %}
+
+<h2 class="section-title">{{ page.title }}</h2>
+
+{% block newsitem %}
+{% include "cms/includes/news_preview.html" %}
+{% endblock %}
+{% else %}
+<p>There are no news items published at the moment.</p>
+{% endif %}
+
+{% are_comments_allowed as allow_comments %}
+{% if allow_comments %}
+{% block footer_scripts %}
+{% include "cms/includes/disqus_setup.html" %}
+<script id="dsq-count-scr" src="//lawm.disqus.com/count.js" async></script>
+{% endblock %}
+{% endif %}
