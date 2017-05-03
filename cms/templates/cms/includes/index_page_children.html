@@ -3,7 +3,16 @@
 
 <ul class="menu vertical subnav">
     {% for page in pages %}
-    <li><a href="{% pageurl page %}">{{ page.title }}</a></li>
+    <li>
+        <a href="{% pageurl page %}">{{ page.title }}</a>
+        
+        {# TODO: if subpages #}
+        {# TODO: loop over children of children to display subpages #}
+        <ul class="vertical menu nested">
+            <li><a href="">Subpage 1</a></li>
+            <li><a href="">Subpage 2</a></li>
+        </ul>
+    </li>
     {% endfor %}
 </ul>
 

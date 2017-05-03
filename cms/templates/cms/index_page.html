@@ -1,5 +1,17 @@
 {% extends "cms/base.html" %}
 
+{% block title %}
+<div class="row">
+    <div class="large-3 columns">
+    </div>
+    <div class="large-9 columns">
+        <header class="section-header">
+          <h1>{{ self.title }}</h1>
+        </header>
+    </div>
+</div>
+{% endblock %}
+
 {% block main %}
 <div class="row">
     <div class="large-3 columns subnav">
