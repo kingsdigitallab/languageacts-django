@@ -19,7 +19,6 @@
 
 body {
     background: rgba($dark-blue, .05);
-    // -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
@@ -140,7 +139,7 @@ header.top-header {
 /** Navigation **/
 
 nav {
-    margin-bottom: rem-calc(24)
+    margin-bottom: rem-calc(24);
 }
 
 .top-bar {
@@ -163,12 +162,22 @@ nav {
         color: $dark-gray;
     }
 
+    a {
+        color: scale-color($dark-gray, $lightness: -30%) !important;
+        font-weight: 400 !important;
+
+        &:hover {
+            background: $white;
+            border-bottom: 1px solid $white !important;
+        }
+    }
+
     li {
         border-bottom: 1px solid scale-color($light-gray, $lightness: -10%);
 
-        a {
-            color: scale-color($dark-gray, $lightness: -30%) !important;
-            font-weight: 400 !important;
+        li {
+            border-bottom: none;
+            border-top: 1px solid scale-color($light-gray, $lightness: -5%);
         }
     }
 }
@@ -197,7 +206,6 @@ section.main {
     a {
         border-bottom: 1px solid transparent;
         color: $secondary-color;
-        display: inline-block;
         font-weight: 700;
 
         &:hover {
@@ -222,9 +230,7 @@ section.main {
 }
 
 .blob {
-    // left: 50%;
     position: absolute;
-    // top: rem-calc(-60);
     top: rem-calc(-50);
 
     i {
@@ -237,9 +243,7 @@ section.main {
 }
 
 .blocks {
-    //background: rgba($blue-gray, .1);
     background: #d9dfe2;
-    // margin: rem-calc(50 0 0);
     padding: rem-calc(28 16 16);
     position: relative;
 }
@@ -336,12 +340,6 @@ section.main {
 .rich-text {
     overflow: auto;
 }
-
-// span.fa-stack-1x {
-//     &.number {
-//         left: -40%;
-//     }
-// }
 
 .twitter-block {
     i {
@@ -593,10 +591,6 @@ Animating the logo's diactrics
 #diactric8 {
     -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
     animation-fill-mode: forwards;
-    //-webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
-    //animation-direction: alternate;
-    // -webkit-animation-iteration-count: 2; /* Safari 4.0 - 8.0 */
-    // animation-iteration-count: 2;
 }
 
 /** Type fonts **/
@@ -650,14 +644,6 @@ Animating the logo's diactrics
             overflow: hidden;
         }
     }
-
-    // .twitter-box,
-    // .twitter-list {
-    //     -webkit-column-count: 4;
-    //     -moz-column-count: 4;
-    //     column-count: 4;
-    // }
-
 }
 
 @include breakpoint(medium up) {
@@ -695,13 +681,6 @@ Animating the logo's diactrics
             overflow: hidden;
         }
     }
-
-    // .twitter-box,
-    // .twitter-list {
-    //     -webkit-column-count: 2;
-    //     -moz-column-count: 2;
-    //     column-count: 2;
-    // }
 }
 
 @include breakpoint(small) {
