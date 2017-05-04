@@ -103,9 +103,9 @@ header.top-header {
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
     // background: url('/static/images/lawm-pattern2.svg') $turquoise;
     // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
+    background-position: rem-calc(0 -10);
     // background-size: rem-calc(45);
-    background-size: rem-calc(80);
-    margin-top: rem-calc(-5);
+    background-size: rem-calc(108);
     position: relative;
 
     // Fixes the issue FF has with Proxima Nova's baseline
@@ -115,8 +115,10 @@ header.top-header {
     }
 
     .strapline-block {
-        color: $light-yellow;
+        // color: $light-yellow;
+        color: $white;
         font-style: italic;
+        line-height: 1.8;
         text-shadow: 0 0 5px $black;
     }
 }
@@ -127,6 +129,7 @@ header.top-header {
         display: block; // It helps aligning properly to pixel values
         max-height: rem-calc(160);
         max-width: rem-calc(300);
+        padding: rem-calc(25 0 20);
 
         .st0{
             fill: #fff;
@@ -670,9 +673,9 @@ Animating the logo's diactrics
         position: absolute;
     }
     
-    .top-header {
-        max-height: rem-calc(150);
-    }
+    // .top-header {
+    //     max-height: rem-calc(150);
+    // }
 }
 
 @include breakpoint(medium only) {
