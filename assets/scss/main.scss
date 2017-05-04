@@ -103,7 +103,9 @@ header.top-header {
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
     // background: url('/static/images/lawm-pattern2.svg') $turquoise;
     // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
-    background-size: rem-calc(45);
+    // background-size: rem-calc(45);
+    background-size: rem-calc(80);
+    margin-top: rem-calc(-5);
     position: relative;
 
     // Fixes the issue FF has with Proxima Nova's baseline
