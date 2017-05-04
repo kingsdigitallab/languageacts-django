@@ -1,1 +1,38 @@
 {% extends "cms/base.html" %}
+
+{% if }
+
+{% block title %}
+<div class="row">
+	{% if self.get_parent.content_type.name == "index page" %}
+    <div class="large-3 columns">
+    </div>
+    <div class="large-9 columns">
+    {% else %}
+    <div class="large-12 columns">
+    {% endif %}
+        <header class="section-header">
+          <h1>{{ self.title }}</h1>
+        </header>
+    </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="row">
+	{% if self.get_parent.content_type.name == "index page" %}
+    <div class="large-3 columns subnav">
+
+        {% block index_page_children %}
+        {% include "cms/includes/index_page_children.html" with pages=self %}
+        {% endblock %}
+    </div>
+    <div class="large-9 columns">
+    {% else %}
+    <div class="large-12 columns">
+    {% endif %}
+
+    {{ block.super }}
+    </div>
+</div>
+{% endblock %}
