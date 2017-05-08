@@ -656,6 +656,10 @@ Animating the logo's diactrics
             overflow: hidden;
         }
     }
+
+    .strapline-block {
+        padding: rem-calc(23 24 0);
+    }
 }
 
 @include breakpoint(medium up) {
@@ -673,12 +677,12 @@ Animating the logo's diactrics
     }
 
     .strapline-block {
-        // background: $primary-color;
-        bottom: 8%;
+        bottom: 0;
         clear: both;
         display: block;
-        font-size: rem-calc(26) !important;
-        // padding: 0 1rem .5rem;
+        font-size: rem-calc(24);
+        height: 60%;
+        margin: 0;
         position: absolute;
     }
     
@@ -695,6 +699,11 @@ Animating the logo's diactrics
             overflow: hidden;
         }
     }
+
+    .strapline-block {
+        font-size: rem-calc(18);
+        padding: rem-calc(21 24 0);
+    }
 }
 
 @include breakpoint(small) {
@@ -705,15 +714,19 @@ Animating the logo's diactrics
     }
 
     .strapline-block {
-        clear: both;
-        display: block;
-        font-size: rem-calc(24);
-        padding-left: rem-calc(24);
+        background: $primary-color;
     }
 }
 
 @include breakpoint(small only) {
     .top-bar-title {
+        padding-left: rem-calc(24);
+    }
+
+    .strapline-block {
+        clear: both;
+        display: block;
+        font-size: rem-calc(22);
         padding-left: rem-calc(24);
     }
 }
