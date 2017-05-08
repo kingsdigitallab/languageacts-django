@@ -708,6 +708,13 @@ Animating the logo's diactrics
         clear: both;
         display: block;
         font-size: rem-calc(24);
+        padding-left: rem-calc(24);
+    }
+}
+
+@include breakpoint(small only) {
+    .top-bar-title {
+        padding-left: rem-calc(24);
     }
 }
 
