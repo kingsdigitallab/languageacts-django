@@ -76,11 +76,14 @@ time {
             display: inline-block;
             font-size: rem-calc(36);
             margin-left: rem-calc(-25);
-            // padding: rem-calc(0 12);
             text-align: center;
             width: rem-calc(60);
         }
     }
+}
+
+.dark-blue-bg {
+    background: $primary-color;
 }
 
 .intro {
@@ -101,10 +104,7 @@ time {
 header.top-header {
     // Pattern background
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
-    // background: url('/static/images/lawm-pattern2.svg') $turquoise;
-    // background: url('/static/images/lawm-pattern3.svg') scale-color($dark-orange, $lightness: -50%);
     background-position: rem-calc(0 -10);
-    // background-size: rem-calc(45);
     background-size: rem-calc(108);
     position: relative;
 
@@ -115,7 +115,6 @@ header.top-header {
     }
 
     .strapline-block {
-        // color: $light-yellow;
         color: $white;
         font-style: italic;
         line-height: 1.8;
@@ -674,10 +673,12 @@ Animating the logo's diactrics
     }
 
     .strapline-block {
-        bottom: 22%;
+        // background: $primary-color;
+        bottom: 8%;
         clear: both;
         display: block;
-        font-size: rem-calc(32) !important;
+        font-size: rem-calc(26) !important;
+        // padding: 0 1rem .5rem;
         position: absolute;
     }
     
@@ -707,6 +708,13 @@ Animating the logo's diactrics
         clear: both;
         display: block;
         font-size: rem-calc(24);
+        padding-left: rem-calc(24);
+    }
+}
+
+@include breakpoint(small only) {
+    .top-bar-title {
+        padding-left: rem-calc(24);
     }
 }
 
