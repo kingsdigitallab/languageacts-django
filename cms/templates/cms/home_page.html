@@ -36,46 +36,35 @@
 <div class="row">
     <div class="large-12 columns">
         <p>
-            <a href="https://twitter.com/languageacts">
+            <a href="//twitter.com/languageacts">
                 <i class="fa fa-twitter" aria-hidden="true"></i> Follow us @languageacts
             </a>
         </p>
     </div>
 </div>
 
-{% comment %}
-<div class="row twitter-block">
-    <div class="medium-6 large-12 columns">
-        <div class="twitter-box">
-            {# Twitter will replace this anyway #}
-            <a class="twitter-timeline" href="https://twitter.com/ginez_17" data-link-color="#ba4b16" data-chrome="noheader transparent" data-tweet-limit="4" data-aria-polite="assertive"></a>
-  
-            <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-    </div>
-</div>
-{% endcomment %}
-
 {% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
 
 {# Instagram Placeholder #}
 <div class="row">
     <div class="large-12 columns">
-        <p><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @InstagramHandle</a></p>
+        <p><a href="//www.instagram.com/languageacts/"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @languageacts</a></p>
     </div>
 </div>
 <div class="row collapse instagram-block">
     <div class="medium-6 large-3 columns">
-        <img src="{% static '/images/placeholders/IMG_5258-640x640.jpg' %}" alt="Placeholder">
-    </div>
-    <div class="medium-6 large-3 columns">
-        <img src="{% static '/images/placeholders/Language-Teacher-640x640.jpg' %}" alt="Placeholder">
-    </div>
-    <div class="medium-6 large-3 columns">
         <img src="{% static '/images/placeholders/IMG_2868-640x640.jpg' %}" alt="Placeholder">
     </div>
     <div class="medium-6 large-3 columns">
+        {# <img src="{% static '/images/placeholders/IMG_5258-640x640.jpg' %}" alt="Placeholder"> #}
+        <img src="{% static '/images/placeholders/placeholder-6-640x640-alhambra.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
         <img src="{% static '/images/placeholders/IMG_4021-640x640.jpg' %}" alt="Placeholder">
+    </div>
+    <div class="medium-6 large-3 columns">
+        {# <img src="{% static '/images/placeholders/Language-Teacher-640x640.jpg' %}" alt="Placeholder"> #}
+        <img src="{% static '/images/placeholders/placeholder-5-640x640-plastification.jpg' %}" alt="Placeholder">
     </div>
 </div>
 
