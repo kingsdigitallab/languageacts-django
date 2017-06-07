@@ -8,6 +8,7 @@ from wagtail.wagtailcore.blocks import (
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 
 class HTMLAlignmentChoiceBlock(FieldBlock):
@@ -102,3 +103,5 @@ class CMSStreamBlock(StreamBlock):
     embed = EmbedBlock(icon='media')
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
+
+    table = TableBlock()
