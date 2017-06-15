@@ -97,7 +97,7 @@ class CMSStreamBlock(StreamBlock):
     paragraph = RichTextBlock(icon='pilcrow')
     pullquote = PullQuoteBlock(icon='openquote')
 
-    image = ImageBlock(label='Aligned image', icon='image')
+    image = ImageBlock(label='Aligned image + text', icon='image')
     document = DocumentChooserBlock(icon='doc-full-inverse')
     link = LinkBlock(icon='link')
     embed = EmbedBlock(icon='media')
