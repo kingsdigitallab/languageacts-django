@@ -29,10 +29,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     provider.customize ["modifyvm", :id, "--memory", "1024"]
   end
 
+
   # vagrant-hostupdater configuration
   config.vm.define "owri" do |machine|
     machine.vm.box = "debian/contrib-jessie64"
     machine.vm.hostname = "owri.vagrant"
     machine.vm.network "private_network", ip: "192.168.33.99"
   end
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+  end
+
 end

@@ -8,6 +8,7 @@ from wagtail.wagtailcore.blocks import (
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 
 class HTMLAlignmentChoiceBlock(FieldBlock):
@@ -37,14 +38,14 @@ class ImageFormatChoiceBlock(FieldBlock):
     field = forms.ChoiceField(choices=(
         ('left', 'Wrap left'), ('right', 'Wrap right'),
         ('mid', 'Mid width'), ('full-width', 'Full width'),
-        ('hero', 'Hero'),
     ))
 
 
 class ImageBlock(StructBlock):
     image = ImageChooserBlock()
-    caption = RichTextBlock()
+    caption = RichTextBlock(required=False)
     alignment = ImageFormatChoiceBlock()
+    text = RichTextBlock(required=False)
 
     class Meta:
         template = 'cms/blocks/image_block.html'
@@ -96,9 +97,11 @@ class CMSStreamBlock(StreamBlock):
     paragraph = RichTextBlock(icon='pilcrow')
     pullquote = PullQuoteBlock(icon='openquote')
 
-    image = ImageBlock(label='Aligned image', icon='image')
+    image = ImageBlock(label='Aligned image + text', icon='image')
     document = DocumentChooserBlock(icon='doc-full-inverse')
     link = LinkBlock(icon='link')
     embed = EmbedBlock(icon='media')
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
+
+    table = TableBlock()
