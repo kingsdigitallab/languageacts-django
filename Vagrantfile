@@ -7,8 +7,6 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
 
-
-
   config.vm.box = "debian/contrib-jessie64"
 
   config.vm.provision "ansible" do |ansible|

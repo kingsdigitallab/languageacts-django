@@ -91,6 +91,19 @@ time {
     color: scale-color($dark-gray, $lightness: -20%);
 }
 
+// Need to implement Wagtail floating classes
+.left {
+    clear: right;
+    float: left;
+    padding-right: rem-calc(24);
+}
+
+.right {
+    clear: left;
+    float: right;
+    padding-left: rem-calc(24);
+}
+
 .meta {
     color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
@@ -101,6 +114,7 @@ time {
 }
 
 /** Header **/
+
 header.top-header {
     // Pattern background
     background: url('/static/images/lawm-pattern.svg') $dark-blue;
@@ -326,9 +340,11 @@ section.main {
 
 .img-wrapper {
     &.float-left {
+        clear: left;
         padding: rem-calc(0 24 0 0);
     }
     &.float-right {
+        clear: right;
         padding: rem-calc(0 0 0 24);
     }
 }
