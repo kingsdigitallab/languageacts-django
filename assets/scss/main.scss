@@ -86,6 +86,10 @@ time {
     background: $primary-color;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .intro {
     font-size: rem-calc(20);
     color: scale-color($dark-gray, $lightness: -20%);
@@ -459,8 +463,6 @@ footer {
     }
 }
 
-
-
 /* Twitter */
 
 .twitter-list {
@@ -701,10 +703,6 @@ Animating the logo's diactrics
         margin: 0;
         position: absolute;
     }
-    
-    // .top-header {
-    //     max-height: rem-calc(150);
-    // }
 }
 
 @include breakpoint(medium only) {

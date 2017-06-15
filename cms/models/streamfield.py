@@ -45,6 +45,7 @@ class ImageBlock(StructBlock):
     image = ImageChooserBlock()
     caption = RichTextBlock()
     alignment = ImageFormatChoiceBlock()
+    text = RichTextBlock(required=False)
 
     class Meta:
         template = 'cms/blocks/image_block.html'
