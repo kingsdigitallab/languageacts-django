@@ -359,4 +359,4 @@ WAGTAILSEARCH_RESULTS_TEMPLATE = 'cms/search_results.html'
 # -----------------------------------------------------------------------------
 
 # Google Analytics ID
-GA_ID = ''
+GA_ID = 'UA-101079203-1'
