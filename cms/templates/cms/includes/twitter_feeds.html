@@ -1,7 +1,7 @@
 {% load twitterhut_tags %}
 
 {% user_timeline screen_name as timeline %}
-<div class="row twitter-list" data-equalizer data-equalize-on="medium">
+<div class="row twitter-list" data-equalizer="twitterheight" data-equalize-on="medium">
 {% comment %}
 <ul class="no-bullet twitter-list" data-equalizer data-equalize-on="medium">
 {% endcomment %}
@@ -10,7 +10,7 @@
     <li data-equalizer-watch>
     {% endcomment %}
     <div class="medium-6 large-3 columns">
-        <div class="tweet-block" data-equalizer-watch>
+        <div class="tweet-block" data-equalizer-watch="twitterheight">
             {% if tweet.retweeted_status %}
             <p class="retweet"><a href="//twitter.com/{{ tweet.user.screen_name }}">@{{ tweet.user.screen_name }}</a> retweeted</p>
             {% endif %}

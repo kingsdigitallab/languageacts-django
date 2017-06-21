@@ -1,6 +1,7 @@
 {% extends "cms/base.html" %}
 
 {% block title %}
+{% comment %}
 <div class="row">
     <div class="large-3 columns">
     </div>
@@ -10,17 +11,21 @@
         </header>
     </div>
 </div>
+{% endcomment %}
 {% endblock %}
 
 {% block main %}
-<div class="row">
-    <div class="large-3 columns subnav">
+<div class="row" data-equalizer="sidebar">
+    <div class="large-3 columns subnav" data-equalizer-watch="sidebar">
         {% block index_page_children %}
         {% include "cms/includes/index_page_children.html" with pages=self %}
         {% endblock %}
     </div>
-    <div class="large-9 columns">
-    {{ block.super }}
+    <div class="large-9 columns" data-equalizer-watch="sidebar">
+        <header class="section-header">
+          <h1>{{ self.title }}</h1>
+        </header>
+        {{ block.super }}
     </div>
 </div>
 {% endblock %}

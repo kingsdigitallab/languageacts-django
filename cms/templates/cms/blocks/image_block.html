@@ -1,7 +1,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<div data-equalizer>
-    <div class="img-wrapper float-{{ value.alignment }}" data-equalizer-watch>
+<div data-equalizer="imgblockheight">
+    <div class="img-wrapper float-{{ value.alignment }}" data-equalizer-watch="imgblockheight">
         {% if value.alignment == "left" or value.alignment == "right" %}
         {% image value.image width-300 as theimage %}
         <img src="{{ theimage.url }}" width="{{ theimage.width }}" height="{{ theimage.height }}" alt="{{ theimage.alt }}">
@@ -18,7 +18,7 @@
     </div>
 
     {% if value.text %}
-    <div data-equalizer-watch>
+    <div data-equalizer-watch="imgblockheight">
         {{ value.text|richtext }}
     </div>
     {% endif %}

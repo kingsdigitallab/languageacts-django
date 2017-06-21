@@ -180,6 +180,8 @@ nav {
 }
 
 .subnav {
+    background: $white;
+
     h3 {
         color: $dark-gray;
     }
@@ -207,7 +209,8 @@ nav {
         }
 
         &.top-level {
-            background: $light-gray;
+            // background: $light-gray;
+            background: rgba($dark-blue, .05);
         }
     }
 }
