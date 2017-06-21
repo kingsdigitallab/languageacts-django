@@ -1,17 +1,7 @@
 {% extends "cms/base.html" %}
+{% load cms_tags wagtailcore_tags %}
 
 {% block title %}
-{% comment %}
-<div class="row">
-    <div class="large-3 columns">
-    </div>
-    <div class="large-9 columns">
-        <header class="section-header">
-          <h1>{{ self.title }}</h1>
-        </header>
-    </div>
-</div>
-{% endcomment %}
 {% endblock %}
 
 {% block main %}
@@ -22,6 +12,10 @@
         {% endblock %}
     </div>
     <div class="large-9 columns" data-equalizer-watch="sidebar">
+        {% block breadcrumbs %}
+        {% get_site_root as site_root %}
+        {% breadcrumbs root=site_root current_page=self %}
+        {% endblock %}
         <header class="section-header">
           <h1>{{ self.title }}</h1>
         </header>
