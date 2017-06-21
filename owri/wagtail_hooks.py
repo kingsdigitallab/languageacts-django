@@ -7,7 +7,8 @@ from wagtail.wagtailcore.whitelist import attribute_rule, check_url
 def whitelister_element_rules():
     return {
         'p': attribute_rule({'class': True}),
-        'a': attribute_rule({'href': check_url, 'id': True, 'class': True}),
+        'a': attribute_rule({'href': check_url, 'id': True, 'class': True,
+                             'target': True}),
         'span': attribute_rule({'class': True}),
         'i': attribute_rule({'class': True}),
         'iframe': attribute_rule(
@@ -24,6 +25,9 @@ hooks.register('construct_whitelister_element_rules',
 def editor_js():
     js_files = [
         'js/hallo_source_editor.js',
+        'js/hallo_bookmark_add.js',
+        'js/hallo_bookmark_link.js',
+        'js/hallo_link_new_window.js'
     ]
 
     js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
@@ -34,6 +38,9 @@ def editor_js():
     return js_includes + format_html("""
         <script>
             registerHalloPlugin('editHtmlButton');
+            registerHalloPlugin('bookmarkAddButton');
+            registerHalloPlugin('bookmarkLinkButton');
+            registerHalloPlugin('openLinkInNewWindow');
         </script>
         """)
 
