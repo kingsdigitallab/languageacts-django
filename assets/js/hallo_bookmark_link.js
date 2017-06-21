@@ -62,7 +62,6 @@ d="wagtail-edit-anchor-save" type="button" style="margin: 0 4%; float: right;" c
                             var a;
                             a = document.createElement('a');
                             a.setAttribute('href', '#' + text);
-                            // a.setAttribute('class', 'page-anchor');
                             a.innerHTML = lastSelection;
                             
                             lastSelection.deleteContents();                            
