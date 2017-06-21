@@ -26,7 +26,7 @@
                 button.hallobutton({
                     uuid: this.options.uuid,
                     editable: this.options.editable,
-                    label: 'Add Anchor',
+                    label: 'Create bookmark',
                     icon: 'icon-tag',
                     command: null
                 });
@@ -48,7 +48,7 @@ dy-body"></div></div>\n        </div><!-- /.modal-content -->\n    </div><!-- /.
                     $('body').append(container);
                     container.modal('hide');
                     var modalBody = container.find('.modal-body-body');
-                    modalBody.html('<textarea placeholder="Create anchor name..." style="height: 50px; width: 92%; font: 14px/21px monospace; border: 1px solid #d8d8d8; background: #f4f4f4; margin: 2% 4%;" id="wagtail-edit-anchor-content"></textarea><button i\
+                    modalBody.html('<textarea placeholder="Create bookmark..." style="height: 50px; width: 92%; font: 14px/21px monospace; border: 1px solid #d8d8d8; background: #f4f4f4; margin: 2% 4%;" id="wagtail-edit-anchor-content"></textarea><button i\
 d="wagtail-edit-anchor-save" type="button" style="margin: 0 4%; float: right;" class="button">Save</button>');
                     $("#wagtail-edit-anchor-save").on("click", function() {
                         
