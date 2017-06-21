@@ -41,7 +41,7 @@
                     $('body > .modal').remove();
                     var container = $('<div class="modal fade editor" tabindex="-1" role="dialog" aria-hidden="true">\n    <div class="modal-dialog">\n        <div class="modal-content"\
 >\n            <button type="button" class="close text-replace" data-dismiss="modal" aria-hidden="true"><i class="icon icon-cross"></i></button>\n            <div class="modal-body"><hea\
-der class="nice-padding hasform"><div class="row"><div class="left"><div class="col"><h1><i class="icon icon-form"></i>&nbsp;Add Bookmark Link</h1></div></header><div class="modal-bo\
+der class="nice-padding hasform"><div class="row"><div class="left"><div class="col"><h1><i class="icon icon-form"></i>&nbsp;Link to bookmark</h1></div></header><div class="modal-bo\
 dy-body"></div></div>\n        </div><!-- /.modal-content -->\n    </div><!-- /.modal-dialog -->\n</div>');
 
                     // add container to body and hide it, so content can be added to it before display
