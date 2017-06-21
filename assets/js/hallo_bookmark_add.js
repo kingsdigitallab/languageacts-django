@@ -48,7 +48,7 @@ dy-body"></div></div>\n        </div><!-- /.modal-content -->\n    </div><!-- /.
                     $('body').append(container);
                     container.modal('hide');
                     var modalBody = container.find('.modal-body-body');
-                    modalBody.html('<textarea placeholder="Anchor name..." style="height: 50px; width: 92%; font: 14px/21px monospace; border: 1px solid #d8d8d8; background: #f4f4f4; margin: 2% 4%;" id="wagtail-edit-anchor-content"></textarea><button i\
+                    modalBody.html('<textarea placeholder="Create anchor name..." style="height: 50px; width: 92%; font: 14px/21px monospace; border: 1px solid #d8d8d8; background: #f4f4f4; margin: 2% 4%;" id="wagtail-edit-anchor-content"></textarea><button i\
 d="wagtail-edit-anchor-save" type="button" style="margin: 0 4%; float: right;" class="button">Save</button>');
                     $("#wagtail-edit-anchor-save").on("click", function() {
                         
@@ -60,10 +60,9 @@ d="wagtail-edit-anchor-save" type="button" style="margin: 0 4%; float: right;" c
                             // Create an anchor
                             var a;
                             a = document.createElement('a');
-                            a.setAttribute('href', '#');
                             a.setAttribute('id', text);
                             a.setAttribute('class', 'page-anchor');
-                            a.innerHTML = '[Anchor to: ' + text + ']';
+                            a.innerHTML = '[Anchor name: ' + text + '] ';
                             
                             lastSelection.insertNode(a);
 

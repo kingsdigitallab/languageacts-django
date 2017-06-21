@@ -363,11 +363,11 @@ section.main {
     margin-top: rem-calc(24);
 }
 
-.page-anchor
-{
+.page-anchor {
     display: inline-block;
-    width: 0px;
+    height: 0;
     overflow: hidden;
+    width: 0;
 }
 
 .page-content {
