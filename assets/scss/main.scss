@@ -180,6 +180,8 @@ nav {
 }
 
 .subnav {
+    background: $white;
+
     h3 {
         color: $dark-gray;
     }
@@ -207,7 +209,8 @@ nav {
         }
 
         &.top-level {
-            background: $light-gray;
+            // background: $light-gray;
+            background: rgba($dark-blue, .05);
         }
     }
 }
@@ -361,6 +364,13 @@ section.main {
 
 .news-block {
     margin-top: rem-calc(24);
+}
+
+.page-anchor {
+    display: inline-block;
+    height: 0;
+    overflow: hidden;
+    width: 0;
 }
 
 .page-content {

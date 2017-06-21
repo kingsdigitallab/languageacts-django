@@ -4,10 +4,10 @@
 <h2 class="section-title">{{ page.title }}</h2>
 
 {% block blogpost %}
-<div class="row small-up-1 medium-up-2 large-up-4" data-equalizer data-equalize-by-row="true" data-equalize-on="medium">
+<div class="row small-up-1 medium-up-2 large-up-4" data-equalizer="blogpostheight" data-equalize-by-row="true" data-equalize-on="medium">
     {% for page in pages %}
     <div class="column column-block">
-        <div class="card blog" data-equalizer-watch>
+        <div class="card blog" data-equalizer-watch="blogpostheight">
             <div class="card-section">
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="meta info byline blog">
