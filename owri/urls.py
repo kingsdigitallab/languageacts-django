@@ -13,6 +13,7 @@ ddhldap_register_signal_handlers()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^digger/', include('activecollab_digger.urls')),
 ]
 
 # -----------------------------------------------------------------------------
