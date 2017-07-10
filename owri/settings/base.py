@@ -56,7 +56,6 @@ DATABASES = {
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-TEMPLATE_DEBUG = False
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -186,6 +185,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
                 'owri.context_processors.settings',
+                'activecollab_digger.context_processors.activecollab_digger'
             ],
             'debug': False,
         },
