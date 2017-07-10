@@ -1,6 +1,7 @@
 -r ddhldap/requirements.txt
 -r twitterhut/requirements.txt
 django==1.10
+django-activecollab-digger
 django-compressor
 django-extensions
 django-libsass

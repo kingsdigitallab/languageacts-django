@@ -12,10 +12,13 @@
         {% endblock %}
     </div>
     <div class="large-9 columns" data-equalizer-watch="sidebar">
+        {% comment %}
+        {# Enable / Disable breadcrums navigation #}
         {% block breadcrumbs %}
         {% get_site_root as site_root %}
         {% breadcrumbs root=site_root current_page=self %}
         {% endblock %}
+        {% endcomment %}
         <header class="section-header">
           <h1>{{ self.title }}</h1>
         </header>

@@ -56,7 +56,6 @@ DATABASES = {
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-TEMPLATE_DEBUG = False
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -92,6 +91,7 @@ INSTALLED_APPS += (
     'owri',
     'cms',
     'twitterhut',
+    'activecollab_digger',
 )
 
 INTERNAL_IPS = ('127.0.0.1', )
@@ -185,6 +185,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.contrib.messages.context_processors.messages',
                 'owri.context_processors.settings',
+                'activecollab_digger.context_processors.activecollab_digger'
             ],
             'debug': False,
         },
@@ -197,6 +198,8 @@ TIME_ZONE = 'Europe/London'
 USE_I18N = True
 USE_L10N = False
 USE_TZ = True
+
+LOGIN_URL = '/wagtail/login/'
 
 WSGI_APPLICATION = PROJECT_NAME + '.wsgi.application'
 
