@@ -37,11 +37,13 @@
     {% else %}
     <div class="large-12 columns">
     {% endif %}
-
+        {% comment %}
+        {# Enable / Disable breadcrums navigation #}
         {% block breadcrumbs %}
         {% get_site_root as site_root %}
         {% breadcrumbs root=site_root current_page=self %}
         {% endblock %}
+        {% endcomment %}
         <header class="section-header">
           <h1>{{ self.title }}</h1>
         </header>
