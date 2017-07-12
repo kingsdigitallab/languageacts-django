@@ -141,7 +141,7 @@ def install_requirements():
         reqs = 'requirements.txt'
 
     with cd(env.path), prefix(env.within_virtualenv):
-        run('pip install --no-cache -U -r {}'.format(reqs))
+        run('pip install --no-cache-dir -U -r {}'.format(reqs))
 
 
 @task
