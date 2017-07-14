@@ -22,6 +22,7 @@ env.user = settings.FABRIC_USER
 env.hosts = ['languageacts.kdl.kcl.ac.uk']
 env.root_path = '/vol/languageacts/webroot/'
 env.envs_path = os.path.join(env.root_path, 'envs')
+env.gateway = 'ssh.cch.kcl.ac.uk'
 
 
 def server(func):
