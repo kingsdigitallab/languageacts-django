@@ -1,5 +1,8 @@
 # Language Acts and Worldmaking
 
+## 1.0.1 Release
+* Responsive iframes and media objects containers
+
 ## 1.0 Release
 * Custom link button for external links
 * Custom button for anchor links
