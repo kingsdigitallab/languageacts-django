@@ -112,6 +112,21 @@ time {
     }
 }
 
+.responsive-object {
+    // padding-bottom: 0 !important;
+    position: relative;
+    height: 0;
+    width: 100%;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+}
+
 .intro {
     font-size: rem-calc(20);
     color: scale-color($dark-gray, $lightness: -20%);
