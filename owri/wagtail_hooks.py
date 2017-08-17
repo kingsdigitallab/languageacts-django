@@ -37,10 +37,10 @@ def editor_js():
 
     return js_includes + format_html("""
         <script>
-            registerHalloPlugin('editHtmlButton');
             registerHalloPlugin('bookmarkAddButton');
             registerHalloPlugin('bookmarkLinkButton');
             registerHalloPlugin('openLinkInNewWindow');
+            registerHalloPlugin('editHtmlButton');
         </script>
         """)
 
