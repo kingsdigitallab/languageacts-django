@@ -164,6 +164,19 @@ time {
 
         &.secondary {
             background: $secondary-color;
+
+            &:hover {
+                background: scale-color($secondary-color, $lightness: -30%);
+            }
+        }
+
+        &:hover {
+            background: scale-color($light-blue, $lightness: -30%);
+        }
+
+        a {
+            color: $white;
+            font-weight: normal;
         }
     }
 }
