@@ -112,8 +112,12 @@ time {
     }
 }
 
+.intro {
+    font-size: rem-calc(20);
+    color: scale-color($dark-gray, $lightness: -20%);
+}
+
 .responsive-object {
-    // padding-bottom: 0 !important;
     position: relative;
     height: 0;
     width: 100%;
@@ -127,12 +131,8 @@ time {
     }
 }
 
-.intro {
-    font-size: rem-calc(20);
-    color: scale-color($dark-gray, $lightness: -20%);
-}
+// Need to implement Wagtail floating classes:
 
-// Need to implement Wagtail floating classes
 .left {
     clear: right;
     float: left;
@@ -151,6 +151,20 @@ time {
 
     &.info {
         font-size: rem-calc(14);
+    }
+}
+
+.tags {
+    background: $light-gray;
+    margin: 0;
+    padding: rem-calc(12);
+
+    .label {
+        background: $light-blue;
+
+        &.secondary {
+            background: $secondary-color;
+        }
     }
 }
 
@@ -324,61 +338,64 @@ section.main {
 }
 
 .card {
-    position: relative;
-}
 
-.card.blog {
-    background: $light-yellow;
-    &:before {
-        color: $dark-gray;
-        content: "\f02b";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        position: absolute;
-        right: rem-calc(3);
-        top: 0;
-        -webkit-transform: rotate(75deg);
-        -moz-transform: rotate(75deg);
-        -o-transform: rotate(75deg);
-        -ms-transform: rotate(75deg);
-        transform: rotate(75deg);
-    }
-}
+    margin-bottom: 0;
 
-.card.event {
-    background: scale-color($dark-orange, $lightness: 92%);
-    &:before {
-        color: $dark-gray;
-        content: "\f073";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        padding: rem-calc(5 7);
-        position: absolute;
-        right: rem-calc(3);
-        top: 0;
+    &.blog {
+        background: $light-yellow;
+
+        &:before {
+            color: $dark-gray;
+            content: "\f02b";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            position: absolute;
+            right: rem-calc(3);
+            top: 0;
+            -webkit-transform: rotate(75deg);
+            -moz-transform: rotate(75deg);
+            -o-transform: rotate(75deg);
+            -ms-transform: rotate(75deg);
+            transform: rotate(75deg);
+        }
     }
 
-    .title {
-        width: 90%;
-    }
-}
+    &.event {
+        background: scale-color($dark-orange, $lightness: 92%);
+        &:before {
+            color: $dark-gray;
+            content: "\f073";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            padding: rem-calc(5 7);
+            position: absolute;
+            right: rem-calc(3);
+            top: 0;
+        }
 
-.card.news {
-    &:before {
-        background: $white;
-        border-radius: 0 0 0 50%;
-        color: $dark-gray;
-        content: "\f1ea";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        padding: rem-calc(5 13);
-        position: absolute;
-        right: 0;
-        top: 0;
+        .title {
+            width: 90%;
+        }
     }
 
-    img {
-        width: 100% !important;
+    &.news {
+        position: relative;
+        &:before {
+            background: $white;
+            border-radius: 0 0 0 50%;
+            color: $dark-gray;
+            content: "\f1ea";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            padding: rem-calc(5 13);
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        img {
+            width: 100% !important;
+        }
     }
 }
 
@@ -387,6 +404,7 @@ section.main {
         clear: left;
         padding: rem-calc(0 24 0 0);
     }
+
     &.float-right {
         clear: right;
         padding: rem-calc(0 0 0 24);
