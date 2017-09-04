@@ -11,6 +11,7 @@
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/main.scss' %}">
   {% endcompress %}
+  <script type="text/javascript" src="{% static 'vendor/instafeed.js/instafeed.min.js' %}"></script>
 </head>
 <body{% block bodyclass %}{% endblock %}>
   <header class="top-header">
@@ -54,6 +55,7 @@
   </script>
   {% require_module 'config' %}
 
-  {% block footer_scripts %}{% endblock %}
+  {% block footer_scripts %}
+  {% endblock %}
 </body>
 </html>
