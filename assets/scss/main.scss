@@ -353,6 +353,7 @@ section.main {
 .card {
 
     margin-bottom: 0;
+    position: relative;
 
     &.blog {
         background: $light-yellow;
