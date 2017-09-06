@@ -138,9 +138,6 @@ requirejs.config({
                 'foundation.util.mediaQuery'
             ],
         },
-        // 'jsinstafeed': {
-        //     exports: 'JSInstafeed'
-        // },
         'instafeed_lawm': {
             exports: 'LAWMInstafeed'
         },
