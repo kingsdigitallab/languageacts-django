@@ -1,0 +1,12 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="column column-block">
+    {% image value.image width-300 as theimage %}
+    {% if value.link %}<a href="{{ value.link }}">{% endif %}
+    <img {{ theimage.attrs }}>
+    {% if value.link %}</a>{% endif %}
+
+    {% if value.text %}
+    <p>{{ value.text|richtext }}</p>
+    {% endif %}
+</div>

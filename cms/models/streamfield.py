@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from django import forms
 from wagtail.wagtailcore.blocks import (
-    CharBlock, FieldBlock, PageChooserBlock, RawHTMLBlock, RichTextBlock,
-    StreamBlock, StructBlock, TextBlock, URLBlock
+    CharBlock, FieldBlock, ListBlock, PageChooserBlock, RawHTMLBlock,
+    RichTextBlock, StreamBlock, StructBlock, TextBlock, URLBlock
 )
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
@@ -49,6 +49,19 @@ class ImageBlock(StructBlock):
 
     class Meta:
         template = 'cms/blocks/image_block.html'
+
+
+class ImageGrid(StructBlock):
+    image = ImageChooserBlock()
+    link = URLBlock(required=False)
+    text = RichTextBlock(required=False)
+
+
+class Grid(StructBlock):
+    image_block = ListBlock(ImageGrid(), required=False)
+
+    class Meta:
+        template = 'cms/blocks/image_grid.html'
 
 
 class LinkStyleChoiceBlock(FieldBlock):
@@ -98,6 +111,7 @@ class CMSStreamBlock(StreamBlock):
     pullquote = PullQuoteBlock(icon='openquote')
 
     image = ImageBlock(label='Aligned image + text', icon='image')
+    grid = Grid(icon='grip', label='Image grid')
     document = DocumentChooserBlock(icon='doc-full-inverse')
     link = LinkBlock(icon='link')
     embed = EmbedBlock(icon='media')
