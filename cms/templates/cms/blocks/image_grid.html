@@ -1,5 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
+{% for block in self %}
 <div class="column column-block">
     {% image value.image width-300 as theimage %}
     {% if value.link %}<a href="{{ value.link }}">{% endif %}
@@ -10,3 +11,4 @@
     <p>{{ value.text|richtext }}</p>
     {% endif %}
 </div>
+{% endfor %}
