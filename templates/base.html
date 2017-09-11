@@ -11,6 +11,9 @@
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/main.scss' %}">
   {% endcompress %}
+
+  {% block header_scripts %}
+  {% endblock %}
 </head>
 <body{% block bodyclass %}{% endblock %}>
   <header class="top-header">
