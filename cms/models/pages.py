@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.shortcuts import render
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
@@ -14,7 +14,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
-
+from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
 
@@ -59,7 +59,7 @@ class IndexPage(Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
     ]
-
+    strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     subpage_types = ['IndexPage', 'RichTextPage']
 
 
@@ -69,6 +69,10 @@ IndexPage.content_panels = [
 ]
 
 IndexPage.promote_panels = Page.promote_panels
+
+
+class StrandPage(IndexPage, WithStreamField):
+    subpage_types = ['IndexPage', 'RichTextPage']
 
 
 class RichTextPage(Page, WithStreamField):
@@ -141,7 +145,7 @@ class BlogPostTag(TaggedItemBase):
 class BlogPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
-
+    strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
@@ -167,6 +171,8 @@ BlogPost.content_panels = [
 BlogPost.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     ImageChooserPanel('feed_image'),
+
+    FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 
 
@@ -225,7 +231,7 @@ class NewsPostTag(TaggedItemBase):
 class NewsPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=NewsPostTag, blank=True)
-
+    strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
@@ -251,6 +257,7 @@ NewsPost.content_panels = [
 NewsPost.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     ImageChooserPanel('feed_image'),
+    FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 
 
@@ -362,7 +369,7 @@ class Event(Page, WithStreamField, WithFeedImage):
     location = models.TextField(verbose_name="Location")
 
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
-
+    strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date_from'),
@@ -393,4 +400,5 @@ Event.content_panels = [
 
 Event.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
+    FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
