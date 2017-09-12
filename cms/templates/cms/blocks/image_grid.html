@@ -9,7 +9,7 @@
 
     {% if item.text %}
     {% if item.link %}<a href="{{ item.link }}" class="text-center">{% endif %}
-        <p>{{ item.text|richtext }}</p>
+        <p class="text-center">{{ item.text|richtext }}</p>
     {% if item.link %}</a>{% endif %}
     {% endif %}
 </div>
