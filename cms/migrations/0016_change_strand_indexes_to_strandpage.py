@@ -6,6 +6,7 @@ from django.db import migrations, models
 from django.contrib.contenttypes.models import ContentType
 from cms.models import HomePage, IndexPage, StrandPage
 import modelcluster 
+import django.db.models.deletion
 
 def swap_types(apps, schema_editor):
     # Define our content types
@@ -44,11 +45,20 @@ def swap_types(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cms', '0015_strandpage'),
+        ('cms', '0015_image_grid'),
     ]
 
     operations = [
-        migrations.RunPython(swap_types),
+        migrations.CreateModel(
+            name='StrandPage',
+            fields=[
+                ('indexpage_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='cms.IndexPage')),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=('cms.indexpage', models.Model),
+        ),
         migrations.AddField(
             model_name='indexpage',
             name='strands',
@@ -79,4 +89,5 @@ class Migration(migrations.Migration):
             name='strands',
             field=modelcluster.fields.ParentalManyToManyField(blank=True, to='cms.StrandPage'),
         ),
+        migrations.RunPython(swap_types),
     ]
