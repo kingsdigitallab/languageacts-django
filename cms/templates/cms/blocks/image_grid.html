@@ -4,11 +4,13 @@
 <div class="column column-block">
     {% image item.image width-300 as theimage %}
     {% if item.link %}<a href="{{ item.link }}">{% endif %}
-    <img {{ theimage.attrs }} class="float-center">
+        <img {{ theimage.attrs }} class="float-center">
     {% if item.link %}</a>{% endif %}
 
     {% if item.text %}
-    <p>{{ item.text|richtext }}</p>
+    {% if item.link %}<a href="{{ item.link }}" class="text-center">{% endif %}
+        <p>{{ item.text|richtext }}</p>
+    {% if item.link %}</a>{% endif %}
     {% endif %}
 </div>
 {% endfor %}
