@@ -6,10 +6,6 @@
 
 {% block bodyclass %} class="homepage"{% endblock %}
 
-{% block header_scripts %}
-  <script type="text/javascript" src="{% static 'vendor/instafeed.js/instafeed.min.js' %}"></script>
-{% endblock %}
-
 {% block main %}
 
 {% for block in self.body %}
@@ -21,10 +17,8 @@
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 
-{# Events Placeholder #}
 {% get_homepage_events as events %}
 {% include "cms/includes/event_preview.html" with event=event_posts %}
-
 
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
@@ -49,7 +43,7 @@
 
 {% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
 
-{# Instagram Placeholder #}
+{# Instagram #}
 <div class="row">
     <div class="large-12 columns">
         <p><a href="//www.instagram.com/languageacts/"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @languageacts</a></p>

@@ -4,7 +4,7 @@ require([
     'jquery',
     'fn',
     'cookie',
-    // 'jsinstafeed',
+    'jsinstafeed',
     'instafeed_lawm',
     'ga'
 ], function(r, $) {
