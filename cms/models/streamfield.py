@@ -54,7 +54,7 @@ class ImageBlock(StructBlock):
 class ImageGrid(StructBlock):
     image = ImageChooserBlock()
     link = URLBlock(required=False)
-    text = RichTextBlock(required=False)
+    text = CharBlock(required=False)
 
 
 class Grid(StructBlock):
