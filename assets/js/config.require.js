@@ -30,8 +30,8 @@ requirejs.config({
         'foundation.util.touch': '../vendor/foundation-sites/js/foundation.util.touch',
         'foundation.util.triggers': '../vendor/foundation-sites/js/foundation.util.triggers',
 
-        // 'jsinstafeed': '../vendor/instafeed.js/instafeed',
-        'instafeed_lawm': 'instafeed_lawm',
+        'jsinstafeed': '../vendor/instafeed.js/instafeed',
+        // 'instafeed_lawm': 'instafeed_lawm',
 
         'jscookie': '../vendor/js-cookie/src/js.cookie',
 
@@ -138,8 +138,14 @@ requirejs.config({
                 'foundation.util.mediaQuery'
             ],
         },
-        'instafeed_lawm': {
-            exports: 'LAWMInstafeed'
+        // 'instafeed_lawm': {
+        //      exports: 'LAWMInstafeed'
+        // },
+        'jsinstafeed': {
+            deps: [
+                'jquery'
+            ]
+            // exports: 'JSInstafeed'
         },
         'jscookie': {
             exports: 'JScookie'

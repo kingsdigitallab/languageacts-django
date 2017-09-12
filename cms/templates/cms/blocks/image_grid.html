@@ -4,7 +4,7 @@
 <div class="column column-block">
     {% image item.image width-300 as theimage %}
     {% if item.link %}<a href="{{ item.link }}">{% endif %}
-    <img {{ theimage.attrs }}>
+    <img {{ theimage.attrs }} class="float-center">
     {% if item.link %}</a>{% endif %}
 
     {% if item.text %}
