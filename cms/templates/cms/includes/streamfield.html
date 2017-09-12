@@ -19,8 +19,8 @@
         {{ block.value.bound_blocks.html.render }}
     </div>
     {% elif block.block_type == 'grid' %}
-    <div class="row small-up-2 medium-up-3 large-up-4">
-        {{ block.value }}
+    <div class="row small-up-2 medum-up-3 large-up-4">
+        {% include_block block %}
     </div>
     {% else %}
     {% include_block block %}
