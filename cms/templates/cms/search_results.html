@@ -13,16 +13,18 @@
 {% block main %}
 
 {% if search_results %}
-<ul>
+<ol class="search-results">
    {% for result in search_results %}
        <li>
-           <h4><a href="{% pageurl result.specific %}">{{ result.specific }}</a></h4>
-           {% if result.specific.search_description %}
-               {{ result.specific.search_description|safe }}
-           {% endif %}
+        <h4>
+          <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+        </h4>
+        {% if result.specific.search_description %}
+        <p>{{ result.specific.search_description|safe }}</p>
+        {% endif %}
        </li>
    {% endfor %}
-</ul>
+</ol>
 {% else %}
   <p>No results found.</p>
 {% endif %}
