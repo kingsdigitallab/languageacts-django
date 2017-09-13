@@ -18,6 +18,10 @@
     <div class="iframe-container block.value.alignment">
         {{ block.value.bound_blocks.html.render }}
     </div>
+    {% elif block.block_type == 'grid' %}
+    <div class="row small-up-1 medium-up-2 large-up-4">
+        {% include_block block %}
+    </div>
     {% else %}
     {% include_block block %}
     {% endif %}

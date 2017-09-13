@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('wagtailcore', '0030_index_on_pagerevision_created_at'),
+        ('wagtailcore', '0040_page_draft_title'),
     ]
 
     operations = [

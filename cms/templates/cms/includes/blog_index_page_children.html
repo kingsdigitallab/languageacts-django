@@ -23,7 +23,7 @@
                 <p>{{ page.search_description }}</p>
             </div>
         </div>
-        {% include "cms/includes/tags.html" %}
+        {% include "cms/includes/tags.html" with obj=page %}
     </div>
     {% endfor %}
 </div>

@@ -30,6 +30,8 @@ requirejs.config({
         'foundation.util.touch': '../vendor/foundation-sites/js/foundation.util.touch',
         'foundation.util.triggers': '../vendor/foundation-sites/js/foundation.util.triggers',
 
+        'jsinstafeed': '../vendor/instafeed.js/instafeed',
+
         'jscookie': '../vendor/js-cookie/src/js.cookie',
 
         'requirejs': '../vendor/requirejs/require',
@@ -134,6 +136,11 @@ requirejs.config({
                 'foundation',
                 'foundation.util.mediaQuery'
             ],
+        },
+        'jsinstafeed': {
+            deps: [
+                'jquery'
+            ]
         },
         'jscookie': {
             exports: 'JScookie'
