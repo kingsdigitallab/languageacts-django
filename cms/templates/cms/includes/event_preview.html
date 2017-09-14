@@ -31,7 +31,7 @@
                 </div>
                 <p>{% if event.search_description %}{{ event.search_description|safe }}{% endif %}</p>
             </div>
-        {% include "cms/includes/tags.html"  with obj=event  %}
+        {% include "cms/includes/tags.html" with obj=event %}
         </div>
     </div>
     {% endfor %}

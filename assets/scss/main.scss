@@ -155,8 +155,9 @@ time {
 }
 
 .tags {
-    background: $light-gray;
+    background: rgba($dark-blue, .035);
     margin: 0;
+    min-height: rem-calc(52);
     padding: rem-calc(12);
 
     .label {
