@@ -190,6 +190,12 @@ time {
             }
         }
     }
+
+    &.plain {
+        background: none;
+        margin-top: rem-calc(6);
+        padding: 0;
+    }
 }
 
 /** Header **/
