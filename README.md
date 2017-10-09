@@ -6,6 +6,7 @@
 * Displaying Instagram stream on the homepage
 * Custom button to add a grid of images (with optional link and text)
 * Bug fixes
+* Whitelisted html `<small>` tag
 
 ## 1.0.1 Release
 * Responsive iframes and media objects containers
