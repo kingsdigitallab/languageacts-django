@@ -1,7 +1,7 @@
 # Language Acts and Worldmaking
 
 ## 2.0 Release
-Major release. Few new features added (listed below).
+Major release. New features added (listed below) and bug fixes.
 * Bug fixes
 * Tags to filter content
 * Tags to filter strands
