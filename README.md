@@ -1,11 +1,12 @@
 # Language Acts and Worldmaking
 
 ## 2.0 Release
+Major release. Few new features added (listed below).
+* Bug fixes
 * Tags to filter content
 * Tags to filter strands
 * Displaying Instagram stream on the homepage
 * Custom button to add a grid of images (with optional link and text)
-* Bug fixes
 * Whitelisted html `<small>` tag
 
 ## 1.0.1 Release
