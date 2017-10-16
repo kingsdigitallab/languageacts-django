@@ -31,7 +31,7 @@ def swap_types(apps, schema_editor):
             sp.save()
             sp.slug = p.slug
 
-            for child in children.all():
+            for c in children.all():
                 c.parent = sp
                 c.save()
 

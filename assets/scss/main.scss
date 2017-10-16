@@ -38,7 +38,7 @@ h1 small,
 h2 small,
 h3 small,
 small {
-    color: $dark-gray;
+    color: scale-color($dark-gray, $lightness: -20%);
 }
 
 time {
@@ -157,28 +157,44 @@ time {
 .tags {
     background: rgba($dark-blue, .035);
     margin: 0;
-    min-height: rem-calc(52);
+    // min-height: rem-calc(52);
     padding: rem-calc(12);
 
     .label {
-        background: $light-blue;
+        background: rgba($dark-blue, .1);
+        border-radius: 2px;
+        margin-bottom: rem-calc(3px);
 
         &.secondary {
-            background: $secondary-color;
+            background: rgba($dark-blue, .4);
+
+            a {
+                color: $white;
+            }
 
             &:hover {
-                background: scale-color($secondary-color, $lightness: -30%);
+                background: rgba($dark-blue, .55);
             }
         }
 
         &:hover {
-            background: scale-color($light-blue, $lightness: -30%);
+            background: rgba($dark-blue, .25);
         }
 
         a {
-            color: $white;
+            color: scale-color($dark-gray, $lightness: -30%);
             font-weight: normal;
+
+            &:hover {
+                border-bottom: 0;
+            }
         }
+    }
+
+    &.plain {
+        background: none;
+        margin-top: rem-calc(6);
+        padding: 0;
     }
 }
 

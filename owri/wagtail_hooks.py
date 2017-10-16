@@ -15,6 +15,7 @@ def whitelister_element_rules():
             {'id': True, 'class': True, 'src': True, 'style': True,
              'frameborder': True, 'allowfullscreen': True, 'width': True,
              'height': True}),
+        'small': attribute_rule({'class': True})
     }
 
 
