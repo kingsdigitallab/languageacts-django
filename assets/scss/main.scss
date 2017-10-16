@@ -161,16 +161,13 @@ time {
     padding: rem-calc(12);
 
     .label {
-        background: rgba($dark-blue, .1);
+        // background: rgba($dark-blue, .1);
+        background: scale-color($light-blue, $lightness: -10%);
         border-radius: 2px;
         margin-bottom: rem-calc(3px);
 
         &.secondary {
-            background: rgba($dark-blue, .4);
-
-            a {
-                color: $white;
-            }
+            background: scale-color($secondary-color, $lightness: -10%);
 
             &:hover {
                 background: rgba($dark-blue, .55);
@@ -182,7 +179,8 @@ time {
         }
 
         a {
-            color: scale-color($dark-gray, $lightness: -30%);
+            // color: scale-color($dark-gray, $lightness: -30%);
+            color: $white;
             font-weight: normal;
 
             &:hover {
