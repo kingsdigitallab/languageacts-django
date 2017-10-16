@@ -27,7 +27,9 @@
                 <p>{{ page.search_description }}</p>
             </div>
         </div>
+        {% if self.slug != 'home' %}
         {% include "cms/includes/tags.html" with obj=page %}
+        {% endif %}
     </div>
     {% endfor %}
 </div>
