@@ -6,27 +6,30 @@
 {# Not a fan of this, but it's the least hacky way to feed the title back. #}
 {% block title %}
 <header class="section-header">
-  <h1>Results for <span class="label">{{ request.GET.q }}</span></h1>
+  <h1>Searching for <span class="label title-tag">{{ request.GET.q }}</span></h1>
 </header>
 {% endblock %}
 
 {% block main %}
-<div class="row">
-  <div class="medium-3 columns">
+<div class="row" data-equalizer="sidebar">
+  <div class="medium-3 columns subnav" data-equalizer-watch="sidebar">
     <div data-sticky-container>
       <div data-sticky data-top-anchor="top:top" data-btm-anchor="top:bottom" id="example-menu">
-        <ul class="menu" data-magellan>
-          <li><a href="#first">One</a></li>
-          <li><a href="#second">Two</a></li>
-          <li><a href="#third">Three</a></li>
+        <h4>Content type</h4>
+        <ul class="vertical menu" data-magellan>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#events">Events</a></li>
+          <li><a href="#news">News</a></li>
+          <li><a href="#generic">Other</a></li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div class="medium-9 columns sections" id="top">
+  <div class="medium-9 columns sections" id="top" data-equalizer-watch="sidebar">
 
-    <section id="first" data-magellan-target="first">
+    <section id="blog" data-magellan-target="blog">
+      <h3>Blog</h3>
 
       {% if search_results %}
       <ol class="search-results">
@@ -60,11 +63,16 @@
       {% else %}
       <p>No results found.</p>
       {% endif %}
-
-      First Section
     </section>
-    <section id="second" data-magellan-target="second">Second Section</section>
-    <section id="third" data-magellan-target="third">Third Section</section>
+    <section id="events" data-magellan-target="events">
+      <h3>Events</h3>
+    </section>
+    <section id="news" data-magellan-target="news">
+      <h3>News</h3>
+    </section>
+    <section id="generic" data-magellan-target="generic">
+      <h3>Other</h3>
+    </section>
   </div>
 </div>
 
