@@ -1,48 +1,84 @@
 {% extends "cms/base.html" %}
 {% load wagtailcore_tags %}
 
-{% block meta_title %}Search Results{% endblock %}
+{% block meta_title %}Tags results{% endblock %}
 
 {# Not a fan of this, but it's the least hacky way to feed the title back. #}
 {% block title %}
 <header class="section-header">
-  <h1>Search Results for: {{ request.GET.q }}</h1>
+  <h1>Results for <span class="label">{{ request.GET.q }}</span></h1>
 </header>
 {% endblock %}
 
 {% block main %}
+<div class="row">
+  <div class="medium-3 columns">
+    <ul class="menu expanded" data-magellan>
+      <li><a href="#first">First Arrival</a></li>
+      <li><a href="#second">Second Arrival</a></li>
+      <li><a href="#third">Third Arrival</a></li>
+    </ul>
 
-{% if search_results %}
-<ol class="search-results">
-  {% for result in search_results %}
-    <li>
-      <h4>
-        <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
-      </h4>
-      {% if result.specific.search_description %}
-      <p>{{ result.specific.search_description|safe }}</p>
-      {% endif %}
-      
-      {% if result.specific.strands.all or result.specific.tags.all %}
-      <div class="tags plain">
-        {% if result.specific.strands.all %}
-        {% for strand in result.specific.strands.all %}
-        <span class="label secondary"><a href="{% pageurl strand %}" class="strand">{{ strand.title }}</a></span>
-        {% endfor %}
-        {% endif %}
-
-        {% if result.specific.tags.all %}
-        {% for tag in result.specific.tags.all %}
-        <span class="label"><a href="/search/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
-        {% endfor %}
-        {% endif %}
+    <div data-sticky-container>
+      <div class="top-bar" data-sticky data-margin-top="0" id="example-menu">
+        <div class="top-bar-left">
+          <ul class="menu">
+            <li class="menu-text">Site Title</li>
+          </ul>
+        </div>
+        <div class="top-bar-right">
+          <ul class="menu" data-magellan>
+            <li><a href="#first">One</a></li>
+            <li><a href="#second">Two</a></li>
+            <li><a href="#third">Three</a></li>
+          </ul>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="medium-9 columns sections">
+
+    <section id="first" data-magellan-target="first">
+
+      {% if search_results %}
+      <ol class="search-results">
+        {% for result in search_results %}
+          <li>
+            <h4>
+              <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+            </h4>
+            {% if result.specific.search_description %}
+            <p>{{ result.specific.search_description|safe }}</p>
+            {% endif %}
+            
+            {% if result.specific.strands.all or result.specific.tags.all %}
+            <div class="tags plain">
+              {% if result.specific.strands.all %}
+              {% for strand in result.specific.strands.all %}
+              <span class="label secondary"><a href="{% pageurl strand %}" class="strand">{{ strand.title }}</a></span>
+              {% endfor %}
+              {% endif %}
+
+              {% if result.specific.tags.all %}
+              {% for tag in result.specific.tags.all %}
+              <span class="label"><a href="/search/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+              {% endfor %}
+              {% endif %}
+            </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p>No results found.</p>
       {% endif %}
-    </li>
-  {% endfor %}
-</ol>
-{% else %}
-<p>No results found.</p>
-{% endif %}
+
+      First Section
+    </section>
+    <section id="second" data-magellan-target="second">Second Section</section>
+    <section id="third" data-magellan-target="third">Third Section</section>
+  </div>
+</div>
 
 {% endblock %}
