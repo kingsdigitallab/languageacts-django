@@ -9,6 +9,9 @@
   <title>{% block meta_title %}{% endblock %} | {{ PROJECT_TITLE }}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- favicons -->
+  {% include 'includes/favicon.html' %}
 
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/main.scss' %}">
