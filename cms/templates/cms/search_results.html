@@ -13,31 +13,18 @@
 {% block main %}
 <div class="row">
   <div class="medium-3 columns">
-    <ul class="menu expanded" data-magellan>
-      <li><a href="#first">First Arrival</a></li>
-      <li><a href="#second">Second Arrival</a></li>
-      <li><a href="#third">Third Arrival</a></li>
-    </ul>
-
     <div data-sticky-container>
-      <div class="top-bar" data-sticky data-margin-top="0" id="example-menu">
-        <div class="top-bar-left">
-          <ul class="menu">
-            <li class="menu-text">Site Title</li>
-          </ul>
-        </div>
-        <div class="top-bar-right">
-          <ul class="menu" data-magellan>
-            <li><a href="#first">One</a></li>
-            <li><a href="#second">Two</a></li>
-            <li><a href="#third">Three</a></li>
-          </ul>
-        </div>
+      <div data-sticky data-top-anchor="top:top" data-btm-anchor="top:bottom" id="example-menu">
+        <ul class="menu" data-magellan>
+          <li><a href="#first">One</a></li>
+          <li><a href="#second">Two</a></li>
+          <li><a href="#third">Three</a></li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <div class="medium-9 columns sections">
+  <div class="medium-9 columns sections" id="top">
 
     <section id="first" data-magellan-target="first">
 
