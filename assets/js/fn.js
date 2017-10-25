@@ -7,6 +7,7 @@ define([
     'es6!foundation.dropdown',
     'es6!foundation.dropdownMenu',
     'es6!foundation.equalizer',
+    'es6!foundation.magellan',
     'es6!foundation.responsiveMenu',
     'es6!foundation.responsiveToggle',
     'es6!foundation.util.box',

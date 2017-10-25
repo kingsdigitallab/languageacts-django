@@ -19,6 +19,7 @@ requirejs.config({
         'foundation.dropdown': '../vendor/foundation-sites/js/foundation.dropdown',
         'foundation.dropdownMenu': '../vendor/foundation-sites/js/foundation.dropdownMenu',
         'foundation.equalizer': '../vendor/foundation-sites/js/foundation.equalizer',
+        'foundation.magellan': '../vendor/foundation-sites/js/foundation.magellan',
         'foundation.responsiveMenu': '../vendor/foundation-sites/js/foundation.responsiveMenu',
         'foundation.responsiveToggle': '../vendor/foundation-sites/js/foundation.responsiveToggle',
         'foundation.util.box': '../vendor/foundation-sites/js/foundation.util.box',
@@ -119,6 +120,11 @@ requirejs.config({
             deps: [
                 'foundation',
                 'foundation.util.mediaQuery'
+            ],
+        },
+        'foundation.magellan': {
+            deps: [
+                'foundation'
             ],
         },
         'foundation.responsiveMenu': {
