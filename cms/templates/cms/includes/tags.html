@@ -3,13 +3,13 @@
 <div class="tags" data-equalizer-watch="tags-box">
     {% if obj.strands.all %}
     {% for strand in obj.strands.all %}
-    <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+    <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
     {% endfor %}
     {% endif %}
 
     {% if obj.tags.all %}
     {% for tag in obj.tags.all %}
-    <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+    <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
     {% endfor %}
     {% endif %}
 </div>

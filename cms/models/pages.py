@@ -474,8 +474,8 @@ class TagResults(RoutablePageMixin, Page):
         }
 
         # Sanity checking
-        if 'q' in request.GET:
-            tag = request.GET['q']
+        if 'tag' in request.GET:
+            tag = request.GET['tag']
         else:
             context['result_count'] = 0
             return render(request, self.get_template(request),

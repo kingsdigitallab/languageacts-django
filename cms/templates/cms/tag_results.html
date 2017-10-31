@@ -2,8 +2,8 @@
 {% load wagtailcore_tags %}
 
 {% block meta_title %}
-  {% if request.GET.q %}
-    Content tagged as {{ request.GET.q }} 
+  {% if request.GET.tag %}
+    Content tagged as {{ request.GET.tag }} 
   {% else %}
     No tag provided
   {% endif %}
@@ -12,8 +12,8 @@
 {# Not a fan of this, but it's the least hacky way to feed the title back. #}
 {% block title %}
 <header class="section-header">
-  {% if request.GET.q %}
-    <h1>Content Tagged as <span class="label title-tag">{{ request.GET.q }}</span></h1>
+  {% if request.GET.tag %}
+    <h1>Content Tagged as <span class="label title-tag">{{ request.GET.tag }}</span></h1>
   {% else %}
     <h1>No Tag Provided</span></h1>
   {% endif %}
@@ -22,7 +22,7 @@
 
 {% block main %}
 
-  {% if request.GET.q %}
+  {% if request.GET.tag %}
 
     {% if result_count %}
 
@@ -61,13 +61,13 @@
                 <div class="tags plain">
                   {% if result.specific.strands.all %}
                   {% for strand in result.specific.strands.all %}
-                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
                   {% endfor %}
                   {% endif %}
 
                   {% if result.specific.tags.all %}
                   {% for tag in result.specific.tags.all %}
-                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
                   {% endfor %}
                   {% endif %}
                 </div>
@@ -95,13 +95,13 @@
                 <div class="tags plain">
                   {% if result.specific.strands.all %}
                   {% for strand in result.specific.strands.all %}
-                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
                   {% endfor %}
                   {% endif %}
 
                   {% if result.specific.tags.all %}
                   {% for tag in result.specific.tags.all %}
-                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
                   {% endfor %}
                   {% endif %}
                 </div>
@@ -129,13 +129,13 @@
                 <div class="tags plain">
                   {% if result.specific.strands.all %}
                   {% for strand in result.specific.strands.all %}
-                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
                   {% endfor %}
                   {% endif %}
 
                   {% if result.specific.tags.all %}
                   {% for tag in result.specific.tags.all %}
-                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
                   {% endfor %}
                   {% endif %}
                 </div>
@@ -163,13 +163,13 @@
                 <div class="tags plain">
                   {% if result.specific.strands.all %}
                   {% for strand in result.specific.strands.all %}
-                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
                   {% endfor %}
                   {% endif %}
 
                   {% if result.specific.tags.all %}
                   {% for tag in result.specific.tags.all %}
-                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
                   {% endfor %}
                   {% endif %}
                 </div>

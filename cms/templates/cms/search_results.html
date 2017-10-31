@@ -27,13 +27,13 @@
       <div class="tags plain">
         {% if result.specific.strands.all %}
         {% for strand in result.specific.strands.all %}
-        <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+        <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
         {% endfor %}
         {% endif %}
 
         {% if result.specific.tags.all %}
         {% for tag in result.specific.tags.all %}
-        <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+        <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
         {% endfor %}
         {% endif %}
       </div>
