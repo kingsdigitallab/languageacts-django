@@ -64,3 +64,4 @@ local.py
 logs/
 playbook.retry
 static/
+live_data.sql
