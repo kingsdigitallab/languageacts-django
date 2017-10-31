@@ -1,79 +1,204 @@
 {% extends "cms/base.html" %}
 {% load wagtailcore_tags %}
 
-{% block meta_title %}Tags results{% endblock %}
+{% block meta_title %}
+  {% if request.GET.q %}
+    Content tagged as {{ request.GET.q }} 
+  {% else %}
+    No tag provided
+  {% endif %}
+{% endblock %}
 
 {# Not a fan of this, but it's the least hacky way to feed the title back. #}
 {% block title %}
 <header class="section-header">
-  <h1>Content tagged as <span class="label title-tag">{{ request.GET.q }}</span></h1>
+  {% if request.GET.q %}
+    <h1>Content Tagged as <span class="label title-tag">{{ request.GET.q }}</span></h1>
+  {% else %}
+    <h1>No Tag Provided</span></h1>
+  {% endif %}
 </header>
 {% endblock %}
 
 {% block main %}
-<div class="row" data-equalizer="sidebar">
-  <div class="medium-3 columns subnav" data-equalizer-watch="sidebar">
-    <div data-sticky-container>
-      <div data-sticky data-top-anchor="top:top" data-btm-anchor="top:bottom" id="example-menu">
-        <h4>Content type</h4>
-        <ul class="vertical menu" data-magellan>
-          <li><a href="#blog">Blog</a></li>
-          <li><a href="#events">Events</a></li>
-          <li><a href="#news">News</a></li>
-          <li><a href="#generic">Other</a></li>
-        </ul>
+
+  {% if request.GET.q %}
+
+    {% if result_count %}
+
+    <div class="row" data-equalizer="sidebar">
+      <div class="medium-3 columns subnav" data-equalizer-watch="sidebar">
+        <div data-sticky-container>
+          <div data-sticky data-top-anchor="top:top" data-btm-anchor="top:bottom" id="example-menu">
+            <h4>Content type</h4>
+            <ul class="vertical menu" data-magellan>
+              {% if blog.all %}<li><a href="#blog">Blog</a></li>{% endif %}
+              {% if events.all %}<li><a href="#events">Events</a></li>{% endif %}
+              {% if news.all %}<li><a href="#news">News</a></li>{% endif %}
+              {% if pages.all %}<li><a href="#generic">Pages</a></li>{% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="medium-9 columns sections" id="top" data-equalizer-watch="sidebar">
+
+        {% if blog.all %}
+        <section id="blog" data-magellan-target="blog">
+          <h3>Blog</h3>
+
+          <ol class="search-results">
+            {% for result in blog.all %}
+              <li>
+                <h4>
+                  <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+                </h4>
+                {% if result.specific.search_description %}
+                <p>{{ result.specific.search_description|safe }}</p>
+                {% endif %}
+                
+                {% if result.specific.strands.all or result.specific.tags.all %}
+                <div class="tags plain">
+                  {% if result.specific.strands.all %}
+                  {% for strand in result.specific.strands.all %}
+                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+
+                  {% if result.specific.tags.all %}
+                  {% for tag in result.specific.tags.all %}
+                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+        {% endif %}
+
+        {% if events.all %}
+        <section id="events" data-magellan-target="events">
+          <h3>Events</h3>
+          <ol class="search-results">
+            {% for result in events.all %}
+              <li>
+                <h4>
+                  <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+                </h4>
+                {% if result.specific.search_description %}
+                <p>{{ result.specific.search_description|safe }}</p>
+                {% endif %}
+                
+                {% if result.specific.strands.all or result.specific.tags.all %}
+                <div class="tags plain">
+                  {% if result.specific.strands.all %}
+                  {% for strand in result.specific.strands.all %}
+                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+
+                  {% if result.specific.tags.all %}
+                  {% for tag in result.specific.tags.all %}
+                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+        {% endif %}
+
+        {% if news.all %}
+        <section id="news" data-magellan-target="news">
+          <h3>News</h3>
+          <ol class="search-results">
+            {% for result in news.all %}
+              <li>
+                <h4>
+                  <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+                </h4>
+                {% if result.specific.search_description %}
+                <p>{{ result.specific.search_description|safe }}</p>
+                {% endif %}
+                
+                {% if result.specific.strands.all or result.specific.tags.all %}
+                <div class="tags plain">
+                  {% if result.specific.strands.all %}
+                  {% for strand in result.specific.strands.all %}
+                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+
+                  {% if result.specific.tags.all %}
+                  {% for tag in result.specific.tags.all %}
+                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+        {% endif %}
+
+        {% if pages.all %}
+        <section id="generic" data-magellan-target="generic">
+          <h3>Pages</h3>
+          <ol class="search-results">
+            {% for result in pages.all %}
+              <li>
+                <h4>
+                  <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+                </h4>
+                {% if result.specific.search_description %}
+                <p>{{ result.specific.search_description|safe }}</p>
+                {% endif %}
+                
+                {% if result.specific.strands.all or result.specific.tags.all %}
+                <div class="tags plain">
+                  {% if result.specific.strands.all %}
+                  {% for strand in result.specific.strands.all %}
+                  <span class="label secondary"><a href="/tagged-pages/?q={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+
+                  {% if result.specific.tags.all %}
+                  {% for tag in result.specific.tags.all %}
+                  <span class="label"><a href="/tagged-pages/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                  {% endfor %}
+                  {% endif %}
+                </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+      </div>
+      {% endif %}
+    </div>
+
+    {% else %} {# No results #}
+    <div class="row">
+      <div class="medium-12 columns">
+        <section>
+          <p>No results found.</p>
+        </section>
       </div>
     </div>
+    {% endif %}
+
+  {% else %} {# No tag #}
+  <div class="row">
+    <div class="medium-12 columns">
+      <section>
+        <p>No tag provided. To search by tag, please click on a tag throughout the site.</p>
+      </section>
+    </div>
   </div>
-
-  <div class="medium-9 columns sections" id="top" data-equalizer-watch="sidebar">
-
-    <section id="blog" data-magellan-target="blog">
-      <h3>Blog</h3>
-
-      {% if search_results %}
-      <ol class="search-results">
-        {% for result in search_results %}
-          <li>
-            <h4>
-              <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
-            </h4>
-            {% if result.specific.search_description %}
-            <p>{{ result.specific.search_description|safe }}</p>
-            {% endif %}
-            
-            {% if result.specific.strands.all or result.specific.tags.all %}
-            <div class="tags plain">
-              {% if result.specific.strands.all %}
-              {% for strand in result.specific.strands.all %}
-              <span class="label secondary"><a href="{% pageurl strand %}" class="strand">{{ strand.title }}</a></span>
-              {% endfor %}
-              {% endif %}
-
-              {% if result.specific.tags.all %}
-              {% for tag in result.specific.tags.all %}
-              <span class="label"><a href="/search/?q={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
-              {% endfor %}
-              {% endif %}
-            </div>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ol>
-      {% else %}
-      <p>No results found.</p>
-      {% endif %}
-    </section>
-    <section id="events" data-magellan-target="events">
-      <h3>Events</h3>
-    </section>
-    <section id="news" data-magellan-target="news">
-      <h3>News</h3>
-    </section>
-    <section id="generic" data-magellan-target="generic">
-      <h3>Other</h3>
-    </section>
-  </div>
-</div>
-
+  {% endif %}
 {% endblock %}

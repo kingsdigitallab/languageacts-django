@@ -4,6 +4,7 @@ import logging
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.shortcuts import render
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -43,7 +44,8 @@ class HomePage(Page, WithStreamField):
 
     subpage_types = [
         'BlogIndexPage', 'EventIndexPage', 'IndexPage',
-        'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage'
+        'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage',
+        'TagResults'
     ]
 
 
@@ -161,6 +163,24 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
         # Find closest ancestor which is a blog index
         return BlogIndexPage.objects.ancestor_of(self).last()
 
+    @classmethod
+    def get_by_tag(self, tag=None):
+        if tag:
+            return self.objects.filter(tags__name=tag)
+        else:
+            return self.objects.none()
+
+    @classmethod
+    def get_by_strand(self, strand_name=None):
+        if strand_name:
+            try:
+                strand = StrandPage.objects.get(title=strand_name)
+                return self.objects.filter(strands=strand)
+            except ObjectDoesNotExist:
+                return self.objects.none()
+        else:
+            return self.objects.none()
+
 
 BlogPost.content_panels = [
     FieldPanel('title', classname='full title'),
@@ -246,6 +266,24 @@ class NewsPost(Page, WithStreamField, WithFeedImage):
     def get_index_page(self):
         # Find closest ancestor which is a news index
         return NewsIndexPage.objects.ancestor_of(self).last()
+
+    @classmethod
+    def get_by_tag(self, tag=None):
+        if tag:
+            return self.objects.filter(tags__name=tag)
+        else:
+            return self.objects.none()
+
+    @classmethod
+    def get_by_strand(self, strand_name=None):
+        if strand_name:
+            try:
+                strand = StrandPage.objects.get(title=strand_name)
+                return self.objects.filter(strands=strand)
+            except ObjectDoesNotExist:
+                return self.objects.none()
+        else:
+            return self.objects.none()
 
 
 NewsPost.content_panels = [
@@ -368,7 +406,7 @@ class Event(Page, WithStreamField, WithFeedImage):
 
     location = models.TextField(verbose_name="Location")
 
-    tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
+    tags = ClusterTaggableManager(through=EventTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     search_fields = Page.search_fields + [
         index.SearchField('body'),
@@ -386,6 +424,24 @@ class Event(Page, WithStreamField, WithFeedImage):
         # Find closest ancestor which is a blog index
         return EventIndexPage.objects.ancestor_of(self).last()
 
+    @classmethod
+    def get_by_tag(self, tag=None):
+        if tag:
+            return self.objects.filter(tags__name=tag)
+        else:
+            return self.objects.none()
+
+    @classmethod
+    def get_by_strand(self, strand_name=None):
+        if strand_name:
+            try:
+                strand = StrandPage.objects.get(title=strand_name)
+                return self.objects.filter(strands=strand)
+            except ObjectDoesNotExist:
+                return self.objects.none()
+        else:
+            return self.objects.none()
+
 
 Event.content_panels = [
     FieldPanel('title', classname='full title'),
@@ -402,3 +458,68 @@ Event.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
+
+
+class TagResults(RoutablePageMixin, Page):
+
+    @route(r'^$')
+    def results(self, request):
+        context = {
+            'blog': None,
+            'events': None,
+            'news': None,
+            'pages': None,
+            'result_count': 0,
+            'self': self
+        }
+
+        # Sanity checking
+        if 'q' in request.GET:
+            tag = request.GET['q']
+        else:
+            context['result_count'] = 0
+            return render(request, self.get_template(request),
+                          context)
+
+        # Check if we have a strand, and if so, get that strand
+        # page's children
+        try:
+            strand = StrandPage.objects.get(title=tag)
+            pages = strand.get_children()
+        except ObjectDoesNotExist:
+            pages = StrandPage.objects.none()
+
+        # Get tagged content
+        blog_tag = BlogPost.get_by_tag(tag)
+        blog_strand = BlogPost.get_by_strand(tag)
+        events_tag = Event.get_by_tag(tag)
+        events_strand = Event.get_by_strand(tag)
+        news_tag = NewsPost.get_by_tag(tag)
+        news_strand = NewsPost.get_by_strand(tag)
+
+        # Merge tagged content
+        blog = blog_tag | blog_strand
+        events = events_tag | events_strand
+        news = news_tag | news_strand
+
+        # Assign them
+        context['blog'] = blog
+        context['events'] = events
+        context['news'] = news
+        context['pages'] = pages
+
+        # Get counts
+        context['result_count'] = (
+            blog.count() + events.count() +
+            news.count() + pages.count())
+
+        return render(request, self.get_template(request),
+                      context)
+
+
+IndexPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body'),
+]
+
+IndexPage.promote_panels = Page.promote_panels
