@@ -370,6 +370,13 @@ section.main {
     }
 }
 
+article {
+    .tags {
+        background: transparent;
+        padding: 0;
+    }
+}
+
 .blob {
     position: absolute;
     top: rem-calc(-50);
@@ -455,6 +462,10 @@ section.main {
             width: 100% !important;
         }
     }
+}
+
+.featured-image {
+    margin: rem-calc(24 0);
 }
 
 .img-wrapper {

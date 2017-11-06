@@ -27,12 +27,17 @@
             {% endblock %}
             {% endif %}
         </p>
+        {% include "cms/includes/tags.html" with obj=page %}
     </header>
 
-    {# TODO: Add feed image, if any - Needs fixing #}
-    {% if self.specific.feed_image %}
-    <img src="{{ self.specific.feed_image.url }}" alt="{{ self.specific.feed_image.alt }}">
-    {% endif %}
+    {% if self.feed_image %}
+    <div class="row featured-image">
+        <div class="large-12 columns">
+            {% image self.feed_image max-600x300 as feat_image %}
+            <img src="{{ feat_image.url }}" alt="{{ feat_image.alt }}" class="float-center">
+            {% endif %}
+        </div>
+    </div>
 
     {{ block.super }}
 </article>
