@@ -9,7 +9,6 @@ Major release. New features added (listed below) and bug fixes.
 * Custom button to add a grid of images (with optional link and text)
 * Whitelisted html `<small>` tag
 * Added favicon
-* Added Blog/Events/News pages with content filtered by strands (using tags)
 
 ## 1.0.1 Release
 * Responsive iframes and media objects containers
