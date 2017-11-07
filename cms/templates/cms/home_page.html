@@ -17,10 +17,8 @@
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 
-{# Events Placeholder #}
 {% get_homepage_events as events %}
 {% include "cms/includes/event_preview.html" with event=event_posts %}
-
 
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
@@ -45,27 +43,13 @@
 
 {% include "cms/includes/twitter_feeds.html" with screen_name=value.twitter %}
 
-{# Instagram Placeholder #}
+{# Instagram #}
 <div class="row">
     <div class="large-12 columns">
         <p><a href="//www.instagram.com/languageacts/"><i class="fa fa-instagram" aria-hidden="true"></i> Follow us @languageacts</a></p>
     </div>
 </div>
-<div class="row collapse instagram-block">
-    <div class="medium-6 large-3 columns">
-        <img src="{% static '/images/placeholders/IMG_2868-640x640.jpg' %}" alt="Placeholder">
-    </div>
-    <div class="medium-6 large-3 columns">
-        {# <img src="{% static '/images/placeholders/IMG_5258-640x640.jpg' %}" alt="Placeholder"> #}
-        <img src="{% static '/images/placeholders/placeholder-6-640x640-alhambra.jpg' %}" alt="Placeholder">
-    </div>
-    <div class="medium-6 large-3 columns">
-        <img src="{% static '/images/placeholders/IMG_4021-640x640.jpg' %}" alt="Placeholder">
-    </div>
-    <div class="medium-6 large-3 columns">
-        {# <img src="{% static '/images/placeholders/Language-Teacher-640x640.jpg' %}" alt="Placeholder"> #}
-        <img src="{% static '/images/placeholders/placeholder-5-640x640-plastification.jpg' %}" alt="Placeholder">
-    </div>
+<div class="row collapse instagram-block" id="instafeed">
 </div>
 
 {% endblock %}

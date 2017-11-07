@@ -1,5 +1,15 @@
 # Language Acts and Worldmaking
 
+## 2.0 Release
+Major release. New features added (listed below) and bug fixes.
+* Bug fixes
+* Tags to filter content
+* Tags to filter strands
+* Displaying Instagram stream on the homepage
+* Custom button to add a grid of images (with optional link and text)
+* Whitelisted html `<small>` tag
+* Added favicon
+
 ## 1.0.1 Release
 * Responsive iframes and media objects containers
 
@@ -8,7 +18,7 @@
 * Custom button for anchor links
 * Custom button to insert tables
 * Custom block to pair image and text
-* Equalizer to the image+text block
+* Equalizer to the image + text block
 * Equalizer for sidebar navigation
 
 ## Beta Release

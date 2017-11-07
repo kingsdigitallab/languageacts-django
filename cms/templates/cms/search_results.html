@@ -13,18 +13,36 @@
 {% block main %}
 
 {% if search_results %}
-<ul>
-   {% for result in search_results %}
-       <li>
-           <h4><a href="{% pageurl result.specific %}">{{ result.specific }}</a></h4>
-           {% if result.specific.search_description %}
-               {{ result.specific.search_description|safe }}
-           {% endif %}
-       </li>
-   {% endfor %}
-</ul>
+<ol class="search-results">
+  {% for result in search_results %}
+    <li>
+      <h4>
+        <a href="{% pageurl result.specific %}">{{ result.specific }}</a>
+      </h4>
+      {% if result.specific.search_description %}
+      <p>{{ result.specific.search_description|safe }}</p>
+      {% endif %}
+      
+      {% if result.specific.strands.all or result.specific.tags.all %}
+      <div class="tags plain">
+        {% if result.specific.strands.all %}
+        {% for strand in result.specific.strands.all %}
+        <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}" class="strand">{{ strand.title }}</a></span>
+        {% endfor %}
+        {% endif %}
+
+        {% if result.specific.tags.all %}
+        {% for tag in result.specific.tags.all %}
+        <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+        {% endfor %}
+        {% endif %}
+      </div>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ol>
 {% else %}
-  <p>No results found.</p>
+<p>No results found.</p>
 {% endif %}
 
 {% endblock %}

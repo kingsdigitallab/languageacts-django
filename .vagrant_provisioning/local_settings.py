@@ -29,3 +29,6 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 GA_ID = ''
+AC_TOKEN = ''
+AC_USER = ''
+AC_BASE_URL = ''

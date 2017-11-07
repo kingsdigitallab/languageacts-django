@@ -38,7 +38,7 @@ h1 small,
 h2 small,
 h3 small,
 small {
-    color: $dark-gray;
+    color: scale-color($dark-gray, $lightness: -20%);
 }
 
 time {
@@ -112,8 +112,12 @@ time {
     }
 }
 
+.intro {
+    font-size: rem-calc(20);
+    color: scale-color($dark-gray, $lightness: -20%);
+}
+
 .responsive-object {
-    // padding-bottom: 0 !important;
     position: relative;
     height: 0;
     width: 100%;
@@ -127,12 +131,8 @@ time {
     }
 }
 
-.intro {
-    font-size: rem-calc(20);
-    color: scale-color($dark-gray, $lightness: -20%);
-}
+// Need to implement Wagtail floating classes:
 
-// Need to implement Wagtail floating classes
 .left {
     clear: right;
     float: left;
@@ -145,12 +145,78 @@ time {
     padding-left: rem-calc(24);
 }
 
+/***/
+
 .meta {
     color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
 
     &.info {
         font-size: rem-calc(14);
+    }
+}
+
+.tags {
+    background: rgba($dark-blue, .035);
+    margin: 0;
+    // min-height: rem-calc(52);
+    padding: rem-calc(12);
+
+    .label {
+        // background: rgba($dark-blue, .1);
+        background: scale-color($light-blue, $lightness: -10%);
+        border-radius: 2px;
+        margin-bottom: rem-calc(3px);
+
+        &.secondary {
+            background: scale-color($secondary-color, $lightness: -10%);
+
+            &:hover {
+                background: rgba($dark-blue, .55);
+            }
+        }
+
+        &:hover {
+            background: rgba($dark-blue, .25);
+        }
+
+        a {
+            // color: scale-color($dark-gray, $lightness: -30%);
+            color: $white;
+            font-weight: normal;
+
+            &:hover {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    &.plain {
+        background: none;
+        margin-top: rem-calc(6);
+        padding: 0;
+    }
+}
+
+.title-tag {
+    &.label {
+        background: rgba($dark-blue, .2);
+        border-radius: 4px;
+        color: scale-color($dark-gray, $lightness: -30%);
+        font-size: 3rem;
+        padding-bottom: .875rem;
+
+        &:hover {
+            background: rgba($dark-blue, .25);
+        }
+
+        a {
+            font-weight: normal;
+
+            &:hover {
+                border-bottom: 0;
+            }
+        }
     }
 }
 
@@ -219,8 +285,13 @@ nav {
 .subnav {
     background: $white;
 
-    h3 {
+    h3,
+    h4 {
         color: $dark-gray;
+    }
+
+    h4 {
+        padding: 1rem .8125rem 0;
     }
 
     a {
@@ -299,6 +370,13 @@ section.main {
     }
 }
 
+article {
+    .tags {
+        background: transparent;
+        padding: 0;
+    }
+}
+
 .blob {
     position: absolute;
     top: rem-calc(-50);
@@ -324,61 +402,73 @@ section.main {
 }
 
 .card {
+
+    margin-bottom: 0;
     position: relative;
-}
 
-.card.blog {
-    background: $light-yellow;
-    &:before {
-        color: $dark-gray;
-        content: "\f02b";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        position: absolute;
-        right: rem-calc(3);
-        top: 0;
-        -webkit-transform: rotate(75deg);
-        -moz-transform: rotate(75deg);
-        -o-transform: rotate(75deg);
-        -ms-transform: rotate(75deg);
-        transform: rotate(75deg);
+    &.blog {
+        background: $light-yellow;
+
+        &:before {
+            color: $dark-gray;
+            content: "\f02b";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            position: absolute;
+            right: rem-calc(3);
+            top: 0;
+            -webkit-transform: rotate(75deg);
+            -moz-transform: rotate(75deg);
+            -o-transform: rotate(75deg);
+            -ms-transform: rotate(75deg);
+            transform: rotate(75deg);
+        }
+    }
+
+    &.event {
+        background: scale-color($dark-orange, $lightness: 92%);
+        &:before {
+            color: $dark-gray;
+            content: "\f073";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            padding: rem-calc(5 7);
+            position: absolute;
+            right: rem-calc(3);
+            top: 0;
+        }
+
+        .title {
+            width: 90%;
+        }
+    }
+
+    &.news {
+        position: relative;
+        &:before {
+            background: $white;
+            border-radius: 0 0 0 50%;
+            color: $dark-gray;
+            content: "\f1ea";
+            font-family: "FontAwesome";
+            font-size: rem-calc(24);
+            padding: rem-calc(5 13);
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        img {
+            width: 100% !important;
+        }
     }
 }
 
-.card.event {
-    background: scale-color($dark-orange, $lightness: 92%);
-    &:before {
-        color: $dark-gray;
-        content: "\f073";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        padding: rem-calc(5 7);
-        position: absolute;
-        right: rem-calc(3);
-        top: 0;
-    }
-
-    .title {
-        width: 90%;
-    }
-}
-
-.card.news {
-    &:before {
-        background: $white;
-        border-radius: 0 0 0 50%;
-        color: $dark-gray;
-        content: "\f1ea";
-        font-family: "FontAwesome";
-        font-size: rem-calc(24);
-        padding: rem-calc(5 13);
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
+.featured-image {
+    margin: rem-calc(24 0);
 
     img {
-        width: 100% !important;
+        width: 100%;
     }
 }
 
@@ -387,6 +477,7 @@ section.main {
         clear: left;
         padding: rem-calc(0 24 0 0);
     }
+
     &.float-right {
         clear: right;
         padding: rem-calc(0 0 0 24);
@@ -447,6 +538,40 @@ section.main {
         height: rem-calc(44);
     }
 }
+
+.search-results {
+    counter-reset: li;
+    list-style: none;
+    margin-left: 0;
+    position: relative;
+
+    li {
+        border-bottom: 1px solid scale-color($light-gray, $lightness: -5%);
+        counter-increment: li;
+        line-height: 1;
+        padding: rem-calc(12 0 12 24);
+        position: relative;
+
+        &::before {
+            top: rem-calc(17);
+            color: $dark-gray;
+            content: counter(li);
+            display: inline-block;
+            margin-left: rem-calc(-24);
+            position: absolute;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        h4,
+        p {
+            margin-bottom: 0;
+        }
+    }
+}
+
 
 /** Footer **/
 

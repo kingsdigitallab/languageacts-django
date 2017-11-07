@@ -4,13 +4,21 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:title" content="Language Acts">
+  <meta property="og:image" content="{{ self.get_site.root_url }}{% static 'images/logos/lawm-logo.png' %}">
   <title>{% block meta_title %}{% endblock %} | {{ PROJECT_TITLE }}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- favicons -->
+  {% include 'includes/favicon.html' %}
 
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/main.scss' %}">
   {% endcompress %}
+
+  {% block header_scripts %}
+  {% endblock %}
 </head>
 <body{% block bodyclass %}{% endblock %}>
   <header class="top-header">
@@ -23,7 +31,7 @@
 
   <div class="row">
     <div class="large-12 columns">
-      <section class="main">
+      <section class="main" data-equalizer="tags-box" data-equalize-on="medium" data-equalize-by-row="true">
         {% block title %}
         <header class="section-header">
           <h1>{{ self.title }}</h1>
@@ -54,6 +62,7 @@
   </script>
   {% require_module 'config' %}
 
-  {% block footer_scripts %}{% endblock %}
+  {% block footer_scripts %}
+  {% endblock %}
 </body>
 </html>
