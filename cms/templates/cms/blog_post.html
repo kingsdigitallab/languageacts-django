@@ -30,6 +30,7 @@
             {% endif %}
         </p>
         {% endblock %}
+        {% include "cms/includes/tags.html" with obj=page %}
     </header>
 
     {{ block.super }}

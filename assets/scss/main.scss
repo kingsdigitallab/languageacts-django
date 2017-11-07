@@ -466,6 +466,10 @@ article {
 
 .featured-image {
     margin: rem-calc(24 0);
+
+    img {
+        width: 100%;
+    }
 }
 
 .img-wrapper {
