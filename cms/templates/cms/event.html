@@ -20,6 +20,7 @@
     <i class="fa fa-map-marker"></i> {{ self.location }}
     </time>
   </p>
+  {% include "cms/includes/tags.html" with obj=page %}
 </header>
 {% endblock %}
 
