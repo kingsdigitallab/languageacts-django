@@ -24,22 +24,14 @@ def swap_types(apps, schema_editor):
             sp = StrandPage()
             sp.title = p.title
             sp.specific.body = p.specific.body
-            sp.parent = HomePage
-            sp.slug = "temp"
-            sp.path = '0'
-            sp.depth = '0'
-            sp.save()
-            sp.slug = p.slug
+            sp.slug = "strand_{}".format(p.slug)
+
+            homepage.add_child(instance=sp)
 
             for c in children.all():
-                c.parent = sp
-                c.save()
-
-            sp.path = p.path
-            sp.depth = p.depth
+                c.move(sp, pos='last-child')
 
             p.delete()
-            sp.save()
 
 
 class Migration(migrations.Migration):
