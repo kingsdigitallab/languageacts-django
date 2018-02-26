@@ -24,7 +24,7 @@
         </a>
 
         <ul class="vertical menu nested">
-            {% for sub in page.get_children %} 
+            {% for sub in page.get_children.live.in_menu %} 
             <li>
                 <a href="{% pageurl sub %}">
                     {{ sub.title }}
