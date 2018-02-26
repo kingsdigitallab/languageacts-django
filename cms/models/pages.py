@@ -76,6 +76,9 @@ IndexPage.promote_panels = Page.promote_panels
 class StrandPage(IndexPage, WithStreamField):
     subpage_types = ['IndexPage', 'RichTextPage']
 
+    def show_filtered_content(self):
+        return True
+
 
 class RichTextPage(Page, WithStreamField):
     search_fields = Page.search_fields + [
