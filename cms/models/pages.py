@@ -79,6 +79,24 @@ class StrandPage(IndexPage, WithStreamField):
     def show_filtered_content(self):
         return True
 
+    def get_context(self, request):
+        context = super(StrandPage, self).get_context(request)
+
+        today = date.today()
+
+        context['blog_posts'] = BlogPost.get_by_strand(
+            self.title).live().order_by('-date')
+        context['events'] = Event.get_by_strand(
+            self.title).live().filter(date_from__gte=today).order_by(
+            'date_from')
+        context['past_events'] = Event.get_by_strand(
+            self.title).live().filter(date_from__lt=today).order_by(
+            '-date_from')
+        context['news_posts'] = NewsPost.get_by_strand(
+            self.title).live().order_by('-date')
+
+        return context
+
 
 class RichTextPage(Page, WithStreamField):
     search_fields = Page.search_fields + [
