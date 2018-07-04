@@ -1,6 +1,6 @@
 from cms.models.pages import (
     BlogIndexPage, EventIndexPage, HomePage, IndexPage, NewsIndexPage,
-    PastEventIndexPage, RichTextPage, StrandPages, _paginate, TagResults
+    PastEventIndexPage, RichTextPage, StrandPage, _paginate, TagResults
 )
 from django.test import RequestFactory, TestCase
 from wagtail.tests.utils import WagtailPageTests
@@ -39,7 +39,7 @@ class TestHomePage(WagtailPageTests):
                 NewsIndexPage,
                 PastEventIndexPage,
                 RichTextPage,
-                StrandPages,
+                StrandPage,
                 TagResults
             })
 
