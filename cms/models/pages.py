@@ -45,7 +45,7 @@ class HomePage(Page, WithStreamField):
     subpage_types = [
         'BlogIndexPage', 'EventIndexPage', 'IndexPage',
         'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage',
-        'TagResults'
+        'StrandPage', 'TagResults'
     ]
 
 
