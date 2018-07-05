@@ -82,24 +82,14 @@ class StrandPage(IndexPage, WithStreamField):
     def get_context(self, request):
         context = super(StrandPage, self).get_context(request)
 
-        today = date.today()
-
         context['blog_posts'] = BlogPost.get_by_strand(
-            self.title).live().filter(date__lte=today).order_by('-date')
+            self.title)
         context['events'] = Event.get_by_strand(
-            self.title).live().filter(
-            Q(date_from__gte=today) | (
-                Q(date_to__isnull=False) & Q(
-                    date_to__gte=today))).order_by(
-            'date_from')
+            self.title)
         context['past_events'] = Event.get_by_strand(
-            self.title).live().filter(
-            Q(date_from__lt=today) & (
-                Q(date_to__isnull=True) | Q(
-                    date_to__lt=today))).order_by(
-            '-date_from')
+            self.title)
         context['news_posts'] = NewsPost.get_by_strand(
-            self.title).live().filter(date__lte=today).order_by('-date')
+            self.title)
 
         return context
 
@@ -194,17 +184,21 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
+        today = date.today()
         if tag:
-            return self.objects.filter(tags__name=tag)
+            return self.objects.live().filter(
+                tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
             return self.objects.none()
 
     @classmethod
     def get_by_strand(self, strand_name=None):
+        today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.filter(strands=strand)
+                return self.objects.live().filter(
+                    strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -300,17 +294,21 @@ class NewsPost(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
+        today = date.today()
         if tag:
-            return self.objects.filter(tags__name=tag)
+            return self.objects.live().filter(
+                tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
             return self.objects.none()
 
     @classmethod
     def get_by_strand(self, strand_name=None):
+        today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.filter(strands=strand)
+                return self.objects.live().filter(
+                    strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
