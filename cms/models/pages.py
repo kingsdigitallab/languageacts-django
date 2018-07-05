@@ -85,15 +85,21 @@ class StrandPage(IndexPage, WithStreamField):
         today = date.today()
 
         context['blog_posts'] = BlogPost.get_by_strand(
-            self.title).live().order_by('-date')
+            self.title).live().filter(date__lte=today).order_by('-date')
         context['events'] = Event.get_by_strand(
-            self.title).live().filter(date_from__gte=today).order_by(
+            self.title).live().filter(
+            Q(date_from__gte=today) | (
+                Q(date_to__isnull=False) & Q(
+                    date_to__gte=today))).order_by(
             'date_from')
         context['past_events'] = Event.get_by_strand(
-            self.title).live().filter(date_from__lt=today).order_by(
+            self.title).live().filter(
+            Q(date_from__lt=today) & (
+                Q(date_to__isnull=True) | Q(
+                    date_to__lt=today))).order_by(
             '-date_from')
         context['news_posts'] = NewsPost.get_by_strand(
-            self.title).live().order_by('-date')
+            self.title).live().filter(date__lte=today).order_by('-date')
 
         return context
 
