@@ -123,7 +123,9 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
 
     @property
     def posts(self):
-        posts = BlogPost.objects.live().descendant_of(self)
+        today = date.today()
+        posts = BlogPost.objects.live().descendant_of(
+            self).filter(date__lte=today)
 
         posts = posts.order_by('-date')
 
@@ -227,7 +229,9 @@ class NewsIndexPage(RoutablePageMixin, Page, WithStreamField):
 
     @property
     def posts(self):
-        posts = NewsPost.objects.live().descendant_of(self)
+        today = date.today()
+        posts = NewsPost.objects.live().descendant_of(
+            self).filter(date__lte=today)
 
         posts = posts.order_by('-date')
 
