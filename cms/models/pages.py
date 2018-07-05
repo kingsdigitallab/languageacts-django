@@ -18,7 +18,7 @@ from wagtail.wagtailsearch import index
 from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
-
+from django.db.models import Q
 logger = logging.getLogger(__name__)
 
 
@@ -331,7 +331,10 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     def events(self):
         # Events that have not ended.
         today = date.today()
-        events = Event.objects.live().filter(date_from__gte=today).order_by(
+        events = Event.objects.live().filter(
+            Q(date_from__gte=today) | (
+                Q(date_to__isnull=False) & Q(
+                    date_to__gte=today))).order_by(
             'date_from')
         return events
 
