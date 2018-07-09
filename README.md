@@ -1,5 +1,13 @@
 # Language Acts and Worldmaking
 
+## 3.0 Release
+Major release. New features added and bug fixes.
+* Bug fixes
+* Blog index page for strand specific blog posts
+* Events index page for strand specific events
+* News index page for strand specific news items
+* Open University logo updated
+
 ## 2.0 Release
 Major release. New features added (listed below) and bug fixes.
 * Bug fixes

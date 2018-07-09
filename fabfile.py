@@ -276,4 +276,4 @@ def clear_cache():
 
 @task
 def restart_uwsgi():
-    sudo('service uwsgi restart django-{}'.format(env.srvr))
+    sudo('/etc/init.d/uwsgi restart')
