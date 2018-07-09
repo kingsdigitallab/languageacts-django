@@ -9,7 +9,14 @@
             {{ index.title }}
         </a>
     </li>
-    {% for page in index.get_children.live %}
+    {% comment %}
+    {% if index.specific.show_filtered_content %}
+        <li><a href="#">{{ index.title }} Blog</a></li>
+        <li><a href="#">{{ index.title }} Events</a></li>
+        <li><a href="#">{{ index.title }} News</a></li>
+    {% endif %}
+    {% endcomment %}
+    {% for page in index.get_children.live.in_menu %}
     <li>
         <a href="{% pageurl page %}"{% if page.url == self.url %} 
         class="active"{% endif %}>
@@ -17,7 +24,7 @@
         </a>
 
         <ul class="vertical menu nested">
-            {% for sub in page.get_children %} 
+            {% for sub in page.get_children.live.in_menu %} 
             <li>
                 <a href="{% pageurl sub %}">
                     {{ sub.title }}

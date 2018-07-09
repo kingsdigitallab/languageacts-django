@@ -18,7 +18,7 @@ from wagtail.wagtailsearch import index
 from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
-
+from django.db.models import Q
 logger = logging.getLogger(__name__)
 
 
@@ -45,7 +45,7 @@ class HomePage(Page, WithStreamField):
     subpage_types = [
         'BlogIndexPage', 'EventIndexPage', 'IndexPage',
         'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage',
-        'TagResults'
+        'StrandPage', 'TagResults'
     ]
 
 
@@ -76,6 +76,23 @@ IndexPage.promote_panels = Page.promote_panels
 class StrandPage(IndexPage, WithStreamField):
     subpage_types = ['IndexPage', 'RichTextPage']
 
+    def show_filtered_content(self):
+        return True
+
+    def get_context(self, request):
+        context = super(StrandPage, self).get_context(request)
+
+        context['blog_posts'] = BlogPost.get_by_strand(
+            self.title)
+        context['events'] = Event.get_by_strand(
+            self.title)
+        context['past_events'] = Event.get_by_strand(
+            self.title)
+        context['news_posts'] = NewsPost.get_by_strand(
+            self.title)
+
+        return context
+
 
 class RichTextPage(Page, WithStreamField):
     search_fields = Page.search_fields + [
@@ -102,7 +119,9 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
 
     @property
     def posts(self):
-        posts = BlogPost.objects.live().descendant_of(self)
+        today = date.today()
+        posts = BlogPost.objects.live().descendant_of(
+            self).filter(date__lte=today)
 
         posts = posts.order_by('-date')
 
@@ -165,17 +184,21 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
+        today = date.today()
         if tag:
-            return self.objects.filter(tags__name=tag)
+            return self.objects.live().filter(
+                tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
             return self.objects.none()
 
     @classmethod
     def get_by_strand(self, strand_name=None):
+        today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.filter(strands=strand)
+                return self.objects.live().filter(
+                    strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -206,7 +229,9 @@ class NewsIndexPage(RoutablePageMixin, Page, WithStreamField):
 
     @property
     def posts(self):
-        posts = NewsPost.objects.live().descendant_of(self)
+        today = date.today()
+        posts = NewsPost.objects.live().descendant_of(
+            self).filter(date__lte=today)
 
         posts = posts.order_by('-date')
 
@@ -269,17 +294,21 @@ class NewsPost(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
+        today = date.today()
         if tag:
-            return self.objects.filter(tags__name=tag)
+            return self.objects.live().filter(
+                tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
             return self.objects.none()
 
     @classmethod
     def get_by_strand(self, strand_name=None):
+        today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.filter(strands=strand)
+                return self.objects.live().filter(
+                    strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -310,7 +339,10 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     def events(self):
         # Events that have not ended.
         today = date.today()
-        events = Event.objects.live().filter(date_from__gte=today).order_by(
+        events = Event.objects.live().filter(
+            Q(date_from__gte=today) | (
+                Q(date_to__isnull=False) & Q(
+                    date_to__gte=today))).order_by(
             'date_from')
         return events
 
@@ -357,7 +389,10 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
     def events(self):
         # Events that have not ended.
         today = date.today()
-        events = Event.objects.live().filter(date_from__lt=today).order_by(
+        events = Event.objects.live().filter(
+            Q(date_from__lt=today) & (
+                Q(date_to__isnull=True) | Q(
+                    date_to__lt=today))).order_by(
             '-date_from')
         return events
 
