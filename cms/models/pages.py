@@ -461,8 +461,13 @@ class Event(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
+
         if tag:
-            return self.objects.filter(tags__name=tag)
+            today = date.today()
+            return self.objects.filter(tags__name=tag).filter(
+                Q(date_from__gte=today) | (
+                Q(date_to__isnull=False) & Q(
+                date_to__gte=today))).order_by('date_from')
         else:
             return self.objects.none()
 
@@ -470,8 +475,12 @@ class Event(Page, WithStreamField, WithFeedImage):
     def get_by_strand(self, strand_name=None):
         if strand_name:
             try:
+                today = date.today()
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.filter(strands=strand)
+                return self.objects.filter(strands=strand).filter(
+                    Q(date_from__gte=today) | (
+                    Q(date_to__isnull=False) & Q(
+                    date_to__gte=today))).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
