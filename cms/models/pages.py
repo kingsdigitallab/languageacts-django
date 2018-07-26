@@ -86,7 +86,7 @@ class StrandPage(IndexPage, WithStreamField):
             self.title)
         context['events'] = Event.get_by_strand(
             self.title)
-        context['past_events'] = Event.get_by_strand(
+        context['past_events'] = Event.get_past_by_strand(
             self.title)
         context['news_posts'] = NewsPost.get_by_strand(
             self.title)
@@ -481,6 +481,21 @@ class Event(Page, WithStreamField, WithFeedImage):
                     Q(date_from__gte=today) | (
                     Q(date_to__isnull=False) & Q(
                     date_to__gte=today))).order_by('date_from')
+            except ObjectDoesNotExist:
+                return self.objects.none()
+        else:
+            return self.objects.none()
+
+    @classmethod
+    def get_past_by_strand(self, strand_name=None):
+        if strand_name:
+            try:
+                today = date.today()
+                strand = StrandPage.objects.get(title=strand_name)
+                return self.objects.filter(strands=strand).filter(
+                    Q(date_from__lt=today) | (
+                    Q(date_to__isnull=False) & Q(
+                    date_to__lt=today))).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
