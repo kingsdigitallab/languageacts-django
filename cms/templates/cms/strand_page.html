@@ -20,7 +20,7 @@
             </li> 
             {% endif %}
 
-            {% if events %}
+            {% if events or past_events %}
             <li>
                 <a href="?content=events" {% if request.GET.content == 'events' %}class="active"{% endif %}>
                     {{self.title}} Events
