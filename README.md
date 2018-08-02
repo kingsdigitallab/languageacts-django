@@ -1,5 +1,9 @@
 # Language Acts and Worldmaking
 
+## 3.1 Release
+Minor release
+* Fixed bug that duplicated display of current and past events
+
 ## 3.0 Release
 Major release. New features added and bug fixes.
 * Bug fixes
