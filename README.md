@@ -1,5 +1,11 @@
 # Language Acts and Worldmaking
 
+## 3.1.1 Release
+Minor release
+* Bug fixes
+* Fixed floating elements on image+text combination
+* Fixed line height for H1s in `section-header`
+
 ## 3.1 Release
 Minor release
 * Fixed bug that duplicated display of current and past events
