@@ -261,6 +261,15 @@ header.top-header {
     }
 }
 
+/** Headings **/
+
+.section-header {
+    h1 {
+        line-height: 1;
+        padding-bottom: .5rem;
+    }
+}
+
 /** Navigation **/
 
 nav {
@@ -406,6 +415,14 @@ article {
 .caption {
     color: scale-color($dark-gray, $lightness: -20%);
     font-style: italic;
+    max-width: 300px;
+    padding-top: 10px;
+    overflow: hidden;
+
+    .rich-text {
+        line-height: 1.25;
+        overflow: hidden;
+    }
 }
 
 .card {
@@ -912,14 +929,34 @@ Animating the logo's diactrics
 }
 
 @include breakpoint(small only) {
-    .top-bar-title {
-        padding-left: rem-calc(24);
+    .caption,
+    .img-wrapper {
+        display: block !important;
+        padding-bottom: 10px;
+        
+        &.float-left {
+            float: none !important;
+        }
+
+        &.float-right {
+            float: none !important;
+        }
+    }
+
+    .section-header {
+        h1 {
+            padding-top: 1rem;
+        }
     }
 
     .strapline-block {
         clear: both;
         display: block;
         font-size: rem-calc(22);
+        padding-left: rem-calc(24);
+    }
+
+    .top-bar-title {
         padding-left: rem-calc(24);
     }
 }
