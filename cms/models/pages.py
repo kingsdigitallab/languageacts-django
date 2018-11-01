@@ -76,6 +76,10 @@ IndexPage.promote_panels = Page.promote_panels
 class StrandPage(IndexPage, WithStreamField):
     subpage_types = ['IndexPage', 'RichTextPage']
 
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
     def show_filtered_content(self):
         return True
 
@@ -466,8 +470,8 @@ class Event(Page, WithStreamField, WithFeedImage):
             today = date.today()
             return self.objects.filter(tags__name=tag).filter(
                 Q(date_from__gte=today) | (
-                Q(date_to__isnull=False) & Q(
-                date_to__gte=today))).order_by('date_from')
+                    Q(date_to__isnull=False) & Q(
+                        date_to__gte=today))).order_by('date_from')
         else:
             return self.objects.none()
 
@@ -479,8 +483,8 @@ class Event(Page, WithStreamField, WithFeedImage):
                 strand = StrandPage.objects.get(title=strand_name)
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__gte=today) | (
-                    Q(date_to__isnull=False) & Q(
-                    date_to__gte=today))).order_by('date_from')
+                        Q(date_to__isnull=False) & Q(
+                            date_to__gte=today))).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -494,8 +498,8 @@ class Event(Page, WithStreamField, WithFeedImage):
                 strand = StrandPage.objects.get(title=strand_name)
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__lt=today) | (
-                    Q(date_to__isnull=False) & Q(
-                    date_to__lt=today))).order_by('date_from')
+                        Q(date_to__isnull=False) & Q(
+                            date_to__lt=today))).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -569,8 +573,8 @@ class TagResults(RoutablePageMixin, Page):
 
         # Get counts
         context['result_count'] = (
-            blog.count() + events.count() +
-            news.count() + pages.count())
+            blog.count() + events.count()
+            + news.count() + pages.count())
 
         return render(request, self.get_template(request),
                       context)

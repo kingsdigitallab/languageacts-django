@@ -8,11 +8,7 @@
 
 {% block main %}
 
-{% for block in self.body %}
-{% if block.block_type != 'home' %}
-    {{ block.value }}
-{% endif %}
-{% endfor %}
+{% include "cms/includes/streamfield_nohome.html" with blocks=self.body %}
 
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
