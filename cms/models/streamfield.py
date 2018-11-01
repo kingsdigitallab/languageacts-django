@@ -22,6 +22,25 @@ class AlignedHTMLBlock(StructBlock):
     alignment = HTMLAlignmentChoiceBlock()
 
 
+class D3Block(StructBlock):
+    html = RawHTMLBlock(required=False)
+    css = RawHTMLBlock(required=False)
+    js = RawHTMLBlock(required=False)
+    additional_files = RawHTMLBlock(required=False,
+                                    verbose_name="Additional JS\
+                                    files to load.")
+
+    class Meta:
+        help_text = '''
+        Enter the relevent sections.
+        You don't need to add script or style tags.
+        IMPORTANT: Please verify with KDL before publishing.
+        Additional files should be added one file per line.
+        Note: Do not include d3
+        itself.'''
+        template = 'cms/blocks/d3_block.html'
+
+
 class HomePageBlock(StructBlock):
     url = URLBlock(required=False)
     page = PageChooserBlock(required=False)
@@ -117,5 +136,7 @@ class CMSStreamBlock(StreamBlock):
     embed = EmbedBlock(icon='media')
 
     html = AlignedHTMLBlock(icon='code', label='Raw HTML')
+
+    d3 = D3Block(icon='media', label='D3 Visualisation')
 
     table = TableBlock()

@@ -45,6 +45,14 @@ def get_homepage_events():
         return events[:4]
 
 
+@register.filter
+def lines(val):
+    if '\r\n' in val:
+        return val.split('\r\n')
+    else:
+        return val.split('\n')
+
+
 @register.assignment_tag
 def get_news_preview():
     """Returns 3 latest news posts"""

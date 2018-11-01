@@ -1,0 +1,21 @@
+{% load wagtailcore_tags cms_tags %}
+
+
+
+<style type="text/css">
+{{ value.css|safe }}
+</style>
+
+{{ value.html|safe }}
+
+{% for file in value.additional_files|lines %}
+<script src="{{file}}"></script>
+{% endfor %}
+
+<script>
+    window.onload = function()
+    {
+        {{ value.js|safe }}
+    };
+</script>
+

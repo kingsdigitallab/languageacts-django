@@ -1,4 +1,4 @@
-{% load staticfiles cms_tags compress require %}
+{% load staticfiles cms_tags compress %}
 <!doctype html>
 <html lang="en-gb">
 <head>
@@ -56,11 +56,29 @@
     </div>
   </footer>
 
-  <!-- define requirejs config settings -->
-  <script type="text/javascript">
-    {% include 'includes/config.js' %}
+  {% compress js %}
+  <script src="{% static "vendor/jquery/dist/jquery.min.js" %}"></script>
+  <script src="{% static "vendor/what-input/dist/what-input.min.js" %}"></script>
+  <script src="{% static "vendor/foundation-sites/dist/js/foundation.min.js" %}"></script>
+  <script src="{% static "vendor/motion-ui/dist/motion-ui.js" %}"></script>
+  <script src="{% static "vendor/d3/d3.min.js" %}"></script>
+  <script src="{% static "vendor/instafeed.js/instafeed.min.js" %}"></script>
+  <script src="{% static "vendor/js-cookie/src//js.cookie.js" %}"></script>
+
+  <script src="{% static "js/main.js" %}"></script>
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '{{ GA_ID }}', 'auto');
+  ga('send', 'pageview');
   </script>
-  {% require_module 'config' %}
+  {% endcompress %}
+
 
   {% block footer_scripts %}
   {% endblock %}
