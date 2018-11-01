@@ -67,7 +67,6 @@ INSTALLED_APPS = (
 
     'compressor',
     'modelcluster',
-    'require',
     'rest_framework',
     'taggit',
 
