@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block main %}
-<div class="row" data-equalizer="sidebar">
-    <div class="large-3 columns subnav" data-equalizer-watch="sidebar">
+<div class="row" data-equalizer="sidebar" data-equalize-on="medium">
+    <div class="small-12 large-3 columns subnav" data-equalizer-watch="sidebar">
         {% block index_page_children %}
         {% include "cms/includes/index_page_children.html" with pages=self %}
         {% endblock %}
@@ -39,7 +39,7 @@
         
     </div>
 
-    <div class="large-9 columns" data-equalizer-watch="sidebar">
+    <div class="small-12 large-9 columns" data-equalizer-watch="sidebar">
         {% comment %}
         {# Enable / Disable breadcrums navigation #}
         {% block breadcrumbs %}

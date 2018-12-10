@@ -282,7 +282,7 @@ nav {
         display: block;
     }
 
-    li a {
+    .menu > li > a {
         padding: rem-calc(28 16 20);
 
         &:hover {
@@ -546,7 +546,7 @@ article {
 // Search box
 
 .search-box {
-    margin-top: rem-calc(16);
+    // margin-top: rem-calc(12);
 
     input {
         border: none;
@@ -873,6 +873,16 @@ Animating the logo's diactrics
 
     .strapline-block {
         padding: rem-calc(23 24 0);
+    }
+
+    .top-bar {
+        margin-top: rem-calc(-16);
+    }
+
+    .top-bar-right {
+        form {
+            padding-top: rem-calc(32);
+        }
     }
 }
 

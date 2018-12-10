@@ -1,0 +1,20 @@
+{
+    "name": "owri",
+    "version": "4.0",
+    "dependencies": {
+        "jquery": null,
+        "foundation-sites": null,
+        "font-awesome": null,
+        "js-cookie": null,
+        "instafeed.js": null,
+        "motion-ui": null
+    },
+    "main": "assets/js/main.js",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
+}

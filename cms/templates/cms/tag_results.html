@@ -26,8 +26,8 @@
 
     {% if result_count %}
 
-    <div class="row" data-equalizer="sidebar">
-      <div class="medium-3 columns subnav" data-equalizer-watch="sidebar">
+    <div class="row" data-equalizer="sidebar" data-equalize-on="medium">
+      <div class="small-12 medium-3 columns subnav" data-equalizer-watch="sidebar">
         <div data-sticky-container>
           <div data-sticky data-top-anchor="top:top" data-btm-anchor="top:bottom" id="example-menu">
             <h4>Content type</h4>
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="medium-9 columns sections" id="top" data-equalizer-watch="sidebar">
+      <div class="small-12 medium-9 columns sections" id="top" data-equalizer-watch="sidebar">
 
         {% if blog.all %}
         <section id="blog" data-magellan-target="blog">
@@ -184,7 +184,7 @@
 
     {% else %} {# No results #}
     <div class="row">
-      <div class="medium-12 columns">
+      <div class="small-12 medium-12 columns">
         <section>
           <p>No results found.</p>
         </section>
@@ -194,7 +194,7 @@
 
   {% else %} {# No tag #}
   <div class="row">
-    <div class="medium-12 columns">
+    <div class="small-12 medium-12 columns">
       <section>
         <p>No tag provided. To search by tag, please click on a tag throughout the site.</p>
       </section>
