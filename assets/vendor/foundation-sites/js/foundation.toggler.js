@@ -1,6 +1,10 @@
 'use strict';
 
-!function($) {
+import $ from 'jquery';
+import { Motion } from './foundation.util.motion';
+import { Plugin } from './foundation.core.plugin';
+import { RegExpEscape } from './foundation.core.utils';
+import { Triggers } from './foundation.util.triggers';
 
 /**
  * Toggler module.
@@ -9,23 +13,26 @@
  * @requires foundation.util.triggers
  */
 
-class Toggler {
+class Toggler extends Plugin {
   /**
    * Creates a new instance of Toggler.
    * @class
+   * @name Toggler
    * @fires Toggler#init
    * @param {Object} element - jQuery object to add the trigger to.
    * @param {Object} options - Overrides to the default plugin settings.
    */
-  constructor(element, options) {
+  _setup(element, options) {
     this.$element = element;
     this.options = $.extend({}, Toggler.defaults, element.data(), options);
     this.className = '';
+    this.className = 'Toggler'; // ie9 back compat
+
+    // Triggers init is idempotent, just need to make sure it is initialized
+    Triggers.init($);
 
     this._init();
     this._events();
-
-    Foundation.registerPlugin(this, 'Toggler');
   }
 
   /**
@@ -49,12 +56,20 @@ class Toggler {
       this.className = input[0] === '.' ? input.slice(1) : input;
     }
 
-    // Add ARIA attributes to triggers
-    var id = this.$element[0].id;
-    $(`[data-open="${id}"], [data-close="${id}"], [data-toggle="${id}"]`)
-      .attr('aria-controls', id);
-    // If the target is hidden, add aria-hidden
-    this.$element.attr('aria-expanded', this.$element.is(':hidden') ? false : true);
+    // Add ARIA attributes to triggers:
+    var id = this.$element[0].id,
+      $triggers = $(`[data-open~="${id}"], [data-close~="${id}"], [data-toggle~="${id}"]`);
+
+    // - aria-expanded: according to the element visibility.
+    $triggers.attr('aria-expanded', !this.$element.is(':hidden'));
+    // - aria-controls: adding the element id to it if not already in it.
+    $triggers.each((index, trigger) => {
+      const $trigger = $(trigger);
+      const controls = $trigger.attr('aria-controls') || '';
+
+      const containsId = new RegExp(`\\b${RegExpEscape(id)}\\b`).test(controls);
+      if (!containsId) $trigger.attr('aria-controls', controls ? `${controls} ${id}` : id);
+    });
   }
 
   /**
@@ -103,14 +118,14 @@ class Toggler {
     var _this = this;
 
     if (this.$element.is(':hidden')) {
-      Foundation.Motion.animateIn(this.$element, this.animationIn, function() {
+      Motion.animateIn(this.$element, this.animationIn, function() {
         _this._updateARIA(true);
         this.trigger('on.zf.toggler');
         this.find('[data-mutate]').trigger('mutateme.zf.trigger');
       });
     }
     else {
-      Foundation.Motion.animateOut(this.$element, this.animationOut, function() {
+      Motion.animateOut(this.$element, this.animationOut, function() {
         _this._updateARIA(false);
         this.trigger('off.zf.toggler');
         this.find('[data-mutate]').trigger('mutateme.zf.trigger');
@@ -119,16 +134,19 @@ class Toggler {
   }
 
   _updateARIA(isOn) {
-    this.$element.attr('aria-expanded', isOn ? true : false);
+    var id = this.$element[0].id;
+    $(`[data-open="${id}"], [data-close="${id}"], [data-toggle="${id}"]`)
+      .attr({
+        'aria-expanded': isOn ? true : false
+      });
   }
 
   /**
    * Destroys the instance of Toggler on the element.
    * @function
    */
-  destroy() {
+  _destroy() {
     this.$element.off('.zf.toggler');
-    Foundation.unregisterPlugin(this);
   }
 }
 
@@ -142,7 +160,4 @@ Toggler.defaults = {
   animate: false
 };
 
-// Window exports
-Foundation.plugin(Toggler, 'Toggler');
-
-}(jQuery);
+export {Toggler};

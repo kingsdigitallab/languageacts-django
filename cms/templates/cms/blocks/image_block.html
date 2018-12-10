@@ -1,6 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
-<div data-equalizer="imgblockheight">
+<div data-equalizer="imgblockheight" data-equalize-on="medium">
     <div class="img-wrapper float-{{ value.alignment }}" data-equalizer-watch="imgblockheight">
         {% if value.alignment == "left" or value.alignment == "right" %}
         {% image value.image width-300 as theimage %}
