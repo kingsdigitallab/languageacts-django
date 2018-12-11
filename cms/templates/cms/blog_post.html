@@ -19,7 +19,7 @@
 <article class="post" id="post{{ self.id }}">
     <header>
         {% block blog_post_author %}
-        <p class="byline blog">Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ self.owner }}</a> on 
+        <p class="byline blog">Posted by {% if self.owner %}<a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ self.owner }}</a>{% else %}Guest{% endif %} on 
             <time datetime="{{ self.date }}">{{ self.date|date:'j b Y' }}</time>
 
             {% are_comments_allowed as allow_comments %}
