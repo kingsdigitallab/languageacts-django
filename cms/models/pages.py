@@ -74,7 +74,7 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class StrandPage(IndexPage, WithStreamField):
-    subpage_types = ['IndexPage', 'RichTextPage']
+    subpage_types = ['IndexPage', 'RichTextPage', 'RecordPage']
 
     search_fields = Page.search_fields + [
         index.SearchField('body'),
@@ -112,6 +112,22 @@ RichTextPage.content_panels = [
 ]
 
 RichTextPage.promote_panels = Page.promote_panels
+
+
+class RecordPage(Page, WithStreamField):
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
+    subpage_types = []
+
+
+RecordPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body'),
+]
+
+RecordPage.promote_panels = Page.promote_panels
 
 
 class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):

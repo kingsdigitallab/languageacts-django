@@ -15,11 +15,16 @@
     {% else %}
     <div class="small-12 large-12 columns">
     {% endif %}
+        {% block richtext_header %}
         <header class="section-header">
           <h1>{{ self.title }}</h1>
         </header>
+        {% endblock %}
 
         {{ block.super }}
+
+        {% block dictionary %}
+        {% endblock %}
     </div>
 </div>
 {% endblock %}

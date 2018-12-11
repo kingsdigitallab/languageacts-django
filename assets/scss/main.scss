@@ -49,6 +49,14 @@ time {
     font-weight: 700;
 }
 
+.biblio {
+    &::before {
+        content: "\f02d";
+        font-family: "FontAwesome";
+        padding-right: rem-calc(4);
+    }
+}
+
 .border-bottom {
     border-bottom: 1px dotted $secondary-color;
 }
@@ -528,6 +536,28 @@ article {
 .page-content {
     h1, h2, h3, h4, h5, h6 {
         clear: both;
+    }
+}
+
+.record {
+    h2 {
+        font-size: rem-calc(28);
+        margin-top: rem-calc(20);
+    }
+    h3 {
+        font-size: rem-calc(24);
+        margin-top: rem-calc(18);
+    }
+    h4 {
+        font-size: rem-calc(20);
+    }
+
+    .section {
+        border-bottom: 1px solid $medium-gray;
+
+        .columns {
+            padding-top: rem-calc(16);
+        }
     }
 }
 
