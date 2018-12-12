@@ -4,7 +4,7 @@ $(document).ready(function()
 
     // LAWM Cookie
     if (!Cookies.get('lawm-cookie')) {
-        $("#cookie-disclaimer").removeClass('hide');
+        $('#cookie-disclaimer').removeClass('hide');
         }
         // Set cookie
         $('#cookie-disclaimer .closeme').on("click", function() {
@@ -26,4 +26,13 @@ $(document).ready(function()
 
         feed.run();
     }
+
+    // Expande / Collapse
+    $('.toggler').on('click', function () {
+        $(this).next('.content').slideToggle(400).toggleClass('hide show');
+        $(this).toggleClass('close open');
+
+        return false;
+    });
+
 });
