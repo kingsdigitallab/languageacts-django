@@ -5,7 +5,7 @@
 
 {% block main %}
 <div class="row" data-equalizer="sidebar" data-equalize-on="medium">
-	{% if self.get_parent.content_type.name == "index page" or self.get_parent.content_type.name == "strand page" %}
+	{% if self.get_parent.content_type.name == "index page" or self.get_parent.content_type.name == "strand page" or self.get_parent.content_type.name == "record index page" %}
     <div class="small-12 large-3 columns subnav" data-equalizer-watch="sidebar">
         {% block index_page_children %}
         {% include "cms/includes/index_page_children.html" with pages=self %}

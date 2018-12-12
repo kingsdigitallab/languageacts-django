@@ -29,9 +29,55 @@ a.more {
     }
 }
 
+button,
+.button {
+    &.label-like {
+        background: $turquoise;
+        color: $white;
+        padding: rem-calc(8);
+
+        &:hover {
+            background: scale-color($turquoise, $lightness: -30%);
+        }
+    }
+}
+
 button i,
 .button i {
     font-size: rem-calc(12);
+}
+
+.toggler {
+    border-bottom: 1px solid $medium-gray;
+    position: relative;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.close,
+    &.open {
+        &::after {
+            color: $secondary-color;
+            font-family: "FontAwesome";
+            font-size: .875em;
+            padding-left: rem-calc(4);
+            position: absolute;
+            right: 0;
+        }
+    }
+
+    &.close {
+        &::after {
+            content: "\f055";
+        }
+    }
+
+    &.open {
+        &::after {
+            content: "\f056";
+        }
+    }
 }
 
 h1 small,

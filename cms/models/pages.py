@@ -74,7 +74,7 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class StrandPage(IndexPage, WithStreamField):
-    subpage_types = ['IndexPage', 'RichTextPage', 'RecordPage']
+    subpage_types = ['IndexPage', 'RichTextPage', 'RecordIndexPage']
 
     search_fields = Page.search_fields + [
         index.SearchField('body'),
@@ -98,20 +98,20 @@ class StrandPage(IndexPage, WithStreamField):
         return context
 
 
-class RichTextPage(Page, WithStreamField):
+class RecordIndexPage(Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
     ]
 
-    subpage_types = []
+    subpage_types = ['RecordPage']
 
 
-RichTextPage.content_panels = [
+RecordIndexPage.content_panels = [
     FieldPanel('title', classname='full title'),
     StreamFieldPanel('body'),
 ]
 
-RichTextPage.promote_panels = Page.promote_panels
+RecordIndexPage.promote_panels = Page.promote_panels
 
 
 class RecordPage(Page, WithStreamField):
@@ -128,6 +128,22 @@ RecordPage.content_panels = [
 ]
 
 RecordPage.promote_panels = Page.promote_panels
+
+
+class RichTextPage(Page, WithStreamField):
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
+    subpage_types = []
+
+
+RichTextPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body'),
+]
+
+RichTextPage.promote_panels = Page.promote_panels
 
 
 class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
