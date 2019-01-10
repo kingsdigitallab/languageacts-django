@@ -10,8 +10,10 @@ from django.shortcuts import render
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
+                                                MultiFieldPanel)
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
@@ -19,6 +21,10 @@ from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
 from django.db.models import Q
+from wagtail.wagtailcore.fields import StreamField
+
+from .streamfield import CMSStreamBlock
+
 logger = logging.getLogger(__name__)
 
 
@@ -98,9 +104,8 @@ class StrandPage(IndexPage, WithStreamField):
         return context
 
 
-class RecordIndexPage(Page, WithStreamField):
+class RecordIndexPage(Page):
     search_fields = Page.search_fields + [
-        index.SearchField('body'),
     ]
 
     subpage_types = ['RecordPage']
@@ -108,26 +113,85 @@ class RecordIndexPage(Page, WithStreamField):
 
 RecordIndexPage.content_panels = [
     FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
 ]
 
 RecordIndexPage.promote_panels = Page.promote_panels
 
 
-class RecordPage(Page, WithStreamField):
+class RecordPage(Page):
+
+    cultural_transmission = StreamField(CMSStreamBlock())
     search_fields = Page.search_fields + [
-        index.SearchField('body'),
+    ]
+    subpage_types = ['RecordEntry']
+
+
+RecordPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('cultural_transmission')
+]
+
+RecordPage.promote_panels = Page.promote_panels
+
+
+class RecordEntry(Page):
+
+    period = models.ForeignKey(
+        'cms.LemmaPeriod',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    language = models.ForeignKey(
+        'cms.LemmaLanguage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    variants = models.CharField(max_length=2048, blank=True, null=True)
+    semantic_history = StreamField(CMSStreamBlock(required=False),
+                                   blank=True,
+                                   null=True)
+    collocational_history = StreamField(CMSStreamBlock(required=False),
+                                        blank=True,
+                                        null=True)
+
+    hist_freq_x_label = models.CharField(max_length=64, null=True, blank=True,
+                                         verbose_name="X Axis Label")
+    hist_freq_y_label = models.CharField(max_length=64, null=True, blank=True,
+                                         verbose_name="Y Axis Label")
+    hist_freq_data = models.TextField(null=True, blank=True,
+                                      verbose_name="Chart Data",
+                                      help_text="Format as... key: value,\
+                                          key: value, key: value")
+
+    search_fields = Page.search_fields + [
     ]
 
     subpage_types = []
 
 
-RecordPage.content_panels = [
+RecordEntry.content_panels = [
     FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
-]
+    SnippetChooserPanel('period'),
+    SnippetChooserPanel('language'),
+    FieldPanel('variants'),
+    MultiFieldPanel(
+        [
+            FieldPanel('hist_freq_x_label'),
+            FieldPanel('hist_freq_y_label'),
+            FieldPanel('hist_freq_data'),
+        ],
+        heading='Historical Frequency',
+        classname="collapsible collapsed"
 
-RecordPage.promote_panels = Page.promote_panels
+    ),
+    StreamFieldPanel('semantic_history'),
+    StreamFieldPanel('collocational_history')
+]
 
 
 class RichTextPage(Page, WithStreamField):

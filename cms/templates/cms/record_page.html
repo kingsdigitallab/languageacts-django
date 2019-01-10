@@ -3,6 +3,7 @@
 
 {% block bodyclass %} class="record"{% endblock %}
 
+
 {% block dictionary %}
 {% comment %}
 This section should be populated with the fields filled in Wagtail when
@@ -11,11 +12,119 @@ creating a single record page
 
 <div class="row">
   <div class="small-12 medium-8 large-9 columns">
-    {# Static content. To be replaced with dynamic content. #}
-    <h2><a href="#"><i class="fa fa-link"></i> Cultural transmission</a></h2>
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+    {% if self.specific.cultural_transmission %}
+        <h2><a href="#"><i class="fa fa-link"></i> Cultural transmission</a></h2>
+        {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
+    {% endif %}
+    
+    {% for page in self.get_children.live %}
+      <h2 class="toggler close"><a id="page-{{page.id}}"><i class="fa fa-link"></i> {{ page.specific.period}} {{page.specific.language}}</a></h2>
+
+
+      <div class="content hide">
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Lemma</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+            <p>{{ page.title }}</p>
+          </div>
+        </div>
+
+        {% if page.specific.variants %}
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Variants</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+            <p>{{ page.specific.variants }}</p>
+          </div>
+        </div>
+        {% endif %}
+
+         {% with related_words=page|related_words %}
+            {% if related_words.count %}
+            <div class="row section">
+                <div class="small-6 medium-4 columns">
+                    <p><strong>Morphologically related words</strong></p>
+                </div>
+                <div class="small-6 medium-8 columns">
+                    {% for related_word in page|related_words %}
+                    {{ related_word.title }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        {% endwith%}
+
+        {# TODO #}
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Ranking/frequency</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+            <ul class="no-bullet">
+              <li><a href="#" class="biblio">Davies 2006</a>: 177 / 8,521</li>
+              <li><a href="#" class="biblio">Davies 2017</a>: 150 / 1,004,689</li>
+              <li><a href="#" class="biblio">Juilland &amp; Chang-Rodr&iacute;guez 1964</a>: 284 / 153</li>
+              <li><a href="#" class="biblio">Esqueva &amp; Cantarero 1981</a>: 202 / 65</li>
+            </ul>
+          </div>
+        </div>
+
+        {# TODO #}        
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>First attestation</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+            <p><a href="#exexistir001"><i class="fa fa-info-circle"></i></a> Pues, concluye aquel sabio que todas las cosas por trabajo e exerçiçio del mouimiento existen, e por consiguiente la natura humana cresze en su vigor corporal e spiritual, seyendo exerçitado en tan noble deporte.</p>
+          </div>
+        </div>
+
+        {% if page.specific.hist_freq_data %}
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Historical frequency</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+            <div class="hist_freq_chart" data-x-label="{% if page.specific.hist_freq_x_label %}{{page.specific.hist_freq_x_label}}{% else %}time{% endif %}" data-y-label="{% if page.specific.hist_freq_y_label %}{{page.specific.hist_freq_y_label}}{% else %}time{% endif %}" data-chart-data="{{ page.specific.hist_freq_data }}"></div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if page.specific.semantic_history %}
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Semantic history</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">    
+            {% include "cms/includes/streamfield.html" with blocks=page.specific.semantic_history %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if page.specific.collocational_history %}
+        <div class="row section">
+          <div class="small-6 medium-4 columns">
+            <p><strong>Collocational history</strong></p>
+          </div>
+          <div class="small-6 medium-8 columns">
+              {% include "cms/includes/streamfield.html" with blocks=page.specific.collocational_history %}
+          </div>
+        </div>
+        {% endif %}
+
+
+      </div>
+      
+    {% endfor %}
+
+
+
+
+      {# Static content. To be replaced with dynamic content. #}
 
     <div class="callout warning">
       <p><strong>NOTE:</strong> only fields with content should display, empty ones should be removed/hidden.</p>
@@ -477,12 +586,9 @@ creating a single record page
   <div class="small-12 medium-4 large-3">
     <h3>Languages</h3>
     <ul class="no-bullet">
-      <li><a href="#castilian" class="button label-like expanded">Modern Castilian</a></li>
-      <li><a href="#portuguese" class="button label-like expanded">Modern Portuguese</a></li>
-      <li><a href="#french" class="button label-like expanded">Modern French</a></li>
-      <li><a href="#italian" class="button label-like expanded">Modern Italian</a></li>
-      <li><a href="#romanian" class="button label-like expanded">Modern Romanian</a></li>
-      <li><a href="#english" class="button label-like expanded">Modern English</a></li>
+        {% for page in self.get_children.live %}
+            <li><a href="#page-{{page.id}}" class="button label-like expanded">{{ page.specific.period}} {{ page.specific.language}}</a></li>
+        {% endfor %}
     </ul>
     <h3><a href="#references">References</a></h3>
   </div>
