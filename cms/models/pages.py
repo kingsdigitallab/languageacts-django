@@ -13,7 +13,7 @@ from taggit.models import TaggedItemBase
 from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                MultiFieldPanel)
+                                                MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
@@ -173,12 +173,43 @@ class RecordEntry(Page):
 
     subpage_types = []
 
+    @property
+    def morph_related_words(self):
+        words = [
+            n.related_word for n in self.morph_words_relationship.all()
+        ]
+        return words
+
+    @property
+    def url(self):
+        return self.get_parent().url
+
+
+class RecordEntryM2M(models.Model):
+    source = ParentalKey(
+        'RecordEntry',
+        related_name='morph_words_relationship'
+    )
+    related_word = models.ForeignKey(
+        'RecordEntry',
+        related_name="+"
+    )
+    panels = [
+        FieldPanel('related_word')
+    ]
+
 
 RecordEntry.content_panels = [
     FieldPanel('title', classname='full title'),
     SnippetChooserPanel('period'),
     SnippetChooserPanel('language'),
     FieldPanel('variants'),
+    MultiFieldPanel(
+        [
+            InlinePanel('morph_words_relationship'),
+        ],
+        heading="Morphologically Related Words"
+    ),
     MultiFieldPanel(
         [
             FieldPanel('hist_freq_x_label'),

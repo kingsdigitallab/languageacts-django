@@ -43,20 +43,19 @@ creating a single record page
         </div>
         {% endif %}
 
-         {% with related_words=page|related_words %}
-            {% if related_words.count %}
+    
+        {% if page.specific.morph_related_words %}
             <div class="row section">
                 <div class="small-6 medium-4 columns">
                     <p><strong>Morphologically related words</strong></p>
                 </div>
                 <div class="small-6 medium-8 columns">
-                    {% for related_word in page|related_words %}
-                    {{ related_word.title }}{% if not forloop.last %}, {% endif %}
+                    {% for related_word in page.specific.morph_related_words %}
+                    <a href="{{related_word.url}}">{{ related_word.title }}</a> ({{ related_word.period }} {{ related_word.language}}){% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             </div>
-            {% endif %}
-        {% endwith%}
+        {% endif %}
 
         {# TODO #}
         <div class="row section">
