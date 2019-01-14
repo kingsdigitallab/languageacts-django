@@ -8,7 +8,7 @@
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline blogpost">
                     <p class="byline blog">
-                    Posted by {% if page.owner %}<a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a>{% else %}Guest{% endif %}<br>
+                    Posted by {% if page.owner and not page.guest %}<a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a>{% else %}Guest{% endif %}<br>
                     <time datetime="{{ page.specific.date }}">
                     {{ page.specific.date|date:'j b Y' }}</time>
 

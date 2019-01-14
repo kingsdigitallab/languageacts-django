@@ -151,6 +151,7 @@ class RecordEntry(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
+
     variants = models.CharField(max_length=2048, blank=True, null=True)
     semantic_history = StreamField(CMSStreamBlock(required=False),
                                    blank=True,
@@ -329,6 +330,7 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
+    guest = models.BooleanField(default=False, verbose_name="Guest Post")
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
@@ -370,6 +372,7 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 BlogPost.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('date'),
+    FieldPanel('guest'),
     StreamFieldPanel('body'),
 ]
 
