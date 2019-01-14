@@ -67,10 +67,10 @@ $(document).ready(function()
             var margin = 50;
             var duration = 250;
             
-            var lineOpacity = "0.5";
+            var lineOpacity = "0.8";
             var lineStroke = "2px";
             var fillOpacity = '0';
-            var lineColor = 'rgb(31, 119, 180)';
+            var lineColor = '#14b1e7'; //'rgb(31, 119, 180)';
             var circleOpacity = '1';
             var circleRadius = 5;
             var circleRadiusHover = 10;
@@ -138,16 +138,24 @@ $(document).ready(function()
               .on("mouseover", function(d) {
                   d3.select(this)     
                     .append("text")
-                    .attr("class", "text")
+                    .attr("class", "graph-text")
+                    .style("opacity", "0")
                     .text(`${d.val}`)
                     .attr("x", d => xScale(d.date) + 5)
-                    .attr("y", d => yScale(d.val) - 10);
+                    .attr("y", d => yScale(d.val) - 10)
+                    .transition()
+                    .duration(duration)
+                    .style("opacity", "1");
                 })
               .on("mouseout", function(d) {
                   d3.select(this)
                     .transition()
                     .duration(duration)
-                    .selectAll(".text").remove();
+                    .selectAll(".graph-text")
+                    .transition()
+                    .duration(duration)
+                    .style("opacity", "0") // Not really needed, just for vis. effect
+                    .remove();
                 })
               .append("circle")
               .attr("cx", d => xScale(d.date))

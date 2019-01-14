@@ -168,10 +168,13 @@ class RecordEntry(Page):
                                       help_text="Format as... key: value,\
                                           key: value, key: value")
 
+    first_attest = models.TextField(blank=True, null=True,
+                                    verbose_name="First Attestation")
+
     search_fields = Page.search_fields + [
     ]
 
-    subpage_types = []
+    subpage_types = ['RecordRankingAndFrequencyEntry']
 
     @property
     def morph_related_words(self):
@@ -204,6 +207,7 @@ RecordEntry.content_panels = [
     SnippetChooserPanel('period'),
     SnippetChooserPanel('language'),
     FieldPanel('variants'),
+    FieldPanel('first_attest'),
     MultiFieldPanel(
         [
             InlinePanel('morph_words_relationship'),
@@ -223,6 +227,33 @@ RecordEntry.content_panels = [
     StreamFieldPanel('semantic_history'),
     StreamFieldPanel('collocational_history')
 ]
+
+
+class RecordRankingAndFrequencyEntry(Page):
+
+    ranking = models.IntegerField(blank=True, null=True)
+    frequency = models.IntegerField(blank=True, null=True)
+    biblioref = models.ForeignKey(
+        'cms.BiblioRef',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+    ]
+    subpage_types = []
+
+
+RecordRankingAndFrequencyEntry.content_panels = [
+    FieldPanel('title', classname='full title'),
+    FieldPanel('ranking', classname='full title'),
+    FieldPanel('frequency', classname='full title'),
+    SnippetChooserPanel('biblioref'),
+]
+
+RecordRankingAndFrequencyEntry.promote_panels = Page.promote_panels
 
 
 class RichTextPage(Page, WithStreamField):
