@@ -550,6 +550,70 @@ article {
     }
 }
 
+// Filters
+
+.entry {
+    color: $black !important;
+    font-weight: 400 !important;
+    font-style: italic;
+    margin: rem-calc(24 0);
+}
+
+.filters {
+    background: $light-yellow;
+    margin-bottom: rem-calc(24);
+    padding: rem-calc(24);
+
+    .card-section {
+        max-height: 200px;
+        overflow: auto;
+    }
+
+    .filter {
+        background: $white;
+        display: block;
+        float: left;
+        margin-right: rem-calc(8);
+        padding: rem-calc(4 8);
+
+        &::after {
+            content: "\f057";
+            font-family: "FontAwesome";
+            padding-left: rem-calc(8);
+        }
+
+        &:hover {
+            background: $medium-gray;
+            cursor: pointer;
+        }
+    }
+
+    .list-horizontal {
+        clear: both;
+        display: block;
+        overflow: hidden;
+    }
+
+    .reset {
+        &::after {
+            content: "\f1f8";
+            font-family: "FontAwesome";
+            padding-left: rem-calc(8);
+        }
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.grid-like {
+    li {
+        float: left;
+        margin-right: rem-calc(12);
+        width: rem-calc(24);
+    }
+}
+
 .img-wrapper {
     &.float-left {
         clear: left;
