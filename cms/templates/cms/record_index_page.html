@@ -5,107 +5,123 @@
   {# Filters #}
   <div class="filters">
     <div class="applied">
-      <h4>Applied filters</h4>
-      <ul class="list-horizontal">
-        <li class="filter">
-          test
-        </li>
+      {% comment %}
+        If filters are applied, display them here
+      {% endcomment %}
+      <ul class="list-horizontal no-bullet">
+        <li class="filter">test</li>
+        <li class="filter">this</li>
+        <li class="filter">component</li>
+        <li class="reset text-right float-right">Clear all filters</li>
       </ul>
     </div>
 
-<div class="row small-up-1 medium-up-4 large-up-4">
-      <div class="column column-block">
-          Language
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          A-Z
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          Type / Part of speech
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          First attestation
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-    </div>
-
     <h3 class="toggler close">Filters</h3>
-    <div class="row small-up-1 medium-up-4 large-up-4 content hide">
-      <div class="column column-block">
-          Language
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          A-Z
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          Type / Part of speech
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
-      </div>
-      <div class="column column-block">
-          First attestation
-          <ul>
-            <li><a href="#">filter 1</a></li>
-            <li><a href="#">filter 2</a></li>
-            <li><a href="#">filter 3</a></li>
-            <li><a href="#">filter 4</a></li>
-            <li><a href="#">filter 5</a></li>
-          </ul>
+    <div class="content hide" data-equalizer data-equalize-by-row="true">
+      <div class="row small-up-1 medium-up-3 large-up-4">
+        <div class="column column-block">
+          <div class="card" data-equalizer-watch>
+            <div class="card-divider">
+              Language
+            </div>
+            <div class="card-section">            
+              <ul>
+                <li><a href="#">English</a></li>
+                <li><a href="#">French</a></li>
+                <li><a href="#">German</a></li>
+                <li><a href="#">Italian</a></li>
+                <li><a href="#">Portuguese</a></li>
+                <li><a href="#">Romanian</a></li>
+                <li><a href="#">Spanish</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="column column-block">
+          <div class="card" data-equalizer-watch>
+            <div class="card-divider">
+              A-Z
+            </div>
+            <div class="card-section clearfix">            
+              <ul class="no-bullet grid-like">
+                <li><a href="#">A</a></li>
+                <li><a href="#">B</a></li>
+                <li><a href="#">C</a></li>
+                <li><a href="#">D</a></li>
+                <li><a href="#">E</a></li>
+                <li><a href="#">F</a></li>
+                <li><a href="#">G</a></li>
+                <li><a href="#">H</a></li>
+                <li><a href="#">I</a></li>
+                <li><a href="#">J</a></li>
+                <li><a href="#">K</a></li>
+                <li><a href="#">L</a></li>
+                <li><a href="#">M</a></li>
+                <li><a href="#">N</a></li>
+                <li><a href="#">O</a></li>
+                <li><a href="#">P</a></li>
+                <li><a href="#">Q</a></li>
+                <li><a href="#">R</a></li>
+                <li><a href="#">S</a></li>
+                <li><a href="#">T</a></li>
+                <li><a href="#">U</a></li>
+                <li><a href="#">V</a></li>
+                <li><a href="#">W</a></li>
+                <li><a href="#">X</a></li>
+                <li><a href="#">Y</a></li>
+                <li><a href="#">Z</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="column column-block">
+          <div class="card" data-equalizer-watch>
+            <div class="card-divider">
+              Type / Part of speech
+            </div>
+            <div class="card-section">            
+              <ul>
+                <li><a href="#">Adjective</a></li>
+                <li><a href="#">Adverb</a></li>
+                <li><a href="#">Articles and determiners</a></li>
+                <li><a href="#">Conjunction</a></li>
+                <li><a href="#">Interjection</a></li>
+                <li><a href="#">Noun</a></li>
+                <li><a href="#">Preposition</a></li>
+                <li><a href="#">Pronoun</a></li>
+                <li><a href="#">Verb</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="column column-block">
+          <div class="card" data-equalizer-watch>
+            <div class="card-divider">
+              First attestation
+            </div>
+            <div class="card-section">            
+              <ul>
+                <li><a href="#">879</a></li>
+                <li><a href="#">999</a></li>
+                <li><a href="#">1313</a></li>
+                <li><a href="#">1789</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <ul>
   {% for page in self.get_children.live %}
     {% comment %}
       This list should be in alphabetical order by default
       Other filters will be available
     {% endcomment %}
-    <a href="{% pageurl page %}">{{ page }}</a>
+    <li>
+      <a href="{% pageurl page %}" class="entry">{{ page }}</a>
+    </li>
   {% endfor %}
+  </ul>
 {% endblock %}
