@@ -1,9 +1,111 @@
 {% extends "cms/rich_text_page.html" %}
 {% load cms_tags wagtailcore_tags wagtailimages_tags %}
 
-
 {% block dictionary %}
-    {% for page in self.get_children.live %}
-        <a href="{% pageurl page %}">{{ page }}</a>
-    {% endfor %}
+  {# Filters #}
+  <div class="filters">
+    <div class="applied">
+      <h4>Applied filters</h4>
+      <ul class="list-horizontal">
+        <li class="filter">
+          test
+        </li>
+      </ul>
+    </div>
+
+<div class="row small-up-1 medium-up-4 large-up-4">
+      <div class="column column-block">
+          Language
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          A-Z
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          Type / Part of speech
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          First attestation
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <h3 class="toggler close">Filters</h3>
+    <div class="row small-up-1 medium-up-4 large-up-4 content hide">
+      <div class="column column-block">
+          Language
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          A-Z
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          Type / Part of speech
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+      <div class="column column-block">
+          First attestation
+          <ul>
+            <li><a href="#">filter 1</a></li>
+            <li><a href="#">filter 2</a></li>
+            <li><a href="#">filter 3</a></li>
+            <li><a href="#">filter 4</a></li>
+            <li><a href="#">filter 5</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>
+
+  {% for page in self.get_children.live %}
+    {% comment %}
+      This list should be in alphabetical order by default
+      Other filters will be available
+    {% endcomment %}
+    <a href="{% pageurl page %}">{{ page }}</a>
+  {% endfor %}
 {% endblock %}
