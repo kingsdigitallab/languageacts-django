@@ -1,2 +1,9 @@
-{% extends "cms/strand_page.html" %}
+{% extends "cms/rich_text_page.html" %}
 {% load cms_tags wagtailcore_tags wagtailimages_tags %}
+
+
+{% block dictionary %}
+    {% for page in self.get_children.live %}
+        <a href="{% pageurl page %}">{{ page }}</a>
+    {% endfor %}
+{% endblock %}

@@ -53,6 +53,11 @@ def lines(val):
         return val.split('\n')
 
 
+@register.filter
+def related_words(page):
+    return page.get_siblings(inclusive=False).live()
+
+
 @register.assignment_tag
 def get_news_preview():
     """Returns 3 latest news posts"""

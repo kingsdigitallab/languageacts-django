@@ -10,8 +10,10 @@ from django.shortcuts import render
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
+from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
+                                                MultiFieldPanel, InlinePanel)
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
@@ -19,6 +21,10 @@ from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
 from django.db.models import Q
+from wagtail.wagtailcore.fields import StreamField
+
+from .streamfield import CMSStreamBlock
+
 logger = logging.getLogger(__name__)
 
 
@@ -98,9 +104,8 @@ class StrandPage(IndexPage, WithStreamField):
         return context
 
 
-class RecordIndexPage(Page, WithStreamField):
+class RecordIndexPage(Page):
     search_fields = Page.search_fields + [
-        index.SearchField('body'),
     ]
 
     subpage_types = ['RecordPage']
@@ -108,26 +113,148 @@ class RecordIndexPage(Page, WithStreamField):
 
 RecordIndexPage.content_panels = [
     FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
 ]
 
 RecordIndexPage.promote_panels = Page.promote_panels
 
 
-class RecordPage(Page, WithStreamField):
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
+class RecordPage(Page):
 
-    subpage_types = []
+    cultural_transmission = StreamField(CMSStreamBlock())
+    search_fields = Page.search_fields + [
+    ]
+    subpage_types = ['RecordEntry']
 
 
 RecordPage.content_panels = [
     FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
+    StreamFieldPanel('cultural_transmission')
 ]
 
 RecordPage.promote_panels = Page.promote_panels
+
+
+class RecordEntry(Page):
+
+    period = models.ForeignKey(
+        'cms.LemmaPeriod',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    language = models.ForeignKey(
+        'cms.LemmaLanguage',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    variants = models.CharField(max_length=2048, blank=True, null=True)
+    semantic_history = StreamField(CMSStreamBlock(required=False),
+                                   blank=True,
+                                   null=True)
+    collocational_history = StreamField(CMSStreamBlock(required=False),
+                                        blank=True,
+                                        null=True)
+
+    hist_freq_x_label = models.CharField(max_length=64, null=True, blank=True,
+                                         verbose_name="X Axis Label")
+    hist_freq_y_label = models.CharField(max_length=64, null=True, blank=True,
+                                         verbose_name="Y Axis Label")
+    hist_freq_data = models.TextField(null=True, blank=True,
+                                      verbose_name="Chart Data",
+                                      help_text="Format as... key: value,\
+                                          key: value, key: value")
+
+    first_attest = models.TextField(blank=True, null=True,
+                                    verbose_name="First Attestation")
+
+    search_fields = Page.search_fields + [
+    ]
+
+    subpage_types = ['RecordRankingAndFrequencyEntry']
+
+    @property
+    def morph_related_words(self):
+        words = [
+            n.related_word for n in self.morph_words_relationship.all()
+        ]
+        return words
+
+    @property
+    def url(self):
+        return self.get_parent().url
+
+
+class RecordEntryM2M(models.Model):
+    source = ParentalKey(
+        'RecordEntry',
+        related_name='morph_words_relationship'
+    )
+    related_word = models.ForeignKey(
+        'RecordEntry',
+        related_name="+"
+    )
+    panels = [
+        FieldPanel('related_word')
+    ]
+
+
+RecordEntry.content_panels = [
+    FieldPanel('title', classname='full title'),
+    SnippetChooserPanel('period'),
+    SnippetChooserPanel('language'),
+    FieldPanel('variants'),
+    FieldPanel('first_attest'),
+    MultiFieldPanel(
+        [
+            InlinePanel('morph_words_relationship'),
+        ],
+        heading="Morphologically Related Words"
+    ),
+    MultiFieldPanel(
+        [
+            FieldPanel('hist_freq_x_label'),
+            FieldPanel('hist_freq_y_label'),
+            FieldPanel('hist_freq_data'),
+        ],
+        heading='Historical Frequency',
+        classname="collapsible collapsed"
+
+    ),
+    StreamFieldPanel('semantic_history'),
+    StreamFieldPanel('collocational_history')
+]
+
+
+class RecordRankingAndFrequencyEntry(Page):
+
+    ranking = models.IntegerField(blank=True, null=True)
+    frequency = models.IntegerField(blank=True, null=True)
+    biblioref = models.ForeignKey(
+        'cms.BiblioRef',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+    ]
+    subpage_types = []
+
+
+RecordRankingAndFrequencyEntry.content_panels = [
+    FieldPanel('title', classname='full title'),
+    FieldPanel('ranking', classname='full title'),
+    FieldPanel('frequency', classname='full title'),
+    SnippetChooserPanel('biblioref'),
+]
+
+RecordRankingAndFrequencyEntry.promote_panels = Page.promote_panels
 
 
 class RichTextPage(Page, WithStreamField):
@@ -203,6 +330,7 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
+    guest = models.BooleanField(default=False, verbose_name="Guest Post")
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
@@ -244,6 +372,7 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 BlogPost.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('date'),
+    FieldPanel('guest'),
     StreamFieldPanel('body'),
 ]
 
