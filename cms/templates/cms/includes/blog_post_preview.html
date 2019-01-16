@@ -12,6 +12,10 @@
                     <time datetime="{{ page.specific.date }}">
                     {{ page.specific.date|date:'j b Y' }}</time>
 
+                    {% if event.search_description %}
+                    <p>{{ event.search_description|safe }}</p>
+                    {% endif %}
+
                     {% are_comments_allowed as allow_comments %}
                     {% if allow_comments %}
                      | <span class="disqus-comment-count" data-disqus-identifier="{{ page.id }}">Comments</span>
