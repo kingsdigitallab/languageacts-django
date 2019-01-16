@@ -57,7 +57,7 @@
               <h3>Blog Posts</h3>
             </header>
             {% if blog_posts %}
-            <div class="row small-up-1 medium-up-2 large-up-4" data-equalizer="blogpostheight" data-equalize-by-row="true" data-equalize-on="medium">
+            <div class="row small-up-1 medium-up-2" data-equalizer="blogpostheight" data-equalize-by-row="true" data-equalize-on="medium">
                 {% for page in blog_posts %}
                 <div class="column column-block">
                     <div class="card blog" data-equalizer-watch="blogpostheight">
@@ -82,10 +82,7 @@
             </div>
             {% else %}
             <p>There are no blog posts.</p>
-
         {% endif %}
-
-
 
         {% elif request.GET.content == 'events' %}
 
@@ -95,7 +92,6 @@
             </header>
 
             {% include "cms/includes/event_index_page_children.html" with events=events %}
-
         {% endif %}
 
         {% if past_events %}
@@ -104,10 +100,7 @@
             </header>
 
             {% include "cms/includes/event_index_page_children.html" with events=past_events %}
-
         {% endif %}
-
-        
 
         {% elif request.GET.content == 'news' %}
         <header class="section-header">
@@ -116,7 +109,7 @@
 
         {% if news_posts %}
         
-            <div class="row news-block small-up-1 medium-up-3" data-equalizer="newsheight" data-equalize-by-row="true" data-equalize-on="medium">
+        <div class="row news-block small-up-1 medium-up-2" data-equalizer="newsheight" data-equalize-by-row="true" data-equalize-on="medium">
         {% for page in news_posts %}
         <div class="column column-block">
             <div class="card news" data-equalizer-watch="newsheight">
@@ -148,12 +141,11 @@
             {% endif %}
         </div>
         {% endfor %}
-    </div>
+        </div>
         
-            {% else %}
-            <p>There are no news items published at the moment.</p>
-            {% endif %}
-
+        {% else %}
+        <p>There are no news items published at the moment.</p>
+        {% endif %}
 
         {% else %}
         {{ block.super }}
