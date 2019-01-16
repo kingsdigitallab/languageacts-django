@@ -16,6 +16,11 @@ def get_section(current_page):
     return current_section
 
 
+@register.filter
+def order_by(queryset, field):
+    return queryset.order_by(field)
+
+
 @register.simple_tag
 def are_comments_allowed():
     """Returns True if commenting on the site is allowed, False otherwise."""
