@@ -14,7 +14,9 @@
         <a href="{% pageurl page %}" class="ninety{% if page.url == self.url %} active{% endif %}">
             {{ page.title }}
         </a>
+        {% if page.get_children.live.exists %}
         <span class="toggler close added"></span>
+        {% endif %}
 
         <ul class="vertical menu nested hide content">
             {% for sub in page.get_children.live.in_menu %} 
