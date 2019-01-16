@@ -14,8 +14,8 @@ creating a single record page
   <div class="small-12 medium-8 large-9 columns">
 
     {% if self.specific.cultural_transmission %}
-        <h2><a href="#"><i class="fa fa-link"></i> Cultural transmission</a></h2>
-        {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
+      <h2><a href="#"><i class="fa fa-link"></i> Cultural transmission</a></h2>
+      {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
     {% endif %}
     
     {% for page in self.get_children.live %}
@@ -115,17 +115,12 @@ creating a single record page
           </div>
         </div>
         {% endif %}
-
-
       </div>
       
     {% endfor %}
-
-
-
   </div>
 {# TODO #}
-  <div class="small-12 medium-4 large-3">
+  <div class="small-12 medium-4 large-3 columns">
     <h3>Languages</h3>
     <ul class="no-bullet">
         {% for page in self.get_children.live %}
