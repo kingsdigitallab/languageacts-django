@@ -8,13 +8,13 @@
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline blogpost">
                     <p class="byline blog">
-                    Posted by {% if page.owner and not page.guest %}<a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a>{% else %}Guest{% endif %}<br>
-                    <time datetime="{{ page.specific.date }}">
-                    {{ page.specific.date|date:'j b Y' }}</time>
+                    Posted by {% if page.owner and not page.guest %}<a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a>{% else %}Guest{% endif %}</p>
 
                     {% if page.search_description %}
                     <p>{{ page.search_description|safe }}</p>
                     {% endif %}
+                    <time datetime="{{ page.specific.date }}">
+                    {{ page.specific.date|date:'j b Y' }}</time>
 
                     {% are_comments_allowed as allow_comments %}
                     {% if allow_comments %}
