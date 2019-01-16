@@ -47,12 +47,26 @@ button i,
     font-size: rem-calc(12);
 }
 
+.ninety {
+    float: left;
+    width: 90%;
+}
+
 .toggler {
     border-bottom: 1px solid $medium-gray;
     position: relative;
 
     &:hover {
         cursor: pointer;
+    }
+
+    &.added {
+        border-bottom: 0;
+        float: left;
+        height: rem-calc(40);
+        padding-top: rem-calc(10);
+        text-align: right;
+        width: 10%;
     }
 
     &.close,
@@ -540,6 +554,10 @@ article {
             width: 100% !important;
         }
     }
+}
+
+.content {
+    clear: both;
 }
 
 .featured-image {
