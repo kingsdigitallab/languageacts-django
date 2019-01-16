@@ -15,7 +15,7 @@
             {% if blog_posts %}
             <li>
                 <a href="?content=blog" {% if request.GET.content == 'blog' %}class="active"{% endif %}>
-                    {{self.title}} Blog Posts
+                    {{ self.title }} Blog Posts
                 </a>
             </li> 
             {% endif %}
@@ -23,7 +23,7 @@
             {% if events or past_events %}
             <li>
                 <a href="?content=events" {% if request.GET.content == 'events' %}class="active"{% endif %}>
-                    {{self.title}} Events
+                    {{ self.title }} Events
                 </a>
             </li> 
             {% endif %}
@@ -31,7 +31,7 @@
             {% if news_posts %}
             <li>
                 <a href="?content=news" {% if request.GET.content == 'news' %}class="active"{% endif %}>
-                    {{self.title}} News
+                    {{ self.title }} News
                 </a>
             </li>    
             {% endif %}
