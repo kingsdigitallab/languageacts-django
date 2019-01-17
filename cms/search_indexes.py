@@ -25,6 +25,10 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
         faceted=False,
         null=True)
 
+    word_types = indexes.MultiValueField(
+        faceted=False,
+        null=True)
+
     def get_model(self):
         return RecordEntry
 
@@ -38,14 +42,14 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
             return None
 
     def prepare_language(self, obj):
-        if obj.specific.language:
-            return obj.specific.language.name
-        else:
-            return None
+        return obj.specific.language.name if obj.specific.language else None
 
     def prepare_period(self, obj):
-        if obj.specific.period:
-            return obj.specific.period.name
+        return obj.specific.period.name if obj.specific.period else None
+
+    def prepare_word_types(self, obj):
+        if obj.specific.word_types:
+            return [word_type.name for word_type in obj.specific.word_types]
         else:
             return None
 
@@ -76,6 +80,10 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
         faceted=True,
         null=True)
 
+    word_types = indexes.MultiValueField(
+        faceted=True,
+        null=True)
+
     def get_model(self):
         return RecordPage
 
@@ -88,10 +96,7 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
                 is not None]
 
     def prepare_first_letter(self, obj):
-        if obj.title:
-            return obj.title.upper()[0]
-        else:
-            return None
+        return obj.title.upper()[0] if obj.title else None
 
     def prepare_languages(self, obj):
         return [entry.specific.language.name for entry in
@@ -100,3 +105,13 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_periods(self, obj):
         return [entry.specific.period.name for entry in
                 obj.get_children() if entry.specific.period is not None]
+
+    def prepare_word_types(self, obj):
+        word_types = []
+
+        for page in obj.get_children():
+            if page.specific.word_types:
+                word_types = word_types + [word_type.name for word_type in
+                                           page.specific.word_types]
+
+        return word_types if len(word_types) else None
