@@ -19,9 +19,9 @@
         {% endif %}
 
         <ul class="vertical menu nested hide content">
-            {% for sub in page.get_children.live.in_menu %} 
+            {% for sub in page.get_children.live.in_menu|order_by:'title' %} 
             <li>
-                <a href="{% pageurl sub %}">
+                <a href="{% pageurl sub %}"{% if sub.url == self.url %} class="active"{% endif %}>
                     {{ sub.title }}
                 </a>
             </li>
