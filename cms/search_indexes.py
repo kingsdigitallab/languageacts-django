@@ -25,7 +25,7 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
         faceted=False,
         null=True)
 
-    word_types = indexes.MultiValueField(
+    word_type = indexes.MultiValueField(
         faceted=False,
         null=True)
 
@@ -47,7 +47,7 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_period(self, obj):
         return obj.specific.period.name if obj.specific.period else None
 
-    def prepare_word_types(self, obj):
+    def prepare_word_type(self, obj):
         if obj.specific.word_types:
             return [word_type.name for word_type in obj.specific.word_types]
         else:
@@ -72,15 +72,15 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
         faceted=True,
         null=True)
 
-    languages = indexes.MultiValueField(
+    language = indexes.MultiValueField(
         faceted=True,
         null=True)
 
-    periods = indexes.MultiValueField(
+    period = indexes.MultiValueField(
         faceted=True,
         null=True)
 
-    word_types = indexes.MultiValueField(
+    word_type = indexes.MultiValueField(
         faceted=True,
         null=True)
 
@@ -98,15 +98,15 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_first_letter(self, obj):
         return obj.title.upper()[0] if obj.title else None
 
-    def prepare_languages(self, obj):
+    def prepare_language(self, obj):
         return [entry.specific.language.name for entry in
                 obj.get_children() if entry.specific.language is not None]
 
-    def prepare_periods(self, obj):
+    def prepare_period(self, obj):
         return [entry.specific.period.name for entry in
                 obj.get_children() if entry.specific.period is not None]
 
-    def prepare_word_types(self, obj):
+    def prepare_word_type(self, obj):
         word_types = []
 
         for page in obj.get_children():

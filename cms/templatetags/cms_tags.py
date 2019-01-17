@@ -149,3 +149,11 @@ def footer_menu(context, root, current_page=None):
 
     return {'request': context['request'], 'root': root,
             'current_page': current_page, 'menu_pages': menu_pages}
+
+
+@register.filter
+def querify(req):
+    if '?q=' in req:
+        return req
+    else:
+        return '{}?q='.format(req)

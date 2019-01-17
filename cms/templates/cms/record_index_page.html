@@ -3,19 +3,21 @@
 
 {% block dictionary %}
   {# Filters #}
+  {% with facets=sqs.facet_counts request_full_path=request.get_full_path|querify %} 
   <div class="filters">
     <div class="applied">
       {% comment %}
         If filters are applied, display them here
       {% endcomment %}
+      {% if selected_facets %}
       <ul class="list-horizontal no-bullet">
-        <li class="filter">test</li>
-        <li class="filter">this</li>
-        <li class="filter">component</li>
-        <li class="reset text-right float-right">Clear all filters</li>
+        {% for selected_facet in selected_facets %}
+        <li><a class="filter" href="{{ selected_facet.remove_url }}">{{ selected_facet.value }}</a></li>
+        {% endfor %}
+        <li class="reset text-right float-right"><a href="{% pageurl self %}?q=">Clear all filters</a></li>
       </ul>
+      {% endif %}
     </div>
-
     <h3 class="toggler close">Filters</h3>
     <div class="content hide" data-equalizer data-equalize-by-row="true">
       <div class="row small-up-1 medium-up-3 large-up-4">
@@ -26,13 +28,9 @@
             </div>
             <div class="card-section">            
               <ul>
-                <li><a href="#">English</a></li>
-                <li><a href="#">French</a></li>
-                <li><a href="#">German</a></li>
-                <li><a href="#">Italian</a></li>
-                <li><a href="#">Portuguese</a></li>
-                <li><a href="#">Romanian</a></li>
-                <li><a href="#">Spanish</a></li>
+                {% for l in facets.fields.language %}
+                  <li><a href="{{ request_full_path }}&amp;selected_facets=language_exact:{{ l.0|urlencode }}">{{ l.0 }} ({{l.1}})</a></li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -44,32 +42,10 @@
             </div>
             <div class="card-section clearfix">            
               <ul class="no-bullet grid-like">
-                <li><a href="#">A</a></li>
-                <li><a href="#">B</a></li>
-                <li><a href="#">C</a></li>
-                <li><a href="#">D</a></li>
-                <li><a href="#">E</a></li>
-                <li><a href="#">F</a></li>
-                <li><a href="#">G</a></li>
-                <li><a href="#">H</a></li>
-                <li><a href="#">I</a></li>
-                <li><a href="#">J</a></li>
-                <li><a href="#">K</a></li>
-                <li><a href="#">L</a></li>
-                <li><a href="#">M</a></li>
-                <li><a href="#">N</a></li>
-                <li><a href="#">O</a></li>
-                <li><a href="#">P</a></li>
-                <li><a href="#">Q</a></li>
-                <li><a href="#">R</a></li>
-                <li><a href="#">S</a></li>
-                <li><a href="#">T</a></li>
-                <li><a href="#">U</a></li>
-                <li><a href="#">V</a></li>
-                <li><a href="#">W</a></li>
-                <li><a href="#">X</a></li>
-                <li><a href="#">Y</a></li>
-                <li><a href="#">Z</a></li>
+                {% for f in facets.fields.first_letter %}
+                 <li><a href="{{ request_full_path }}&amp;selected_facets=first_letter_exact:{{ f.0|urlencode }}">{{ f.0 }} ({{f.1}})</a></li>
+                {% endfor %}
+              
               </ul>
             </div>
           </div>
@@ -81,15 +57,9 @@
             </div>
             <div class="card-section">            
               <ul>
-                <li><a href="#">Adjective</a></li>
-                <li><a href="#">Adverb</a></li>
-                <li><a href="#">Articles and determiners</a></li>
-                <li><a href="#">Conjunction</a></li>
-                <li><a href="#">Interjection</a></li>
-                <li><a href="#">Noun</a></li>
-                <li><a href="#">Preposition</a></li>
-                <li><a href="#">Pronoun</a></li>
-                <li><a href="#">Verb</a></li>
+                {% for w in facets.fields.word_type %}
+                  <li><a href="{{ request_full_path }}&amp;selected_facets=word_type_exact:{{ w.0|urlencode }}">{{ w.0 }} ({{w.1}})</a></li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -101,10 +71,9 @@
             </div>
             <div class="card-section">            
               <ul>
-                <li><a href="#">879</a></li>
-                <li><a href="#">999</a></li>
-                <li><a href="#">1313</a></li>
-                <li><a href="#">1789</a></li>
+                {% for f in facets.fields.first_attest_year %}
+                  <li><a href="{{ request_full_path }}&amp;selected_facets=first_attest_year_exact:{{ f.0|urlencode }}">{{ f.0 }} ({{f.1}})</a></li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -112,15 +81,16 @@
       </div>
     </div>
   </div>
+  {% endwith %}
 
   <ul>
-  {% for page in self.get_children.live|order_by:'title' %}
+  {% for page in sqs %}
     {% comment %}
       This list should be in alphabetical order by default
       Other filters will be available
     {% endcomment %}
     <li>
-      <a href="{% pageurl page %}" class="entry">{{ page }}</a>
+      <a href="{% pageurl page.object %}" class="entry">{{ page.object }}</a>
     </li>
   {% endfor %}
   </ul>

@@ -22,6 +22,7 @@ from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
 from django.db.models import Q
 from wagtail.wagtailcore.fields import StreamField
+from haystack.query import SearchQuerySet
 
 from .streamfield import CMSStreamBlock
 
@@ -109,6 +110,41 @@ class RecordIndexPage(Page):
     ]
 
     subpage_types = ['RecordPage']
+
+    def get_context(self, request):
+        context = super(RecordIndexPage, self).get_context(request)
+
+        # Get selected facets
+        selected_facets = set(request.GET.getlist('selected_facets'))
+
+        # Init a search query set
+        sqs = SearchQuerySet().models(RecordPage)
+
+        # Apply currently selected facets
+        for facet in selected_facets:
+            sqs = sqs.narrow(facet)
+
+        # Get facet counts
+        sqs = sqs.facet('language')\
+            .facet('word_type')\
+            .facet('first_letter')\
+            .facet('first_attest_year')
+
+        # Generate presentable facet data
+        selected_facets_ui = []
+
+        for facet in selected_facets:
+            f = {
+                'value': facet.split(':')[1],
+                'remove_url': request.get_full_path().replace(
+                    '&selected_facets={}'.format(facet), '')
+            }
+            selected_facets_ui.append(f)
+
+        context['selected_facets'] = selected_facets_ui
+        context['sqs'] = sqs
+
+        return context
 
 
 RecordIndexPage.content_panels = [
