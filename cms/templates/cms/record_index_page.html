@@ -113,7 +113,6 @@
     </div>
   </div>
 
-  {{ self.get_facets }}
   <ul>
   {% for page in self.get_children.live|order_by:'title' %}
     {% comment %}
