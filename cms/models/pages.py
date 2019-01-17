@@ -169,8 +169,11 @@ class RecordEntry(Page):
                                       help_text="Format as... key: value,\
                                           key: value, key: value")
 
+    first_attest_year = models.IntegerField(blank=True, null=True,
+                                            verbose_name="First\
+                                                Attestation Year")
     first_attest = models.TextField(blank=True, null=True,
-                                    verbose_name="First Attestation")
+                                    verbose_name="First Attestation Text")
 
     search_fields = Page.search_fields + [
     ]
@@ -208,7 +211,13 @@ RecordEntry.content_panels = [
     SnippetChooserPanel('period'),
     SnippetChooserPanel('language'),
     FieldPanel('variants'),
-    FieldPanel('first_attest'),
+    MultiFieldPanel(
+        [
+            FieldPanel('first_attest_year'),
+            FieldPanel('first_attest'),
+        ],
+        heading="First Attestation"
+    ),
     MultiFieldPanel(
         [
             InlinePanel('morph_words_relationship'),
