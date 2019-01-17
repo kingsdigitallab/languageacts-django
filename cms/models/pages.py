@@ -188,10 +188,18 @@ class RecordEntry(Page):
         return words
 
     @property
+    def word_types(self):
+        word_types = [
+            n.word_type for n in self.word_type_relationship.all()
+        ]
+        return word_types
+
+    @property
     def url(self):
         return self.get_parent().url
 
 
+# M2M Relations
 class RecordEntryM2M(models.Model):
     source = ParentalKey(
         'RecordEntry',
@@ -206,6 +214,20 @@ class RecordEntryM2M(models.Model):
     ]
 
 
+class RecordEntryWordType(models.Model):
+    source = ParentalKey(
+        'RecordEntry',
+        related_name='word_type_relationship'
+    )
+    word_type = models.ForeignKey(
+        'cms.WordType',
+        related_name="+"
+    )
+    panels = [
+        FieldPanel('word_type')
+    ]
+
+
 RecordEntry.content_panels = [
     FieldPanel('title', classname='full title'),
     SnippetChooserPanel('period'),
@@ -217,6 +239,12 @@ RecordEntry.content_panels = [
             FieldPanel('first_attest'),
         ],
         heading="First Attestation"
+    ),
+    MultiFieldPanel(
+        [
+            InlinePanel('word_type_relationship'),
+        ],
+        heading="Types/Parts of speech"
     ),
     MultiFieldPanel(
         [
