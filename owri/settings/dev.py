@@ -25,6 +25,7 @@ LOGGING['loggers']['owri']['level'] = LOGGING_LEVEL
 
 TEMPLATES[0]['OPTIONS']['debug'] = True
 
+HAYSTACK_CONNECTIONS['default']['INDEX_NAME'] = 'owri_haystack_dev'
 WAGTAILSEARCH_BACKENDS['default']['INDEX'] = 'owri_wagtail_dev'
 
 # -----------------------------------------------------------------------------

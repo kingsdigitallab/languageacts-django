@@ -78,7 +78,7 @@ creating a single record page
             <p><strong>First attestation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <p><a href="#"><i class="fa fa-info-circle"></i></a> {{ page.specific.first_attest }}</p>
+            <p>{% if page.specific.first_attest_year %}<a href="#"><i class="fa fa-info-circle"></i>{{ page.specific.first_attest_year }}</a>{% endif %} {{ page.specific.first_attest }}</p>
           </div>
         </div>
         {% endif %}

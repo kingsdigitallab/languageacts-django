@@ -16,7 +16,7 @@ DATABASES = {
 }
 
 INTERNAL_IPS = INTERNAL_IPS + ('', )
-
+HAYSTACK_CONNECTIONS['default']['INDEX_NAME'] = 'owri_haystack_dev'
 WAGTAILSEARCH_BACKENDS['default']['INDEX'] = 'owri_wagtail_stg'
 
 # -----------------------------------------------------------------------------

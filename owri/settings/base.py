@@ -68,6 +68,7 @@ INSTALLED_APPS = (
     'compressor',
     'modelcluster',
     'rest_framework',
+    'haystack',
     'taggit',
 
     'wagtail.wagtailcore',
@@ -351,6 +352,14 @@ WAGTAILSEARCH_BACKENDS = {
         'INDEX': 'owri_wagtail',
         'TIMEOUT': 5,
     }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',  # noqa
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'owri_haystack',
+    },
 }
 
 WAGTAIL_FRONTEND_LOGIN_TEMPLATE = 'cms/login.html'

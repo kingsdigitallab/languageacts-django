@@ -4,6 +4,7 @@ django==1.10
 django-activecollab-digger
 django-compressor
 django-extensions
+django-haystack
 django-libsass
 django-model-utils
 django-modelcluster
