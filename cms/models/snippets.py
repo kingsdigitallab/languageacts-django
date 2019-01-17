@@ -101,3 +101,23 @@ class LemmaPeriod(index.Indexed, models.Model):
 
     def __str__(self):
         return self.name
+
+
+@register_snippet
+class WordType(index.Indexed, models.Model):
+    name = models.CharField(max_length=256)
+
+    panels = [
+        FieldPanel('name'),
+    ]
+
+    search_fields = [
+        index.SearchField('name', partial_match=True),
+    ]
+
+    class Meta:
+        verbose_name = "Word Type/Part of Speech"
+        verbose_name_plural = "Word Types/Parts of Speech"
+
+    def __str__(self):
+        return self.name
