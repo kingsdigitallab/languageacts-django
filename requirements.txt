@@ -8,7 +8,7 @@ django-libsass
 django-model-utils
 django-modelcluster
 django-redis
-elasticsearch>=5.0.0,<6.0.0
+elasticsearch>=2.0.0,<3.0.0
 libsass==0.13.2
 django-kdl-ldap
 psycopg2

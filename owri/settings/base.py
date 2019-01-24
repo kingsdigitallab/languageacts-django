@@ -303,7 +303,7 @@ ITEMS_PER_PAGE = 10
 # }
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.search.backends.elasticsearch5',
+        'BACKEND': 'wagtail.search.backends.elasticsearch2',
         'AUTO_UPDATE': False,
         'URLS': ['http://127.0.0.1:9200'],
         'INDEX': 'owri_wagtail',
@@ -313,7 +313,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine', # noqa
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine', # noqa
         'URL': 'http://127.0.0.1:9200/',
         'INDEX_NAME': 'owri_haystack',
     },
