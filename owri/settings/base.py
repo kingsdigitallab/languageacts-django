@@ -326,3 +326,10 @@ WAGTAILSEARCH_RESULTS_TEMPLATE = 'cms/search_results.html'
 
 # Google Analytics ID
 GA_ID = 'UA-101079203-1'
+
+# ActiveCollab API token
+AC_TOKEN = ''
+# ActiveCollab project ID
+AC_PROJECT_ID = ''
+# ActiveCollab user ID to create the issues
+AC_USER = ''
