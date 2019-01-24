@@ -21,6 +21,6 @@ def tweet_to_html(tweet):
     return mark_safe(Twython.html_for_tweet(tweet))
 
 
-@register.assignment_tag(takes_context=False)
+@register.simple_tag(takes_context=False)
 def user_timeline(screen_name):
     return get_user_timeline(screen_name)

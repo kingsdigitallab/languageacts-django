@@ -1,6 +1,5 @@
--r ddhldap/requirements.txt
 -r twitterhut/requirements.txt
-django==1.10
+django
 django-activecollab-digger
 django-compressor
 django-extensions
@@ -11,6 +10,7 @@ django-modelcluster
 django-redis
 elasticsearch>=2.0.0,<5.0.0
 libsass==0.13.2
+django-kdl-ldap
 psycopg2
 redis
-wagtail<2.0
+wagtail

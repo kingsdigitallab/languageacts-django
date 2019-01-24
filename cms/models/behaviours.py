@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from wagtail.wagtailcore.fields import StreamField
+from wagtail.core.fields import StreamField
 
 from .streamfield import CMSStreamBlock
 

@@ -1,4 +1,4 @@
-from base import *  # noqa
+from .base import *  # noqa
 
 ALLOWED_HOSTS = []
 
@@ -19,6 +19,6 @@ INTERNAL_IPS = INTERNAL_IPS + ('', )
 # -----------------------------------------------------------------------------
 
 try:
-    from local import *  # noqa
+    from .local import *  # noqa
 except ImportError:
     pass

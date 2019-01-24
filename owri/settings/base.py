@@ -11,8 +11,10 @@ import getpass
 import logging
 import os
 
-from ddhldap.settings import *  # noqa
 from twitterhut.settings import *  # noqa
+
+from kdl_ldap.settings import *  # noqa
+from django_auth_ldap.config import LDAPGroupQuery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -57,7 +59,7 @@ DATABASES = {
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -71,28 +73,29 @@ INSTALLED_APPS = (
     'haystack',
     'taggit',
 
-    'wagtail.wagtailcore',
-    'wagtail.wagtailadmin',
-    'wagtail.wagtaildocs',
-    'wagtail.wagtailsnippets',
-    'wagtail.wagtailusers',
-    'wagtail.wagtailimages',
-    'wagtail.wagtailembeds',
-    'wagtail.wagtailsearch',
-    'wagtail.wagtailredirects',
-    'wagtail.wagtailforms',
-    'wagtail.wagtailsites',
-    'wagtail.contrib.wagtailapi',
-    'wagtail.contrib.wagtailroutablepage',
+    'wagtail.core',
+    'wagtail.admin',
+    'wagtail.documents',
+    'wagtail.snippets',
+    'wagtail.users',
+    'wagtail.images',
+    'wagtail.embeds',
+    'wagtail.search',
+    'wagtail.contrib.redirects',
+    'wagtail.contrib.forms',
+    'wagtail.sites',
+    'wagtail.api',
+    'wagtail.contrib.routable_page',
     'wagtail.contrib.table_block',
-)
+]
 
-INSTALLED_APPS += (
+INSTALLED_APPS += [
+    'kdl_ldap',
     'owri',
     'cms',
     'twitterhut',
     'activecollab_digger',
-)
+]
 
 INTERNAL_IPS = ('127.0.0.1', )
 
@@ -133,11 +136,6 @@ LOGGING = {
             'level': LOGGING_LEVEL,
             'propagate': True
         },
-        'django_auth_ldap': {
-            'handlers': ['file'],
-            'level': LOGGING_LEVEL,
-            'propagate': True
-        },
         'owri': {
             'handlers': ['file'],
             'level': LOGGING_LEVEL,
@@ -152,19 +150,18 @@ LOGGING = {
 }
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'wagtail.wagtailcore.middleware.SiteMiddleware',
-    'wagtail.wagtailredirects.middleware.RedirectMiddleware',
-)
+    'wagtail.core.middleware.SiteMiddleware',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+]
 
 ROOT_URLCONF = PROJECT_NAME + '.urls'
 
@@ -204,17 +201,12 @@ LOGIN_URL = '/wagtail/login/'
 WSGI_APPLICATION = PROJECT_NAME + '.wsgi.application'
 
 
-# -----------------------------------------------------------------------------
-# Authentication
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth
-# https://scm.cch.kcl.ac.uk/hg/ddhldap-django
-# -----------------------------------------------------------------------------
-
-AUTH_LDAP_REQUIRE_GROUP = 'cn=owri,' + LDAP_BASE_OU
-
-AUTH_LDAP_ALWAYS_UPDATE_USER = False
-
-AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_REQUIRE_GROUP = (
+    (
+        LDAPGroupQuery('cn=kdl-staff,' + LDAP_BASE_OU)
+        | LDAPGroupQuery('cn=owri,' + LDAP_BASE_OU)
+    )
+)
 
 
 # -----------------------------------------------------------------------------
@@ -237,7 +229,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-STATICFILES_STORAGE = 'require.storage.OptimizedStaticFilesStorage'
+# STATICFILES_STORAGE = 'require.storage.OptimizedStaticFilesStorage' TODO
 
 MEDIA_URL = STATIC_URL + 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL.strip('/'))
@@ -281,48 +273,6 @@ COMPRESS_PRECOMPILERS = (
 
 
 # -----------------------------------------------------------------------------
-# Django-Require
-# https://github.com/etianen/django-require
-# -----------------------------------------------------------------------------
-
-# The baseUrl to pass to the r.js optimizer, relative to STATIC_ROOT.
-REQUIRE_BASE_URL = 'js'
-
-# The name of a build profile to use for your project, relative to
-# REQUIRE_BASE_URL. A sensible value would be 'app.build.js'.
-# Leave blank to use the built-in default build profile. Set to False to
-# disable running the default profile (e.g. if only using it to build
-# Standalone Modules)
-REQUIRE_BUILD_PROFILE = False
-
-# The name of the require.js script used by your project, relative to
-# REQUIRE_BASE_URL.
-REQUIRE_JS = '../vendor/requirejs/require.js'
-
-# A dictionary of standalone modules to build with almond.js.
-# See the section on Standalone Modules, below.
-REQUIRE_STANDALONE_MODULES = {
-    'config': {
-        # Where to output the built module, relative to REQUIRE_BASE_URL.
-        'out': 'config-built.js',
-
-        # Optional: A build profile used to build this standalone module.
-        'build_profile': 'config.build.js',
-    }
-}
-
-# Whether to run django-require in debug mode.
-REQUIRE_DEBUG = DEBUG
-
-# A tuple of files to exclude from the compilation result of r.js.
-REQUIRE_EXCLUDE = ('build.txt', )
-
-# The execution environment in which to run r.js: auto, node or rhino.
-# auto will autodetect the environment and make use of node if available and
-# rhino if not.
-REQUIRE_ENVIRONMENT = 'node'
-
-# -----------------------------------------------------------------------------
 # FABRIC
 # -----------------------------------------------------------------------------
 
@@ -344,9 +294,14 @@ WAGTAIL_SITE_NAME = PROJECT_TITLE
 
 ITEMS_PER_PAGE = 10
 
+# WAGTAILADMIN_RICH_TEXT_EDITORS = {
+#    'default': {
+#        'WIDGET': 'wagtail.admin.rich_text.HalloRichTextArea'
+#    }
+# }
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch2',
+        'BACKEND': 'wagtail.search.backends.elasticsearch2',
         'AUTO_UPDATE': True,
         'URLS': ['http://127.0.0.1:9200'],
         'INDEX': 'owri_wagtail',

@@ -10,18 +10,18 @@ from django.shortcuts import render
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.wagtailsnippets.edit_handlers import SnippetChooserPanel
-from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
-from wagtail.wagtailadmin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                                MultiFieldPanel, InlinePanel)
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
-from wagtail.wagtailsearch import index
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
+                                         MultiFieldPanel, InlinePanel)
+from wagtail.core.models import Page
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.search import index
 from django import forms
 from .behaviours import WithFeedImage, WithStreamField
 from datetime import date
 from django.db.models import Q
-from wagtail.wagtailcore.fields import StreamField
+from wagtail.core.fields import StreamField
 from haystack.query import SearchQuerySet
 
 from .streamfield import CMSStreamBlock
@@ -243,7 +243,8 @@ class RecordEntryM2M(models.Model):
     )
     related_word = models.ForeignKey(
         'RecordEntry',
-        related_name="+"
+        related_name="+",
+        on_delete="models.CASCADE"
     )
     panels = [
         FieldPanel('related_word')
@@ -257,7 +258,8 @@ class RecordEntryWordType(models.Model):
     )
     word_type = models.ForeignKey(
         'cms.WordType',
-        related_name="+"
+        related_name="+",
+        on_delete="models.CASCADE"
     )
     panels = [
         FieldPanel('word_type')

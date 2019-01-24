@@ -2,7 +2,7 @@ from django import template
 from django.conf import settings
 
 from cms.models.pages import BlogPost, Event, NewsPost, HomePage
-from wagtail.wagtailcore.models import Page
+from wagtail.core.models import Page
 from datetime import date
 
 register = template.Library()
@@ -38,7 +38,7 @@ def breadcrumbs(context, root, current_page):
             'current_page': current_page, 'pages': pages}
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_homepage_events():
     """Returns 3 latest news posts"""
     today = date.today()
@@ -63,7 +63,7 @@ def related_words(page):
     return page.get_siblings(inclusive=False).live()
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_news_preview():
     """Returns 3 latest news posts"""
     today = date.today()
@@ -74,7 +74,7 @@ def get_news_preview():
         return pages[:3]
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_blog_posts_preview():
     """Returns 3 latest blog posts"""
     today = date.today()
@@ -90,22 +90,22 @@ def get_site_root(context):
     """Returns the site root Page, not the implementation-specific model used.
     Object-comparison to self will return false as objects would differ.
 
-    :rtype: `wagtail.wagtailcore.models.Page`
+    :rtype: `wagtail.core.models.Page`
     """
     return context['request'].site.root_page
 
 
-@register.assignment_tag(takes_context=False)
+@register.simple_tag(takes_context=False)
 def get_twitter_name():
     return getattr(settings, 'TWITTER_NAME')
 
 
-@register.assignment_tag(takes_context=False)
+@register.simple_tag(takes_context=False)
 def get_twitter_url():
     return getattr(settings, 'TWITTER_URL')
 
 
-@register.assignment_tag(takes_context=False)
+@register.simple_tag(takes_context=False)
 def get_twitter_widget_id():
     return getattr(settings, 'TWITTER_WIDGET_ID')
 
