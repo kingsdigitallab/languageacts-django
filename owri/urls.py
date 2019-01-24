@@ -27,7 +27,7 @@ urlpatterns += [
     re_path('wagtail/', include(wagtailadmin_urls)),
     re_path('documents/', include(wagtaildocs_urls)),
     # re_path(r'^search/', include(wagtailsearch_frontend_urls)), TODO
-
+    re_path('', include('cms.urls')),
     re_path('', include(wagtail_urls)),
 ]
 
