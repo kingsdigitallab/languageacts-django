@@ -6,6 +6,16 @@
   become: true
 
   tasks:
+  - name: fix debian sudoers file
+    become: yes
+    lineinfile:
+      path: /etc/sudoers
+      backup: yes
+      regexp: "^%sudo\\s+ALL=\\(ALL:ALL\\)\\s+ALL$"
+      line: "%sudo   ALL=(ALL) NOPASSWD: ALL"
+    tags:
+      - system
+
   - name: apt | install https transport for apt
     apt:
       pkg: apt-transport-https
@@ -17,24 +27,39 @@
   - name: apt | add elasticsearch key
     become: yes
     apt_key:
-      url: https://packages.elastic.co/GPG-KEY-elasticsearch
+      url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
       state: present
     tags:
       - system
 
   - name: apt | add elasticsearch sources
     apt_repository:
-      repo: 'deb http://packages.elastic.co/elasticsearch/2.x/debian stable main'
+      repo: 'deb https://artifacts.elastic.co/packages/6.x/apt stable main'
       state: present
+    tags:
+      - system
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      upgrade: yes
     tags:
       - system
 
   - name: apt | install required system packages
     apt:
       pkg: '{{ item }}'
-      state: installed
+      state: present
       update_cache: yes
     with_items: '{{ system_packages }}'
+    tags:
+      - system
+
+  - name: apt | install elasticsearch
+    apt:
+      pkg: '{{ item }}'
+      state: present
+      update_cache: yes
+    with_items: '{{ elastic_packages }}'
     tags:
       - system
 
@@ -53,10 +78,21 @@
     tags:
       - system
 
-  - name: services | stopping unused services
+  - name: motd | clean existing
     become: yes
-    service: name=apache2 state=stopped
-  - service: name=exim4 state=stopped
+    shell: 'rm -rf /etc/update-motd.d/*'
+    tags:
+      - system
+
+  - name: motd | deploy motd
+    become: yes
+    copy: src={{ motd.file }} dest=/etc/update-motd.d/00-kdl owner=root
+    tags:
+      - system
+
+  - name: motd | permissions
+    become: yes
+    shell: 'chmod +x /etc/update-motd.d/*'
     tags:
       - system
 
@@ -65,48 +101,48 @@
     - vars.yml
   gather_facts: false
   tasks:
-  - name: python | easy install pip
+  - name: python | make python3 default version
     become: yes
-    easy_install: name=pip state=latest
+    alternatives:
+      link: /usr/bin/python
+      name: python
+      path: /usr/bin/python3
+      priority: 10
+
+  - name: pip | install virtualenv
+    become: yes
+    pip:
+      name: virtualenv
+      state: latest
     tags:
       - python
 
-  - name: python | install setuptools
-    become: yes
-    pip: name=setuptools state=latest
-    tags:
-      - python
-
-  - name: python | install virtualenv
-    become: yes
-    pip: name=virtualenv state=latest
-    tags:
-      - python
-
-  - name: python | install psycopg2
-    become: yes
-    pip: name=psycopg2 state=latest
-    tags:
-      - python
-
-  - name: python | setup virtualenv
+  - name: pip | setup virtualenv
     file: path={{ python.virtualenv_location }} state=directory
   - command: virtualenv {{ python.virtualenv_location }}
     tags:
       - python
 
-  - name: python | update pip
+  - name: pip | update setuptools
     pip:
-      name: pip
-      virtualenv: '{{ python.virtualenv_location }}'
+      name: setuptools
+      virtualenv: "{{ python.virtualenv_location }}"
       state: latest
     tags:
       - python
 
-  - name: python | ensure python requirements are installed to latest version
+  - name: pip | update pip
     pip:
-      requirements: '{{ project_root }}/{{ python.requirements }}'
-      virtualenv: '{{ python.virtualenv_location }}'
+      name: pip
+      virtualenv: "{{ python.virtualenv_location }}"
+      state: latest
+    tags:
+      - python
+
+  - name: pip | ensure python requirements are installed to latest version
+    pip:
+      requirements: "{{ project_root }}/{{ python.requirements }}"
+      virtualenv: "{{ python.virtualenv_location }}"
     tags:
       - python
 
@@ -115,33 +151,51 @@
     - vars.yml
   # gather_facts: false
   tasks:
-  - name: locale | setup gb locale
-    locale_gen:
-      name: '{{ postgresql.locale }}'
-      state: present
+  - name: postgresql | setup gb locale
     become: yes
+    locale_gen:
+      name: "{{ postgresql.locale }}"
+      state: present
+    tags:
+      - db
+
+  - name: postgresql | get installed version
+    become: yes
+    shell: 'ls /etc/postgresql/*/main/pg_hba.conf | cut -d / -f4'
+    register: postgresql_version
     tags:
       - db
 
   - name: postgresql | ensure postgresql user can authenticate
     become: yes
     lineinfile:
-      dest: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
+      path: /etc/postgresql/{{ postgresql_version.stdout }}/main/pg_hba.conf
       backup: yes
-      regexp: '^local\s+all\s+{{ postgresql.admin_user }}\s+peer$'
-      line: 'local    all    {{ postgresql.admin_user }}    {{ postgresql.default_auth_method }}'
+      regexp: "^local\\s+all\\s+{{ postgresql.admin_user }}\\s+peer$"
+      line: "local    all    {{ postgresql.admin_user }}    {{ postgresql.default_auth_method }}"
     tags:
       - db
 
   - name: postgresql | ensure all users can authenticate
     become: yes
     lineinfile:
-      dest: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
+      path: /etc/postgresql/{{ postgresql_version.stdout }}/main/pg_hba.conf
       backup: yes
-      regexp: '^local\s+all\s+all\s+peer$'
-      line: 'local    all    all    {{ postgresql.default_auth_method }}'
+      regexp: "^local\\s+all\\s+all\\s+peer$"
+      line: "local    all    all    {{ postgresql.default_auth_method }}"
     notify:
       - postgresql | restart postgres
+    tags:
+      - db
+
+  - name: elasticsearch | change JVM Heap To start at 256M
+    become: yes
+    lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      backup: yes
+      regexp: "^-Xms2g$"
+      line: "-Xms256m"
+    notify:
       - elasticsearch | restart elasticsearch
     tags:
       - db
@@ -168,24 +222,24 @@
     - vars.yml
   tasks:
   - name: postgresql | create user
-    become_user: '{{ postgresql.admin_user }}'
+    become_user: "{{ postgresql.admin_user }}"
     postgresql_user:
-      user: '{{ postgresql.user }}'
-      password: '{{ app.name }}'
+      user: "{{ postgresql.user }}"
+      password: "{{ app.name }}"
       role_attr_flags: CREATEDB # NOSUPERUSER NOCREATEROLE
     tags:
       - db
 
   - name: postgresql | create db
-    become_user: '{{ postgresql.admin_user }}'
+    become_user: "{{ postgresql.admin_user }}"
     postgresql_db:
-      name: '{{ app.name }}'
-      encoding: '{{postgresql.encoding}}'
-      lc_collate: '{{postgresql.locale}}'
-      lc_ctype: '{{postgresql.locale}}'
-      template: 'template0'
+      name: "{{ app.name }}"
+      encoding: "{{postgresql.encoding}}"
+      lc_collate: "{{postgresql.locale}}"
+      lc_ctype: "{{postgresql.locale}}"
+      template: "template0"
       state: present
-      owner: '{{ postgresql.user }}'
+      owner: "{{ postgresql.user }}"
     notify:
       - postgresql | apply privileges
     tags:
@@ -193,7 +247,7 @@
 
   - name: check if initial data file exists
     stat:
-      path: '{{ project_root }}/.vagrant_provisioning/{{ postgresql.initial_data_file }}'
+      path: "{{ project_root }}/.vagrant_provisioning/{{ postgresql.initial_data_file }}"
     register: idf
     tags:
       - db
@@ -208,13 +262,20 @@
       - db
       - data
 
+  - name: posgresql | create postgis extension if available
+    become_user: "{{ postgresql.admin_user }}"
+    command: psql -U {{ postgresql.admin_user }} -d {{ app.name }} -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+    tags:
+      - db
+      - data
+
   handlers:
   - name: postgresql | apply privileges
-    become_user: '{{ postgresql.admin_user }}'
+    become_user: "{{ postgresql.admin_user }}"
     postgresql_privs:
-      db: '{{ app.name }}'
+      db: "{{ app.name }}"
       privs: ALL
-      roles: '{{ postgresql.user }}'
+      roles: "{{ postgresql.user }}"
       state: present
       type: database
     tags:
@@ -222,12 +283,12 @@
       - data
 
   - name: postgresql | apply privileges after data import
-    become_user: '{{ postgresql.admin_user }}'
+    become_user: "{{ postgresql.admin_user }}"
     postgresql_privs:
-      db: '{{ app.name }}'
+      db: "{{ app.name }}"
       objs: ALL_IN_SCHEMA
       privs: ALL
-      roles: '{{ postgresql.user }}'
+      roles: "{{ postgresql.user }}"
       state: present
       type: table
     tags:
@@ -244,13 +305,14 @@
       - django
 
   - name: django | migrations
-    command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py makemigrations'
-  - command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py migrate'
+    command: "{{ user_home }}/venv/bin/python {{ project_root }}/manage.py makemigrations"
+  - command: "{{ user_home }}/venv/bin/python {{ project_root }}/manage.py migrate"
     tags:
       - django
 
-  - name: django | update undex
-    command: '{{ user_home }}/venv/bin/python {{ project_root }}/manage.py update_index'
+  - name: django | add default (vagrant/vagrant) superuser
+    command: "{{ user_home }}/venv/bin/python {{ project_root }}/manage.py shell -c \"from django.contrib.auth.models import User; User.objects.create_superuser('vagrant', 'vagrant@localhost', 'vagrant')\""
+    ignore_errors: yes # The user may already exist
     tags:
       - django
 
@@ -259,23 +321,19 @@
       - vars.yml
   tasks:
   - name: git | init
-    command: 'git init'
+    command: "git init"
     args:
-      chdir: '{{ project_root }}'
+      chdir: "{{ project_root }}"
     tags:
       - git
 
   - name: git | flake8 pre-commit hook
-    command: '{{ python.virtualenv_location }}/bin/flake8 --install-hook=git'
+    command: "{{ user_home }}/venv/bin/flake8 --install-hook=git"
+    ignore_errors: yes # Stop errors if it already exists
     args:
-      chdir: '{{ project_root }}'
-  - command: 'git config flake8.strict True'
+      chdir: "{{ project_root }}"
+  - command: "git config flake8.strict True"
     args:
-      chdir: '{{ project_root }}'
-  - lineinfile:
-      dest: '{{ project_root }}/.git/hooks/pre-commit'
-      backup: yes
-      regexp: '^#!/.*$'
-      line: '#!/usr/bin/env python'
+      chdir: "{{ project_root }}"
     tags:
       - git
