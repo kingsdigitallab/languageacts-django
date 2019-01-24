@@ -5,8 +5,10 @@ import os.path
 import sys
 from functools import wraps
 
-from django.conf import settings
-from fabric.api import cd, env, prefix, quiet, require, run, sudo, task
+from django.conf import settings as django_settings
+from django.core.management.utils import get_random_secret_key
+from fabric.api import (cd, env, prefix, prompt, put, quiet, require, run,
+                        settings, sudo, task)
 from fabric.colors import green, yellow
 from fabric.contrib import django
 
@@ -14,15 +16,42 @@ from fabric.contrib import django
 project_root = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(project_root)
 
-django.project('owri')
+# -------------------------------
+# SETTINGS VARIABLES
+# Please verify each variable below and edit as necessary to match
+# your project configuration.
+# TODO: externalise to settings to base.py
+# so this becomes a generic script without project-specific code.
 
+# The name of the Django app for this project
+# Folder that contains wsgi.py
+PROJECT_NAME = 'owri'
+# Git repository pointer
 REPOSITORY = 'https://github.com/kingsdigitallab/languageacts-django.git'
 
-env.user = settings.FABRIC_USER
-env.hosts = ['languageacts.kdl.kcl.ac.uk']
-env.root_path = '/vol/languageacts/webroot/'
+
+env.gateway = 'ssh.kdl.kcl.ac.uk'
+# Host names used as deployment targets
+env.hosts = ['languageacts2.kdl.kcl.ac.uk']
+# Absolute filesystem path to project 'webroot'
+env.root_path = '/vol/{languageacts2/webroot/'
+# Absolute filesystem path to project Django root
+env.django_root_path = '/vol/languageacts2/webroot/'
+# Absolute filesystem path to Python virtualenv for this project
 env.envs_path = os.path.join(env.root_path, 'envs')
-env.gateway = 'ssh.cch.kcl.ac.uk'
+# -------------------------------
+
+django.project(PROJECT_NAME)
+
+# Set FABRIC_GATEWAY = 'username@proxy.x' in local.py
+# if you are behind a proxy.
+FABRIC_GATEWAY = getattr(django_settings, 'FABRIC_GATEWAY', None)
+if FABRIC_GATEWAY:
+    env.forward_agent = True
+    env.gateway = FABRIC_GATEWAY
+
+# Name of linux user who deploys on the remote server
+env.user = django_settings.FABRIC_USER
 
 
 def server(func):
@@ -60,30 +89,12 @@ def liv():
 
 
 def set_srvr_vars():
+    # Absolute filesystem path to the django project root
+    # Contains manage.py
     env.path = os.path.join(env.root_path, env.srvr, 'django',
-                            'owri-django')
+                            '{}-django'.format(PROJECT_NAME))
     env.within_virtualenv = 'source {}'.format(
-        os.path.join(env.envs_path, env.srvr, 'bin', 'activate'))
-
-
-@task
-def install_system_packages():
-    sudo('apt-get -y --force-yes install apt-transport-https')
-    sudo(('wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | '
-          'apt-key add -'))
-    sudo(('echo '
-          '"deb https://packages.elastic.co/elasticsearch/2.x/debian '
-          'stable main" | '
-          'tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list'))
-    sudo('apt-get update')
-    sudo(('apt-get -y --force-yes install '
-          'python-dev python-pip python-setuptools python-virtualenv '
-          'openjdk-7-jre elasticsearch '
-          'libjpeg-dev libxml2-dev libxslt-dev '
-          'libldap2-dev libsasl2-dev '
-          'libpq-dev postgresql-client '
-          'git git-core'))
-    sudo('sudo update-rc.d elasticsearch defaults 95 10')
+        os.path.join(get_virtual_env_path(), 'bin', 'activate'))
 
 
 @task
@@ -99,7 +110,7 @@ def setup_environment(version=None):
 def create_virtualenv():
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
     with quiet():
-        env_vpath = os.path.join(env.envs_path, env.srvr)
+        env_vpath = get_virtual_env_path()
         if run('ls {}'.format(env_vpath)).succeeded:
             print(
                 green('virtual environment at [{}] exists'.format(env_vpath)))
@@ -132,6 +143,9 @@ def clone_repo():
 
 @task
 def install_requirements():
+
+    fix_permissions('virtualenv')
+
     require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
 
     reqs = 'requirements-{}.txt'.format(env.srvr)
@@ -142,7 +156,7 @@ def install_requirements():
         reqs = 'requirements.txt'
 
     with cd(env.path), prefix(env.within_virtualenv):
-        run('pip install --no-cache-dir -U -r {}'.format(reqs))
+        run('pip install -q --no-cache -U -r {}'.format(reqs))
 
 
 @task
@@ -157,13 +171,15 @@ def reinstall_requirement(which):
 def deploy(version=None):
     update(version)
     install_requirements()
+    upload_local_settings()
     own_django_log()
     fix_permissions()
     migrate()
     collect_static()
-    # update_index()
-    # clear_cache()
+    update_index()
+    clear_cache()
     restart_uwsgi()
+    check_deploy()
 
 
 @task
@@ -186,14 +202,41 @@ def update(version=None):
 
 
 @task
+def upload_local_settings():
+    require('srvr', 'path', provided_by=env.servers)
+
+    with cd(env.path):
+        with settings(warn_only=True):
+            if run('ls {}/settings/local.py'.format(PROJECT_NAME)).failed:
+                db_host = prompt('Database host: ')
+                db_pwd = prompt('Database password: ')
+
+                put('{}/settings/local_{}.py'.format(PROJECT_NAME, env.srvr),
+                    '{}/settings/local.py'.format(PROJECT_NAME), mode='0664')
+
+                run('echo >> {}/settings/local.py'.format(PROJECT_NAME))
+                run('echo '
+                    '"DATABASES[\'default\'][\'PASSWORD\'] = \'{}\'" >>'
+                    '{}/settings/local.py'.format(db_pwd, PROJECT_NAME))
+                run('echo '
+                    '"DATABASES[\'default\'][\'HOST\'] = \'{}\'" >>'
+                    '{}/settings/local.py'.format(db_host, PROJECT_NAME))
+                run('echo '
+                    '"SECRET_KEY = \'{}\'" >>'
+                    '{}/settings/local.py'.format(
+                        get_random_secret_key(), PROJECT_NAME))
+
+
+@task
 def own_django_log():
     """ make sure logs/django.log is owned by www-data"""
-    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
+    require('srvr', 'path', provided_by=env.servers)
 
     with quiet():
         log_path = os.path.join(env.path, 'logs', 'django.log')
         if run('ls {}'.format(log_path)).succeeded:
             sudo('chown www-data:www-data {}'.format(log_path))
+            sudo('chmod g+rw {}'.format(log_path))
 
 
 @task
@@ -204,8 +247,7 @@ def fix_permissions(category='static'):
         'static' (default): django static path + general project path
         'virtualenv': fix the virtualenv permissions
     '''
-    # GN: why do we need VE?
-    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
+    require('srvr', 'path', provided_by=env.servers)
 
     processed = False
 
@@ -277,3 +319,16 @@ def clear_cache():
 @task
 def restart_uwsgi():
     sudo('/etc/init.d/uwsgi restart')
+    if env.srvr in ['liv']:
+        sudo('/etc/init.d/trafficserver stop')
+        sudo('traffic_server -Cclear')
+        sudo('/etc/init.d/trafficserver start')
+
+
+@task
+def check_deploy():
+    require('srvr', 'path', 'within_virtualenv', provided_by=env.servers)
+
+    if env.srvr in ['stg', 'liv']:
+        with cd(env.path), prefix(env.within_virtualenv):
+            run('./manage.py check --deploy')

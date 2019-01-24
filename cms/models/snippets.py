@@ -36,8 +36,6 @@ class BiblioRef(index.Indexed, models.Model):
 
     search_fields = [
         index.SearchField('author', partial_match=True),
-        index.SearchField('year_from', partial_match=True),
-        index.SearchField('year_to', partial_match=True),
         index.SearchField('link', partial_match=True),
         index.SearchField('notes', partial_match=True),
 

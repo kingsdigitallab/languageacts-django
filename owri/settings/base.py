@@ -67,10 +67,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'haystack',
+
     'compressor',
     'modelcluster',
     'rest_framework',
-    'haystack',
     'taggit',
 
     'wagtail.core',
@@ -87,6 +88,7 @@ INSTALLED_APPS = [
     'wagtail.api',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.table_block',
+
 ]
 
 INSTALLED_APPS += [
@@ -301,8 +303,8 @@ ITEMS_PER_PAGE = 10
 # }
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.search.backends.elasticsearch2',
-        'AUTO_UPDATE': True,
+        'BACKEND': 'wagtail.search.backends.elasticsearch5',
+        'AUTO_UPDATE': False,
         'URLS': ['http://127.0.0.1:9200'],
         'INDEX': 'owri_wagtail',
         'TIMEOUT': 5,
@@ -311,7 +313,7 @@ WAGTAILSEARCH_BACKENDS = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',  # noqa
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine', # noqa
         'URL': 'http://127.0.0.1:9200/',
         'INDEX_NAME': 'owri_haystack',
     },
