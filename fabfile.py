@@ -34,7 +34,7 @@ env.gateway = 'ssh.kdl.kcl.ac.uk'
 # Host names used as deployment targets
 env.hosts = ['languageacts2.kdl.kcl.ac.uk']
 # Absolute filesystem path to project 'webroot'
-env.root_path = '/vol/{languageacts2/webroot/'
+env.root_path = '/vol/languageacts2/webroot/'
 # Absolute filesystem path to project Django root
 env.django_root_path = '/vol/languageacts2/webroot/'
 # Absolute filesystem path to Python virtualenv for this project
