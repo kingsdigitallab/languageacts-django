@@ -171,7 +171,7 @@ def reinstall_requirement(which):
 def deploy(version=None):
     update(version)
     install_requirements()
-    upload_local_settings()
+    # upload_local_settings()
     own_django_log()
     fix_permissions()
     migrate()
@@ -306,6 +306,7 @@ def update_index():
 
     with cd(env.path), prefix(env.within_virtualenv):
         run('./manage.py update_index')
+        run('./manage.py wt_update_index')
 
 
 @task
