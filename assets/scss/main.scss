@@ -17,6 +17,15 @@
 
 /** Globals **/
 
+a.exsource
+{
+    &:before {
+        content: "\f14c";
+        font-family: "FontAwesome";
+        padding-right: 0.25rem;
+    }
+}
+
 body {
     background: rgba($dark-blue, .05);
     -moz-osx-font-smoothing: grayscale;

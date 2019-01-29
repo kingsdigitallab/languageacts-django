@@ -5,7 +5,9 @@ from wagtail.core.whitelist import attribute_rule, check_url
 # from wagtail.admin.rich_text import HalloPlugin
 import wagtail.admin.rich_text.editors.draftail.features as draftail_features
 from wagtail.admin.rich_text.converters.html_to_contentstate import (
-    BlockElementHandler, InlineStyleElementHandler, InlineEntityElementHandler)
+    BlockElementHandler, InlineStyleElementHandler,
+    ExternalLinkElementHandler, PageLinkElementHandler,
+    InlineEntityElementHandler)
 from draftjs_exporter.dom import DOM
 
 
@@ -213,7 +215,8 @@ def register_rich_text_anchor_identifier_feature(features):
 
     control = {
         'type': type_,
-        'label': '<#id>',
+        'icon': 'icon icon-tag',
+        'label': 'Bookmark',
         'description': 'Add Bookmark',
     }
 
@@ -227,3 +230,55 @@ def register_rich_text_anchor_identifier_feature(features):
         'to_database_format': {
             'entity_decorators': {type_: anchor_identifier_entity_decorator}},
     })
+
+# See https://github.com/wagtail/wagtail/issues/4474
+
+
+@hooks.register('register_rich_text_features')
+def register_extended_link_feature(features):
+    features.default_features.append('extended_link')
+    feature_name = 'extended_link'
+    type_ = 'LINK'
+
+    control = {
+        'type': type_,
+        'label': 'EX',
+        'icon': 'icon icon-link',
+        'description': 'External Source Link',
+        'attributes': ['url', 'id', 'parentId', 'rel', 'target', 'class'],
+        'whitelist': {
+            'href': "^(http:|https:|undefined$)",
+        }
+    }
+
+    features.register_editor_plugin(
+        'draftail', feature_name, draftail_features.EntityFeature(control)
+    )
+
+    features.register_converter_rule('contentstate', feature_name, {
+        'from_database_format': {
+            'a[href]': ExternalLinkElementHandler('LINK'),
+            'a[linktype="page"]': PageLinkElementHandler('LINK'),
+        },
+        'to_database_format': {
+            'entity_decorators': {'LINK': extended_link_entity}
+        }
+    })
+
+
+def extended_link_entity(props):
+    id_ = props.get('id')
+    link_props = {}
+
+    if id_ is not None:
+        link_props['linktype'] = 'page'
+        link_props['id'] = id_
+        link_props['target'] = '_blank'
+        link_props['class'] = 'exsource'
+
+    else:
+        link_props['href'] = props.get('url')
+        link_props['target'] = '_blank'
+        link_props['class'] = 'exsource'
+
+    return DOM.create_element('a', link_props, props['children'])
