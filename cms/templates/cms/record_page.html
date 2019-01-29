@@ -1,5 +1,5 @@
 {% extends "cms/rich_text_page.html" %}
-{% load cms_tags wagtailcore_tags %}
+{% load cms_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block bodyclass %} class="record"{% endblock %}
 
@@ -94,13 +94,18 @@ creating a single record page
         </div>
         {% endif %}
 
-        {% if page.specific.hist_freq_data %}
+        {% if page.specific.hist_freq_data or page.specific.hist_freq_image %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
             <p><strong>Historical frequency</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <div class="hist_freq_chart" data-x-label="{% if page.specific.hist_freq_x_label %}{{page.specific.hist_freq_x_label}}{% else %}time{% endif %}" data-y-label="{% if page.specific.hist_freq_y_label %}{{page.specific.hist_freq_y_label}}{% else %}time{% endif %}" data-chart-data="{{ page.specific.hist_freq_data }}"></div>
+            {% if page.specific.hist_freq_image %}
+            {% image page.specific.hist_freq_image max-800x600 as tmp_image %}
+              <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+            {% else %}
+              <div class="hist_freq_chart" data-x-label="{% if page.specific.hist_freq_x_label %}{{page.specific.hist_freq_x_label}}{% else %}time{% endif %}" data-y-label="{% if page.specific.hist_freq_y_label %}{{page.specific.hist_freq_y_label}}{% else %}time{% endif %}" data-chart-data="{{ page.specific.hist_freq_data }}"></div>
+            {% endif %}
           </div>
         </div>
         {% endif %}

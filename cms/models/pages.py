@@ -205,6 +205,15 @@ class RecordEntry(Page):
                                       help_text="Format as... key: value,\
                                           key: value, key: value")
 
+    hist_freq_image = models.ForeignKey(
+        'wagtailimages.Image',
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name='[OR] Pre-rendered Graph Image',
+        help_text='Pre-rendered graph will take priority over manual data\
+            inputted above.'
+    )
+
     first_attest_year = models.IntegerField(blank=True, null=True,
                                             verbose_name="First\
                                                 Attestation Year")
@@ -295,6 +304,7 @@ RecordEntry.content_panels = [
             FieldPanel('hist_freq_x_label'),
             FieldPanel('hist_freq_y_label'),
             FieldPanel('hist_freq_data'),
+            ImageChooserPanel('hist_freq_image')
         ],
         heading='Historical Frequency',
         classname="collapsible collapsed"
