@@ -234,7 +234,9 @@ time {
         // background: rgba($dark-blue, .1);
         background: scale-color($light-blue, $lightness: -10%);
         border-radius: 2px;
+        line-height: rem-calc(18);
         margin-bottom: rem-calc(3px);
+        white-space: normal;
 
         &.secondary {
             background: scale-color($secondary-color, $lightness: -10%);
