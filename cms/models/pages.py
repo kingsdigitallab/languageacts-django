@@ -209,6 +209,7 @@ class RecordEntry(Page):
         'wagtailimages.Image',
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
         verbose_name='[OR] Pre-rendered Graph Image',
         help_text='Pre-rendered graph will take priority over manual data\
             inputted above.'
