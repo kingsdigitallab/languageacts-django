@@ -156,14 +156,36 @@ RecordIndexPage.promote_panels = Page.promote_panels
 
 class RecordPage(Page):
 
+    latin_lemma = models.CharField(
+        max_length=2048, blank=True, null=True)
+
+    latin_pos = models.ForeignKey(
+        'cms.POSLabel',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    latin_meaning = models.CharField(
+        max_length=2048, blank=True, null=True)
+
     cultural_transmission = StreamField(CMSStreamBlock())
+
     search_fields = Page.search_fields + [
     ]
+
     subpage_types = ['RecordEntry']
+
+    def get_languages(self):
+        return RecordEntry.objects.live().descendant_of(self).order_by('language__order_by')
 
 
 RecordPage.content_panels = [
     FieldPanel('title', classname='full title'),
+    FieldPanel('latin_lemma'),
+    SnippetChooserPanel('latin_pos'),
+    FieldPanel('latin_meaning'),
     StreamFieldPanel('cultural_transmission')
 ]
 
@@ -171,14 +193,6 @@ RecordPage.promote_panels = Page.promote_panels
 
 
 class RecordEntry(Page):
-
-    period = models.ForeignKey(
-        'cms.LemmaPeriod',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
 
     language = models.ForeignKey(
         'cms.LemmaLanguage',
@@ -188,22 +202,35 @@ class RecordEntry(Page):
         related_name='+'
     )
 
-    variants = models.CharField(max_length=2048, blank=True, null=True)
-    semantic_history = StreamField(CMSStreamBlock(required=False),
-                                   blank=True,
-                                   null=True)
-    collocational_history = StreamField(CMSStreamBlock(required=False),
-                                        blank=True,
-                                        null=True)
+    lemma = models.CharField(
+        max_length=2048, blank=True, null=True)
 
-    hist_freq_x_label = models.CharField(max_length=64, null=True, blank=True,
-                                         verbose_name="X Axis Label")
-    hist_freq_y_label = models.CharField(max_length=64, null=True, blank=True,
-                                         verbose_name="Y Axis Label")
-    hist_freq_data = models.TextField(null=True, blank=True,
-                                      verbose_name="Chart Data",
-                                      help_text="Format as... key: value,\
-                                          key: value, key: value")
+    variants = models.CharField(
+        max_length=2048, blank=True, null=True)
+
+    pos = models.ForeignKey(
+        'cms.POSLabel',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    morph_related_words = models.CharField(
+        max_length=2048, blank=True, null=True,
+        verbose_name="Morphologically Related Words")
+
+    ranking_freq = models.CharField(
+        max_length=2048, blank=True, null=True,
+        verbose_name="Ranking/Frequency")
+
+    first_attest = models.CharField(
+        max_length=2048, blank=True, null=True,
+        verbose_name="First Attestation")
+
+    hist_freq = models.CharField(
+        max_length=2048, blank=True, null=True,
+        verbose_name="Historical Frequency")
 
     hist_freq_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -215,132 +242,54 @@ class RecordEntry(Page):
             inputted above.'
     )
 
-    first_attest_year = models.IntegerField(blank=True, null=True,
-                                            verbose_name="First\
-                                                Attestation Year")
-    first_attest = models.TextField(blank=True, null=True,
-                                    verbose_name="First Attestation Text")
+    semantic_history = StreamField(CMSStreamBlock(required=False),
+                                   blank=True,
+                                   null=True)
+
+    collocational_history = StreamField(CMSStreamBlock(required=False),
+                                        blank=True,
+                                        null=True)
+
+    diatopic_variation = models.CharField(
+        max_length=2048, blank=True, null=True)
+
+    diaphasic_variation = models.CharField(
+        max_length=2048, blank=True, null=True)
 
     search_fields = Page.search_fields + [
     ]
 
-    subpage_types = ['RecordRankingAndFrequencyEntry']
-
-    @property
-    def morph_related_words(self):
-        words = [
-            n.related_word for n in self.morph_words_relationship.all()
-        ]
-        return words
-
-    @property
-    def word_types(self):
-        word_types = [
-            n.word_type for n in self.word_type_relationship.all()
-        ]
-        return word_types
+    subpage_types = []
 
     @property
     def url(self):
         return self.get_parent().url
 
 
-# M2M Relations
-class RecordEntryM2M(models.Model):
-    source = ParentalKey(
-        'RecordEntry',
-        related_name='morph_words_relationship'
-    )
-    related_word = models.ForeignKey(
-        'RecordEntry',
-        related_name="+",
-        on_delete="models.CASCADE"
-    )
-    panels = [
-        FieldPanel('related_word')
-    ]
-
-
-class RecordEntryWordType(models.Model):
-    source = ParentalKey(
-        'RecordEntry',
-        related_name='word_type_relationship'
-    )
-    word_type = models.ForeignKey(
-        'cms.WordType',
-        related_name="+",
-        on_delete="models.CASCADE"
-    )
-    panels = [
-        FieldPanel('word_type')
-    ]
-
-
 RecordEntry.content_panels = [
     FieldPanel('title', classname='full title'),
-    SnippetChooserPanel('period'),
     SnippetChooserPanel('language'),
+    FieldPanel('lemma'),
     FieldPanel('variants'),
+    SnippetChooserPanel('pos'),
+    FieldPanel('morph_related_words'),
+    FieldPanel('ranking_freq'),
+    FieldPanel('first_attest'),
     MultiFieldPanel(
         [
-            FieldPanel('first_attest_year'),
-            FieldPanel('first_attest'),
-        ],
-        heading="First Attestation"
-    ),
-    MultiFieldPanel(
-        [
-            InlinePanel('word_type_relationship'),
-        ],
-        heading="Types/Parts of speech"
-    ),
-    MultiFieldPanel(
-        [
-            InlinePanel('morph_words_relationship'),
-        ],
-        heading="Morphologically Related Words"
-    ),
-    MultiFieldPanel(
-        [
-            FieldPanel('hist_freq_x_label'),
-            FieldPanel('hist_freq_y_label'),
-            FieldPanel('hist_freq_data'),
+            FieldPanel('hist_freq'),
             ImageChooserPanel('hist_freq_image')
         ],
         heading='Historical Frequency',
         classname="collapsible collapsed"
-
     ),
+
+
     StreamFieldPanel('semantic_history'),
-    StreamFieldPanel('collocational_history')
+    StreamFieldPanel('collocational_history'),
+    FieldPanel('diatopic_variation'),
+    FieldPanel('diaphasic_variation'),
 ]
-
-
-class RecordRankingAndFrequencyEntry(Page):
-
-    ranking = models.IntegerField(blank=True, null=True)
-    frequency = models.IntegerField(blank=True, null=True)
-    biblioref = models.ForeignKey(
-        'cms.BiblioRef',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    search_fields = Page.search_fields + [
-    ]
-    subpage_types = []
-
-
-RecordRankingAndFrequencyEntry.content_panels = [
-    FieldPanel('title', classname='full title'),
-    FieldPanel('ranking', classname='full title'),
-    FieldPanel('frequency', classname='full title'),
-    SnippetChooserPanel('biblioref'),
-]
-
-RecordRankingAndFrequencyEntry.promote_panels = Page.promote_panels
 
 
 class RichTextPage(Page, WithStreamField):
