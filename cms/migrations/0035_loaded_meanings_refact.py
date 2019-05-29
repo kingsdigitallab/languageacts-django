@@ -25,12 +25,6 @@ class Migration(migrations.Migration):
             },
             bases=(wagtail.search.index.Indexed, models.Model),
         ),
-        migrations.DeleteModel(
-            name='BiblioRef',
-        ),
-        migrations.DeleteModel(
-            name='LemmaPeriod',
-        ),
         migrations.RemoveField(
             model_name='recordentrym2m',
             name='related_word',
@@ -155,5 +149,11 @@ class Migration(migrations.Migration):
             model_name='recordpage',
             name='latin_pos',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='cms.POSLabel'),
+        ),
+        migrations.DeleteModel(
+            name='BiblioRef',
+        ),
+        migrations.DeleteModel(
+            name='LemmaPeriod',
         ),
     ]
