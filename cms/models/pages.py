@@ -228,7 +228,7 @@ class RecordEntry(Page):
         max_length=2048, blank=True, null=True,
         verbose_name="First Attestation")
 
-    hist_freq = models.CharField(
+    hist_freq = models.TextField(
         max_length=2048, blank=True, null=True,
         verbose_name="Historical Frequency")
 
