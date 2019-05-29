@@ -11,6 +11,6 @@ django-redis
 elasticsearch>=2.0.0,<3.0.0
 libsass==0.13.2
 django-kdl-ldap
-psycopg2
+psycopg2-binary
 redis
 wagtail
