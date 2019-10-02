@@ -45,3 +45,5 @@ AC_PROJECT_ID = 771
 AC_USER = 36
 
 GA_ID = ''
+
+MEDIA_URL = 'media/'

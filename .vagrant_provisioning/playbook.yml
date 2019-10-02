@@ -188,18 +188,6 @@
     tags:
       - db
 
-  - name: elasticsearch | change JVM Heap To start at 256M
-    become: yes
-    lineinfile:
-      path: /etc/elasticsearch/jvm.options
-      backup: yes
-      regexp: "^-Xms2g$"
-      line: "-Xms256m"
-    notify:
-      - elasticsearch | restart elasticsearch
-    tags:
-      - db
-
   handlers:
   - name: postgresql | restart postgres
     become: yes
