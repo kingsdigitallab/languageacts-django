@@ -20,7 +20,7 @@
 
     <ol class="search-results">
         {% for result in results_qs %}
-            <li><h4><a href="{{ result.0.url }}">{{result}}</a></h4>
+            <li><h4><a href="{{ result.url }}">{{result}}</a></h4>
             {% if result.specific.search_description %}
                 <p>{{ result.specific.search_description|safe }}</p>
             {% endif %}
