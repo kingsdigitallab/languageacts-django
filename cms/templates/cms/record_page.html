@@ -22,14 +22,20 @@ creating a single record page
         </div>
     </div>
 
+    {% if page.specific.latin_pos.all %}
     <div class="row section">
         <div class="small-6 medium-4 columns">
             <p><strong>Latin POS</strong></p>
         </div>
         <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.latin_pos }}</p>
+            <p>
+            {% for p in page.specific.latin_pos.all %}
+                {{ p }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </p>
         </div>
     </div>
+    {% endif %}
 
     <div class="row section">
         <div class="small-6 medium-4 columns">
@@ -67,13 +73,15 @@ creating a single record page
         </div>
         {% endif %}
 
-        {% if page.specific.pos %}
+        {% if page.specific.pos.all %}
             <div class="row section">
                 <div class="small-6 medium-4 columns">
                     <p><strong>{{page.specific.language}} POS</strong></p>
                 </div>
                 <div class="small-6 medium-8 columns">
-                    {{ page.specific.pos }}
+                    {% for p in page.specific.pos.all %}
+                    {{ p }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         {% endif %}

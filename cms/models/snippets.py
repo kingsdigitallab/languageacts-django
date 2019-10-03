@@ -3,6 +3,7 @@ from wagtail.snippets.models import register_snippet
 from wagtail.search import index
 from wagtail.admin.edit_handlers import FieldPanel
 
+
 @register_snippet
 class LemmaLanguage(index.Indexed, models.Model):
     name = models.CharField(max_length=128)

@@ -13,7 +13,7 @@ from taggit.models import TaggedItemBase
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                         MultiFieldPanel, InlinePanel)
+                                         MultiFieldPanel)
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
@@ -159,18 +159,12 @@ class RecordPage(Page):
     latin_lemma = models.CharField(
         max_length=2048, blank=True, null=True)
 
-    latin_pos = models.ForeignKey(
-        'cms.POSLabel',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
+    latin_pos = ParentalManyToManyField('cms.POSLabel', blank=True)
 
     latin_meaning = models.CharField(
         max_length=2048, blank=True, null=True)
 
-    cultural_transmission = StreamField(CMSStreamBlock())
+    cultural_transmission = StreamField(CMSStreamBlock(required=False))
 
     search_fields = Page.search_fields + [
     ]
@@ -178,13 +172,14 @@ class RecordPage(Page):
     subpage_types = ['RecordEntry']
 
     def get_languages(self):
-        return RecordEntry.objects.live().descendant_of(self).order_by('language__order_by')
+        return RecordEntry.objects.live().descendant_of(self).order_by(
+            'language__order_by')
 
 
 RecordPage.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('latin_lemma'),
-    SnippetChooserPanel('latin_pos'),
+    FieldPanel('latin_pos', widget=forms.CheckboxSelectMultiple),
     FieldPanel('latin_meaning'),
     StreamFieldPanel('cultural_transmission')
 ]
@@ -208,13 +203,7 @@ class RecordEntry(Page):
     variants = models.CharField(
         max_length=2048, blank=True, null=True)
 
-    pos = models.ForeignKey(
-        'cms.POSLabel',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
+    pos = ParentalManyToManyField('cms.POSLabel', blank=True)
 
     morph_related_words = models.CharField(
         max_length=2048, blank=True, null=True,
@@ -271,7 +260,7 @@ RecordEntry.content_panels = [
     SnippetChooserPanel('language'),
     FieldPanel('lemma'),
     FieldPanel('variants'),
-    SnippetChooserPanel('pos'),
+    FieldPanel('pos', widget=forms.CheckboxSelectMultiple),
     FieldPanel('morph_related_words'),
     FieldPanel('ranking_freq'),
     FieldPanel('first_attest'),
