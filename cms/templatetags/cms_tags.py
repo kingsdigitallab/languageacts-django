@@ -92,7 +92,10 @@ def get_site_root(context):
 
     :rtype: `wagtail.core.models.Page`
     """
-    return context['request'].site.root_page
+    if hasattr(context['request'], 'site'):
+        return context['request'].site.root_page
+    else:
+        return None
 
 
 @register.simple_tag(takes_context=False)
@@ -121,6 +124,9 @@ def has_view_restrictions(page):
 def main_menu(context, root, current_page=None):
     """Returns the main menu items, the children of the root page. Only live
     pages that have the show_in_menus setting on are returned."""
+    if not root:
+        root = current_page
+
     menu_pages = root.get_children().live().in_menu()
 
     root.active = (current_page.url == root.url
