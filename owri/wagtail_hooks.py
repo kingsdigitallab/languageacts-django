@@ -201,7 +201,6 @@ def insert_editor_js_anchor():
     return js_includes
 
 
-
 @hooks.register('register_rich_text_features')
 def register_rich_text_anchor_identifier_feature(features):
     features.default_features.append('anchor-identifier')
@@ -233,6 +232,7 @@ def register_rich_text_anchor_identifier_feature(features):
     })
 
 # See https://github.com/wagtail/wagtail/issues/4474
+
 
 @hooks.register('register_rich_text_features')
 def register_extended_link_feature(features):
@@ -352,14 +352,16 @@ def insert_editor_js_colour():
         'js/wagtail_draftail_colour.js',
     ]
     css_files = [
-
+        'js/wagtail_draftail_colour.css',
     ]
     js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
                                    ((settings.STATIC_URL, filename)
                                     for filename in js_files)
                                    )
-    js_includes = js_includes + format_html_join('\n', '<link rel="stylesheet" href="{0}{1}"/>',
-                                   ((settings.STATIC_URL, filename)
-                                    for filename in js_files)
-                                   )
+    js_includes = js_includes + format_html_join(
+        '\n',
+        '<link rel="stylesheet" href="{0}{1}"/>',  # NOQA
+        ((settings.STATIC_URL, filename)
+         for filename in css_files)
+        )
     return js_includes

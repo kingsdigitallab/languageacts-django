@@ -1,0 +1,36 @@
+#picker
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 100;
+}
+
+#picker .wrap
+{
+    margin: 20% auto 0 auto;
+    background-color: #ffffff;
+    width: 60%;
+    padding: 10px;
+}
+
+
+
+#picker ul{
+    list-style: none;
+    padding: 0;
+}
+
+#picker ul li{
+    display: inline-block;
+    width: 10%;
+    height: 50px;
+}
+
+#picker ul li:hover
+{
+    cursor: pointer;
+}
