@@ -17,7 +17,7 @@ def whitelister_element_rules():
         'p': attribute_rule({'class': True}),
         'a': attribute_rule({'href': check_url, 'id': True, 'class': True,
                              'target': True}),
-        'span': attribute_rule({'class': True}),
+        'span': attribute_rule({'class': True, 'style': True}),
         'i': attribute_rule({'class': True}),
         'iframe': attribute_rule(
             {'id': True, 'class': True, 'src': True, 'style': True,
@@ -201,6 +201,7 @@ def insert_editor_js_anchor():
     return js_includes
 
 
+
 @hooks.register('register_rich_text_features')
 def register_rich_text_anchor_identifier_feature(features):
     features.default_features.append('anchor-identifier')
@@ -232,7 +233,6 @@ def register_rich_text_anchor_identifier_feature(features):
     })
 
 # See https://github.com/wagtail/wagtail/issues/4474
-
 
 @hooks.register('register_rich_text_features')
 def register_extended_link_feature(features):
@@ -282,3 +282,84 @@ def extended_link_entity(props):
         link_props['class'] = 'exsource'
 
     return DOM.create_element('a', link_props, props['children'])
+
+
+# Coloured Text
+
+def colour_entity_decorator(props):
+    """
+    Draft.js ContentState to database HTML.
+    Converts the ANCHOR entities into <a> tags.
+    """
+    return DOM.create_element('span', {
+        'style': 'color: {}'.format(props['fragment']),
+        'data-color': props['fragment'],
+    }, props['children'])
+
+
+class ColourEntityElementHandler(InlineEntityElementHandler):
+    """
+    Database HTML to Draft.js ContentState.
+    Converts the <a> tags into ANCHOR entities, with the right data.
+    """
+    # In Draft.js entity terms, anchors are "mutable".
+    # We can alter the anchor's text, but it's still an anchor.
+    mutability = 'MUTABLE'
+
+    def get_attribute_data(self, attrs):
+        """
+        Take the ``fragment`` value from the ``href`` HTML attribute.
+        """
+        return {
+            'fragment': attrs['data-color'],
+        }
+
+
+@hooks.register('register_rich_text_features')
+def register_rich_text_colour_feature(features):
+    features.default_features.append('colour')
+    """
+    Registering the `anchor` feature, which uses the
+    `ANCHOR` Draft.js entity type,
+    and is stored as HTML with a `<a data-anchor href="#my-anchor">` tag.
+    """
+    feature_name = 'colour'
+    type_ = 'COLOUR'
+
+    control = {
+        'type': type_,
+        'label': 'Color',
+        'description': 'Font Colour',
+    }
+
+    features.register_editor_plugin(
+        'draftail', feature_name, draftail_features.EntityFeature(control)
+    )
+
+    features.register_converter_rule('contentstate', feature_name, {
+        # Note here that the conversion is more
+        # complicated than for blocks and inline styles.
+        'from_database_format': {
+            'span[data-color]': ColourEntityElementHandler(type_)},
+        'to_database_format': {
+            'entity_decorators': {type_: colour_entity_decorator}},
+    })
+
+
+@hooks.register('insert_editor_js')
+def insert_editor_js_colour():
+    js_files = [
+        'js/wagtail_draftail_colour.js',
+    ]
+    css_files = [
+
+    ]
+    js_includes = format_html_join('\n', '<script src="{0}{1}"></script>',
+                                   ((settings.STATIC_URL, filename)
+                                    for filename in js_files)
+                                   )
+    js_includes = js_includes + format_html_join('\n', '<link rel="stylesheet" href="{0}{1}"/>',
+                                   ((settings.STATIC_URL, filename)
+                                    for filename in js_files)
+                                   )
+    return js_includes
