@@ -18,7 +18,7 @@ creating a single record page
             <p><strong>Latin Lemma</strong></p>
         </div>
         <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.latin_lemma }}</p>
+            <p>{{ page.specific.latin_lemma|safe }}</p>
         </div>
     </div>
 
@@ -42,7 +42,7 @@ creating a single record page
             <p><strong>Latin Meaning</strong></p>
         </div>
         <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.latin_meaning }}</p>
+            <p>{{ page.specific.latin_meaning|safe }}</p>
         </div>
     </div>
 
@@ -68,7 +68,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} Variants</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.variants }}</p>
+            <p>{{ page.specific.variants|safe }}</p>
           </div>
         </div>
         {% endif %}
@@ -92,7 +92,7 @@ creating a single record page
                     <p><strong>{{page.specific.language}} Morphologically related words</strong></p>
                 </div>
                 <div class="small-6 medium-8 columns">
-                    {{ page.specific.morph_related_words }}
+                    {{ page.specific.morph_related_words|safe }}
                 </div>
             </div>
         {% endif %}
@@ -103,7 +103,7 @@ creating a single record page
             <p><strong>Ranking/frequency in {{page.specific.language}}</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            {{ page.specific.ranking_freq }}
+            {{ page.specific.ranking_freq|safe }}
           </div>
         </div>
         {% endif %}
@@ -114,7 +114,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} First attestation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <p>{% if page.specific.first_attest_year %}<a href="#"><i class="fa fa-info-circle"></i>{{ page.specific.first_attest_year }}</a>{% endif %} {{ page.specific.first_attest }}</p>
+            <p>{% if page.specific.first_attest_year %}<a href="#"><i class="fa fa-info-circle"></i>{{ page.specific.first_attest_year }}</a>{% endif %} {{ page.specific.first_attest|safe }}</p>
           </div>
         </div>
         {% endif %}
@@ -129,7 +129,7 @@ creating a single record page
             {% image page.specific.hist_freq_image max-800x600 as tmp_image %}
               <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
             {% else %}
-              {{ page.specific.hist_freq}}
+              {{ page.specific.hist_freq|safe}}
             {% endif %}
           </div>
         </div>
@@ -163,7 +163,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} Diatopic Variation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            {{ page.specific.diatopic_variation }}
+            {{ page.specific.diatopic_variation|safe }}
           </div>
         </div>
         {% endif %}
@@ -174,7 +174,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} Diaphasic Variation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            {{ page.specific.diaphasic_variation }}
+            {{ page.specific.diaphasic_variation|safe }}
           </div>
         </div>
         {% endif %}

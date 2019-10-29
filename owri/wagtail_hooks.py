@@ -216,7 +216,7 @@ def register_rich_text_anchor_identifier_feature(features):
     control = {
         'type': type_,
         'icon': 'icon icon-tag',
-        'label': 'Bookmark',
+        'label': '',
         'description': 'Add Bookmark',
     }
 
@@ -242,7 +242,7 @@ def register_extended_link_feature(features):
 
     control = {
         'type': type_,
-        'label': 'EX',
+        'label': 'Ex',
         'icon': 'icon icon-link',
         'description': 'External Source Link',
         'attributes': ['url', 'id', 'parentId', 'rel', 'target', 'class'],

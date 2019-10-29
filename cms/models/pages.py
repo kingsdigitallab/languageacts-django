@@ -23,6 +23,7 @@ from datetime import date
 from django.db.models import Q
 from wagtail.core.fields import StreamField
 from haystack.query import SearchQuerySet
+from wagtail.core.fields import RichTextField
 
 from .streamfield import CMSStreamBlock
 
@@ -156,15 +157,14 @@ RecordIndexPage.promote_panels = Page.promote_panels
 
 class RecordPage(Page):
 
-    latin_lemma = models.CharField(
-        max_length=2048, blank=True, null=True)
+    latin_lemma = RichTextField(blank=True, null=True)
 
     latin_pos = ParentalManyToManyField('cms.POSLabel', blank=True)
 
-    latin_meaning = models.CharField(
-        max_length=2048, blank=True, null=True)
+    latin_meaning = RichTextField(blank=True, null=True)
 
-    cultural_transmission = StreamField(CMSStreamBlock(required=False))
+    cultural_transmission = StreamField(
+        CMSStreamBlock(required=False, blank=True))
 
     search_fields = Page.search_fields + [
     ]
@@ -200,26 +200,17 @@ class RecordEntry(Page):
     lemma = models.CharField(
         max_length=2048, blank=True, null=True)
 
-    variants = models.CharField(
-        max_length=2048, blank=True, null=True)
+    variants = RichTextField(blank=True, null=True)
 
     pos = ParentalManyToManyField('cms.POSLabel', blank=True)
 
-    morph_related_words = models.CharField(
-        max_length=2048, blank=True, null=True,
-        verbose_name="Morphologically Related Words")
+    morph_related_words = RichTextField(blank=True, null=True)
 
-    ranking_freq = models.CharField(
-        max_length=2048, blank=True, null=True,
-        verbose_name="Ranking/Frequency")
+    ranking_freq = RichTextField(blank=True, null=True)
 
-    first_attest = models.CharField(
-        max_length=2048, blank=True, null=True,
-        verbose_name="First Attestation")
+    first_attest = RichTextField(blank=True, null=True)
 
-    hist_freq = models.TextField(
-        max_length=2048, blank=True, null=True,
-        verbose_name="Historical Frequency")
+    hist_freq = RichTextField(blank=True, null=True)
 
     hist_freq_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -239,11 +230,9 @@ class RecordEntry(Page):
                                         blank=True,
                                         null=True)
 
-    diatopic_variation = models.CharField(
-        max_length=2048, blank=True, null=True)
+    diatopic_variation = RichTextField(blank=True, null=True)
 
-    diaphasic_variation = models.CharField(
-        max_length=2048, blank=True, null=True)
+    diaphasic_variation = RichTextField(blank=True, null=True)
 
     search_fields = Page.search_fields + [
     ]
