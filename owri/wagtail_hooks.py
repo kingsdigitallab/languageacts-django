@@ -28,6 +28,37 @@ def whitelister_element_rules():
 
 
 @hooks.register('register_rich_text_features')
+def register_underline_feature(features):
+    """
+    Registering the `underline` feature, which uses the `UNDERLINE`
+    Draft.js inline style type,
+    and is stored as HTML with an `<s>` tag.
+    """
+    feature_name = 'underline'
+    type_ = 'UNDERLINE'
+    tag = 'u'
+    control = {
+        'type': type_,
+        'label': '_',
+        'description': 'Underline',
+    }
+
+    features.register_editor_plugin(
+        'draftail', feature_name, draftail_features.InlineStyleFeature(control)
+    )
+
+    db_conversion = {
+        'from_database_format': {tag: InlineStyleElementHandler(type_)},
+        'to_database_format': {'style_map': {type_: tag}},
+    }
+
+    features.register_converter_rule(
+        'contentstate', feature_name, db_conversion)
+
+    features.default_features.append('underline')
+
+
+@hooks.register('register_rich_text_features')
 def register_strikethrough_feature(features):
     """
     Registering the `strikethrough` feature, which uses the `STRIKETHROUGH`
@@ -243,7 +274,7 @@ def register_extended_link_feature(features):
     control = {
         'type': type_,
         'label': 'Ex',
-        'icon': 'icon icon-link',
+        'icon': 'icon icon-pick',
         'description': 'External Source Link',
         'attributes': ['url', 'id', 'parentId', 'rel', 'target', 'class'],
         'whitelist': {
@@ -328,7 +359,9 @@ def register_rich_text_colour_feature(features):
 
     control = {
         'type': type_,
-        'label': 'Color',
+        # Yeah I know, but wagtail provide such a limited set of options!
+        'icon': 'icon icon-radio-full',
+        'label': '',
         'description': 'Font Colour',
     }
 
