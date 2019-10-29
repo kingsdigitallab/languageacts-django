@@ -12,16 +12,7 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
                              template_name='cms/search_indexes/'
                              'recordentry_text.txt')
 
-    # Prepared values
-    first_attest_year = indexes.IntegerField(
-        faceted=False,
-        null=True)
-
     language = indexes.CharField(
-        faceted=False,
-        null=True)
-
-    period = indexes.CharField(
         faceted=False,
         null=True)
 
@@ -35,17 +26,8 @@ class RecordEntryIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         return self.get_model().objects.all()
 
-    def prepare_first_attest_year(self, obj):
-        if obj.specific.first_attest_year:
-            return obj.specific.first_attest_year
-        else:
-            return None
-
     def prepare_language(self, obj):
         return obj.specific.language.name if obj.specific.language else None
-
-    def prepare_period(self, obj):
-        return obj.specific.period.name if obj.specific.period else None
 
 
 class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
@@ -77,7 +59,3 @@ class RecordPageIndex(indexes.SearchIndex, indexes.Indexable):
     def prepare_language(self, obj):
         return [entry.specific.language.name for entry in
                 obj.get_children() if entry.specific.language is not None]
-
-    def prepare_period(self, obj):
-        return [entry.specific.period.name for entry in
-                obj.get_children() if entry.specific.period is not None]
