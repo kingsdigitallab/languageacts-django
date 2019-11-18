@@ -65,7 +65,6 @@ const Colour = props => {
     return React.createElement(
         'span',
         {
-            class: 'hello',
             style: { color: data.fragment},
             'data-colour': data.fragment,
         },

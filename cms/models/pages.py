@@ -222,13 +222,8 @@ class RecordEntry(Page):
             inputted above.'
     )
 
-    semantic_history = StreamField(CMSStreamBlock(required=False),
-                                   blank=True,
-                                   null=True)
-
-    collocational_history = StreamField(CMSStreamBlock(required=False),
-                                        blank=True,
-                                        null=True)
+    semantic_history = RichTextField(blank=True, null=True)
+    collocational_history = RichTextField(blank=True, null=True)
 
     diatopic_variation = RichTextField(blank=True, null=True)
 
@@ -263,8 +258,8 @@ RecordEntry.content_panels = [
     ),
 
 
-    StreamFieldPanel('semantic_history'),
-    StreamFieldPanel('collocational_history'),
+    FieldPanel('semantic_history'),
+    FieldPanel('collocational_history'),
     FieldPanel('diatopic_variation'),
     FieldPanel('diaphasic_variation'),
 ]

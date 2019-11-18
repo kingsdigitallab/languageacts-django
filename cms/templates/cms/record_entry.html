@@ -15,7 +15,7 @@ creating a single record page
     <div class="content preview">
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Lemma</strong></p>
+            <p><strong>{{self.language|safe}} Lemma</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
             <p>{{ self.lemma }}</p>
@@ -25,10 +25,10 @@ creating a single record page
         {% if self.variants %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Variants</strong></p>
+            <p><strong>{{self.language|safe}} Variants</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <p>{{ self.variants }}</p>
+            <p>{{ self.variants|safe }}</p>
           </div>
         </div>
         {% endif %}
@@ -36,11 +36,11 @@ creating a single record page
         {% if self.pos.all %}
             <div class="row section">
                 <div class="small-6 medium-4 columns">
-                    <p><strong>{{self.language}} POS</strong></p>
+                    <p><strong>{{self.language|safe}} POS</strong></p>
                 </div>
                 <div class="small-6 medium-8 columns">
                     {% for p in self.pos.all %}
-                    {{ p }}{% if not forloop.last %}, {% endif %}
+                    {{ p|safe }}{% if not forloop.last %}, {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -49,10 +49,10 @@ creating a single record page
         {% if self.morph_related_words %}
             <div class="row section">
                 <div class="small-6 medium-4 columns">
-                    <p><strong>{{self.language}} Morphologically related words</strong></p>
+                    <p><strong>{{self.language|safe}} Morphologically related words</strong></p>
                 </div>
                 <div class="small-6 medium-8 columns">
-                    {{ self.morph_related_words }}
+                    {{ self.morph_related_words|safe }}
                 </div>
             </div>
         {% endif %}
@@ -60,7 +60,7 @@ creating a single record page
       {% if self.ranking_freq %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>Ranking/frequency in {{self.language}}</strong></p>
+            <p><strong>Ranking/frequency in {{self.language|safe}}</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
             {{ self.ranking_freq }}
@@ -71,10 +71,10 @@ creating a single record page
         {% if self.first_attest %}     
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} First attestation</strong></p>
+            <p><strong>{{self.language|safe}} First attestation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            <p>{% if self.first_attest_year %}<a href="#"><i class="fa fa-info-circle"></i>{{ self.first_attest_year }}</a>{% endif %} {{ self.first_attest }}</p>
+            <p>{% if self.first_attest_year|safe %}<a href="#"><i class="fa fa-info-circle"></i>{{ self.first_attest_year|safe }}</a>{% endif %} {{ self.first_attest|safe }}</p>
           </div>
         </div>
         {% endif %}
@@ -82,14 +82,14 @@ creating a single record page
         {% if self.hist_freq or self.hist_freq_image %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Historical frequency</strong></p>
+            <p><strong>{{self.language|safe}} Historical frequency</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
             {% if self.hist_freq_image %}
             {% image self.hist_freq_image max-800x600 as tmp_image %}
               <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
             {% else %}
-              {{ self.hist_freq}}
+              {{ self.hist_freq|safe}}
             {% endif %}
           </div>
         </div>
@@ -98,21 +98,21 @@ creating a single record page
         {% if self.semantic_history %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Semantic history</strong></p>
+            <p><strong>{{self.language|safe}} Semantic history</strong></p>
           </div>
-          <div class="small-6 medium-8 columns">    
-            {% include "cms/includes/streamfield.html" with blocks=self.semantic_history %}
-          </div>
+          <div class="small-6 medium-8 columns">   
+              {{ self.semantic_history|safe }}
+            </div>
         </div>
         {% endif %}
 
         {% if self.collocational_history %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Collocational history</strong></p>
+            <p><strong>{{self.language|safe}} Collocational history</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-              {% include "cms/includes/streamfield.html" with blocks=self.collocational_history %}
+              {{ self.collocational_history|safe}}
           </div>
         </div>
         {% endif %}
@@ -120,10 +120,10 @@ creating a single record page
         {% if self.diatopic_variation %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Diatopic Variation</strong></p>
+            <p><strong>{{self.language|safe}} Diatopic Variation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            {{ self.diatopic_variation }}
+            {{ self.diatopic_variation|safe }}
           </div>
         </div>
         {% endif %}
@@ -131,10 +131,10 @@ creating a single record page
         {% if self.diaphasic_variation %}
         <div class="row section">
           <div class="small-6 medium-4 columns">
-            <p><strong>{{self.language}} Diaphasic Variation</strong></p>
+            <p><strong>{{self.language|safe}} Diaphasic Variation</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-            {{ self.diaphasic_variation }}
+            {{ self.diaphasic_variation|safe }}
           </div>
         </div>
         {% endif %}
@@ -143,7 +143,7 @@ creating a single record page
 
      {% if self.specific.cultural_transmission %}
       <h2>Cultural transmission</h2>
-      {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
+      {{ self.specific.cultural_transmission|safe }}
     {% endif %}
     
     </div>

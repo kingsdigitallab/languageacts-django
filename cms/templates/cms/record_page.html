@@ -141,7 +141,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} Semantic history</strong></p>
           </div>
           <div class="small-6 medium-8 columns">    
-            {% include "cms/includes/streamfield.html" with blocks=page.specific.semantic_history %}
+            {{ page.specific.semantic_history|safe }}
           </div>
         </div>
         {% endif %}
@@ -152,7 +152,7 @@ creating a single record page
             <p><strong>{{page.specific.language}} Collocational history</strong></p>
           </div>
           <div class="small-6 medium-8 columns">
-              {% include "cms/includes/streamfield.html" with blocks=page.specific.collocational_history %}
+              {{ page.specific.collocational_history|safe }}
           </div>
         </div>
         {% endif %}
