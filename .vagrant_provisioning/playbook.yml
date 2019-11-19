@@ -19,7 +19,7 @@
   - name: apt | install https transport for apt
     apt:
       pkg: apt-transport-https
-      state: installed
+      state: present
       update_cache: yes
     tags:
       -system
