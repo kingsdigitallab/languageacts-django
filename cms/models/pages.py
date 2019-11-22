@@ -126,10 +126,7 @@ class RecordIndexPage(Page):
             sqs = sqs.narrow(facet)
 
         # Get facet counts
-        sqs = sqs.facet('language')\
-            .facet('word_type')\
-            .facet('first_letter')\
-            .facet('first_attest_year')
+        sqs = sqs.facet('language').facet('word_type').facet('first_letter')
 
         # Generate presentable facet data
         selected_facets_ui = []
