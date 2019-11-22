@@ -62,7 +62,7 @@
     <p><strong>{{record.language|safe}} First attestation</strong></p>
   </div>
   <div class="small-6 medium-8 columns">
-    <p>{% if record.first_attest_year|safe %}<a href="#"><i
+    <p>{% if record.first_attest_year %}<a href="#"><i
           class="fa fa-info-circle"></i>{{ record.first_attest_year|safe }}</a>{% endif %}
     </p>
     {% include "cms/includes/streamfield_record_entry.html" with blocks=record.first_attest %}
