@@ -2,96 +2,91 @@
 {% load cms_tags wagtailcore_tags wagtailimages_tags %}
 
 {% block dictionary %}
-  {# Filters #}
-  {% with facets=sqs.facet_counts request_full_path=request.get_full_path|querify %} 
-  <div class="filters">
-    <div class="applied">
-      {% comment %}
-        If filters are applied, display them here
-      {% endcomment %}
-      {% if selected_facets %}
-      <ul class="list-horizontal no-bullet">
-        {% for selected_facet in selected_facets %}
-        <li><a class="filter" href="{{ selected_facet.remove_url }}">{{ selected_facet.value }}</a></li>
-        {% endfor %}
-        <li class="reset text-right float-right"><a href="{% pageurl self %}?q=">Clear all filters</a></li>
-      </ul>
-      {% endif %}
-    </div>
-    <h3 class="toggler close">Filters</h3>
-    <div class="content hide" data-equalizer data-equalize-by-row="true">
-      <div class="row small-up-1 medium-up-3 large-up-4">
-        <div class="column column-block">
-          <div class="card" data-equalizer-watch>
-            <div class="card-divider">
-              Language
-            </div>
-            <div class="card-section">            
-              <ul>
-                {% for l in facets.fields.language %}
-                  <li><a href="{{ request_full_path }}&amp;selected_facets=language_exact:{{ l.0|urlencode }}">{{ l.0 }} ({{l.1}})</a></li>
-                {% endfor %}
-              </ul>
-            </div>
+{# Filters #}
+{% with facets=sqs.facet_counts request_full_path=request.get_full_path|querify %}
+<div class="filters">
+  <div class="applied">
+    {% comment %}
+    If filters are applied, display them here
+    {% endcomment %}
+    {% if selected_facets %}
+    <ul class="list-horizontal no-bullet">
+      {% for selected_facet in selected_facets %}
+      <li><a class="filter"
+          href="{{ selected_facet.remove_url }}">{{ selected_facet.value }}</a>
+      </li>
+      {% endfor %}
+      <li class="reset text-right float-right"><a
+          href="{% pageurl self %}?q=">Clear all filters</a></li>
+    </ul>
+    {% endif %}
+  </div>
+  <h3 class="toggler close">Filters</h3>
+  <div class="content hide" data-equalizer data-equalize-by-row="true">
+    <div class="row small-up-1 medium-up-3 large-up-4">
+      <div class="column column-block">
+        <div class="card" data-equalizer-watch>
+          <div class="card-divider">
+            Language
+          </div>
+          <div class="card-section">
+            <ul>
+              {% for l in facets.fields.language %}
+              <li><a
+                  href="{{ request_full_path }}&amp;selected_facets=language_exact:{{ l.0|urlencode }}">{{ l.0 }}
+                  ({{l.1}})</a></li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
-        <div class="column column-block">
-          <div class="card" data-equalizer-watch>
-            <div class="card-divider">
-              A-Z
-            </div>
-            <div class="card-section clearfix">            
-              <ul class="no-bullet grid-like">
-                {% for f in facets.fields.first_letter %}
-                 <li><a href="{{ request_full_path }}&amp;selected_facets=first_letter_exact:{{ f.0|urlencode }}">{{ f.0 }} ({{f.1}})</a></li>
-                {% endfor %}
-              
-              </ul>
-            </div>
+      </div>
+      <div class="column column-block">
+        <div class="card" data-equalizer-watch>
+          <div class="card-divider">
+            A-Z
+          </div>
+          <div class="card-section clearfix">
+            <ul class="no-bullet grid-like">
+              {% for f in facets.fields.first_letter %}
+              <li><a
+                  href="{{ request_full_path }}&amp;selected_facets=first_letter_exact:{{ f.0|urlencode }}">{{ f.0 }}
+                  ({{f.1}})</a></li>
+              {% endfor %}
+
+            </ul>
           </div>
         </div>
-        <div class="column column-block">
-          <div class="card" data-equalizer-watch>
-            <div class="card-divider">
-              Type / Part of speech
-            </div>
-            <div class="card-section">            
-              <ul>
-                {% for w in facets.fields.word_type %}
-                  <li><a href="{{ request_full_path }}&amp;selected_facets=word_type_exact:{{ w.0|urlencode }}">{{ w.0 }} ({{w.1}})</a></li>
-                {% endfor %}
-              </ul>
-            </div>
+      </div>
+      <div class="column column-block">
+        <div class="card" data-equalizer-watch>
+          <div class="card-divider">
+            Type / Part of speech
           </div>
-        </div>
-        <div class="column column-block">
-          <div class="card" data-equalizer-watch>
-            <div class="card-divider">
-              First attestation
-            </div>
-            <div class="card-section">            
-              <ul>
-                {% for f in facets.fields.first_attest_year %}
-                  <li><a href="{{ request_full_path }}&amp;selected_facets=first_attest_year_exact:{{ f.0|urlencode }}">{{ f.0 }} ({{f.1}})</a></li>
-                {% endfor %}
-              </ul>
-            </div>
+          <div class="card-section">
+            <ul>
+              {% for w in facets.fields.word_type %}
+              <li><a
+                  href="{{ request_full_path }}&amp;selected_facets=word_type_exact:{{ w.0|urlencode }}">{{ w.0 }}
+                  ({{w.1}})</a></li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-  {% endwith %}
+</div>
+{% endwith %}
 
-  <ul>
+<ul>
   {% for page in sqs %}
-    {% comment %}
-      This list should be in alphabetical order by default
-      Other filters will be available
-    {% endcomment %}
-    <li>
-      <a href="{% pageurl page.object %}" class="entry">{{ page.object }}</a>
-    </li>
+  {% comment %}
+  This list should be in alphabetical order by default
+  Other filters will be available
+  {% endcomment %}
+  <li>
+    <a href="{% pageurl page.object %}" class="entry">{{ page.object }}</a>
+  </li>
   {% endfor %}
-  </ul>
+</ul>
 {% endblock %}
