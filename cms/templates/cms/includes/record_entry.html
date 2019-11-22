@@ -1,0 +1,132 @@
+{% load cms_tags wagtailcore_tags wagtailimages_tags %}
+
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Lemma</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    <p>{{ record.lemma }}</p>
+  </div>
+</div>
+
+{% if record.variants %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Variants</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.variants %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.pos.all %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} POS</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% for p in record.pos.all %}
+    {{ p|safe }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.morph_related_words %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Morphologically related words</strong>
+    </p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.morph_related_words %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.ranking_freq %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>Ranking/frequency in {{record.language|safe}}</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.ranking_freq %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.first_attest %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} First attestation</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    <p>{% if record.first_attest_year|safe %}<a href="#"><i
+          class="fa fa-info-circle"></i>{{ record.first_attest_year|safe }}</a>{% endif %}
+    </p>
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.first_attest %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.hist_freq or record.hist_freq_image %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Historical frequency (per million
+        words)</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% if record.hist_freq_image %}
+    {% image record.hist_freq_image max-800x600 as tmp_image %}
+    <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
+    {% else %}
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.hist_freq %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.semantic_history %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Semantic history</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.semantic_history %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.collocational_history %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Collocational history</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.collocational_history %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.diatopic_variation %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Diatopic Variation</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.diatopic_variation %}
+  </div>
+</div>
+{% endif %}
+
+{% if record.diaphasic_variation %}
+<div class="row section">
+  <div class="small-6 medium-4 columns">
+    <p><strong>{{record.language|safe}} Diaphasic Variation</strong></p>
+  </div>
+  <div class="small-6 medium-8 columns">
+    {% include "cms/includes/streamfield_record_entry.html" with blocks=record.diaphasic_variation %}
+  </div>
+</div>
+{% endif %}

@@ -14,192 +14,70 @@ creating a single record page
   <div class="small-12 medium-8 large-9 columns">
 
     <div class="row section">
-        <div class="small-6 medium-4 columns">
-            <p><strong>Latin Lemma</strong></p>
-        </div>
-        <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.latin_lemma|safe }}</p>
-        </div>
+      <div class="small-6 medium-4 columns">
+        <p><strong>Latin Lemma</strong></p>
+      </div>
+      <div class="small-6 medium-8 columns">
+        <p>{{ page.specific.latin_lemma|safe }}</p>
+      </div>
     </div>
 
     {% if page.specific.latin_pos.all %}
     <div class="row section">
-        <div class="small-6 medium-4 columns">
-            <p><strong>Latin POS</strong></p>
-        </div>
-        <div class="small-6 medium-8 columns">
-            <p>
-            {% for p in page.specific.latin_pos.all %}
-                {{ p }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        </div>
+      <div class="small-6 medium-4 columns">
+        <p><strong>Latin POS</strong></p>
+      </div>
+      <div class="small-6 medium-8 columns">
+        <p>
+          {% for p in page.specific.latin_pos.all %}
+          {{ p }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+      </div>
     </div>
     {% endif %}
 
     <div class="row section">
-        <div class="small-6 medium-4 columns">
-            <p><strong>Latin Meaning</strong></p>
-        </div>
-        <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.latin_meaning|safe }}</p>
-        </div>
+      <div class="small-6 medium-4 columns">
+        <p><strong>Latin Meaning</strong></p>
+      </div>
+      <div class="small-6 medium-8 columns">
+        <p>{{ page.specific.latin_meaning|safe }}</p>
+      </div>
     </div>
 
 
-    
-    {% for page in self.get_languages %}
-    <h2 class="toggler close"><a id="page-{{page.id}}"><i class="fa fa-link"></i> {{ page.specific.period}} {{page.specific.language}}</a></h2>
 
+    {% for page in self.get_languages %}
+    <h2 class="toggler close">
+      <a id="page-{{page.id}}">
+        <i class="fa fa-link"></i> {{ page.specific.period}}
+        {{page.specific.language}}</a>
+    </h2>
 
     <div class="content hide">
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Lemma</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.lemma }}</p>
-          </div>
-        </div>
+      {% include "cms/includes/record_entry.html"  with record=page %}
+    </div>
 
-        {% if page.specific.variants %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Variants</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            <p>{{ page.specific.variants|safe }}</p>
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.pos.all %}
-            <div class="row section">
-                <div class="small-6 medium-4 columns">
-                    <p><strong>{{page.specific.language}} POS</strong></p>
-                </div>
-                <div class="small-6 medium-8 columns">
-                    {% for p in page.specific.pos.all %}
-                    {{ p }}{% if not forloop.last %}, {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-    
-        {% if page.specific.morph_related_words %}
-            <div class="row section">
-                <div class="small-6 medium-4 columns">
-                    <p><strong>{{page.specific.language}} Morphologically related words</strong></p>
-                </div>
-                <div class="small-6 medium-8 columns">
-                    {{ page.specific.morph_related_words|safe }}
-                </div>
-            </div>
-        {% endif %}
-
-      {% if page.specific.ranking_freq %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>Ranking/frequency in {{page.specific.language}}</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            {{ page.specific.ranking_freq|safe }}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.first_attest %}     
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} First attestation</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            <p>{% if page.specific.first_attest_year %}<a href="#"><i class="fa fa-info-circle"></i>{{ page.specific.first_attest_year }}</a>{% endif %} {{ page.specific.first_attest|safe }}</p>
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.hist_freq or page.specific.hist_freq_image %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Historical frequency (per million words)</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            {% if page.specific.hist_freq_image %}
-            {% image page.specific.hist_freq_image max-800x600 as tmp_image %}
-              <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
-            {% else %}
-              {{ page.specific.hist_freq|safe}}
-            {% endif %}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.semantic_history %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Semantic history</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">    
-            {{ page.specific.semantic_history|safe }}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.collocational_history %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Collocational history</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-              {{ page.specific.collocational_history|safe }}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.diatopic_variation %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Diatopic Variation</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            {{ page.specific.diatopic_variation|safe }}
-          </div>
-        </div>
-        {% endif %}
-
-        {% if page.specific.diaphasic_variation %}
-        <div class="row section">
-          <div class="small-6 medium-4 columns">
-            <p><strong>{{page.specific.language}} Diaphasic Variation</strong></p>
-          </div>
-          <div class="small-6 medium-8 columns">
-            {{ page.specific.diaphasic_variation|safe }}
-          </div>
-        </div>
-        {% endif %}
-      </div>
-      
     {% endfor %}
 
-     {% if self.specific.cultural_transmission %}
-      <h2>Cultural transmission</h2>
-      {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
+    {% if self.specific.cultural_transmission %}
+    <h2>Cultural transmission</h2>
+    {% include "cms/includes/streamfield.html" with blocks=self.specific.cultural_transmission %}
     {% endif %}
-    
-    </div>
-{# TODO #}
+  </div>
+  {# TODO #}
   <div class="small-12 medium-4 large-3 columns">
     <h3>Languages</h3>
     <ul class="no-bullet">
-        {% for page in self.get_children.live %}
-            <li><a href="#page-{{page.id}}" class="button label-like expanded">{{ page.specific.period }} {{ page.specific.language }}</a></li>
-        {% endfor %}
+      {% for page in self.get_children.live %}
+      <li><a href="#page-{{page.id}}"
+          class="button label-like expanded">{{ page.specific.period }}
+          {{ page.specific.language }}</a></li>
+      {% endfor %}
     </ul>
     <h3><a href="#references">References</a></h3>
   </div>
 </div>
 
 {% endblock %}
-
-

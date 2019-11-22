@@ -11,146 +11,14 @@ creating a single record page
 {% endcomment %}
 
 <div class="row">
-
   <div class="content preview">
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Lemma</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        <p>{{ self.lemma }}</p>
-      </div>
-    </div>
-
-    {% if self.variants %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Variants</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.variants %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.pos.all %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} POS</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% for p in self.pos.all %}
-        {{ p|safe }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.morph_related_words %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Morphologically related words</strong>
-        </p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.morph_related_words %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.ranking_freq %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>Ranking/frequency in {{self.language|safe}}</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.ranking_freq %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.first_attest %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} First attestation</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        <p>{% if self.first_attest_year|safe %}<a href="#"><i
-              class="fa fa-info-circle"></i>{{ self.first_attest_year|safe }}</a>{% endif %}
-        </p>
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.first_attest %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.hist_freq or self.hist_freq_image %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Historical frequency (per million
-            words)</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% if self.hist_freq_image %}
-        {% image self.hist_freq_image max-800x600 as tmp_image %}
-        <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
-        {% else %}
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.hist_freq %}
-        {% endif %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.semantic_history %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Semantic history</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.semantic_history %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.collocational_history %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Collocational history</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.collocational_history %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.diatopic_variation %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Diatopic Variation</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.diatopic_variation %}
-      </div>
-    </div>
-    {% endif %}
-
-    {% if self.diaphasic_variation %}
-    <div class="row section">
-      <div class="small-6 medium-4 columns">
-        <p><strong>{{self.language|safe}} Diaphasic Variation</strong></p>
-      </div>
-      <div class="small-6 medium-8 columns">
-        {% include "cms/includes/streamfield_record_entry.html" with blocks=self.diaphasic_variation %}
-      </div>
-    </div>
-    {% endif %}
+    {% include "cms/includes/record_entry.html" with record=self %}
   </div>
-
 
   {% if self.specific.cultural_transmission %}
   <h2>Cultural transmission</h2>
   {{ self.specific.cultural_transmission|safe }}
   {% endif %}
-
 </div>
 
 </div>
