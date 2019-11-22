@@ -1,31 +1,31 @@
 from __future__ import unicode_literals
 
 import logging
+from datetime import date
 
+from django import forms
 from django.conf import settings
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from django.db.models import Q
 from django.shortcuts import render
+from haystack.query import SearchQuerySet
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
-from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.admin.edit_handlers import (
+    FieldPanel, MultiFieldPanel, StreamFieldPanel
+)
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.admin.edit_handlers import (FieldPanel, StreamFieldPanel,
-                                         MultiFieldPanel)
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
-from django import forms
-from .behaviours import WithFeedImage, WithStreamField
-from datetime import date
-from django.db.models import Q
-from wagtail.core.fields import StreamField
-from haystack.query import SearchQuerySet
-from wagtail.core.fields import RichTextField
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
-from .streamfield import CMSStreamBlock
+from .behaviours import WithFeedImage, WithStreamField
+from .streamfield import CMSStreamBlock, RecordEntryStreamBlock
 
 logger = logging.getLogger(__name__)
 
@@ -188,7 +188,6 @@ RecordPage.promote_panels = Page.promote_panels
 
 
 class RecordEntry(Page):
-
     language = models.ForeignKey(
         'cms.LemmaLanguage',
         null=True,
@@ -196,22 +195,19 @@ class RecordEntry(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-
     lemma = models.CharField(
         max_length=2048, blank=True, null=True)
 
-    variants = RichTextField(blank=True, null=True)
+    variants = StreamField(RecordEntryStreamBlock, blank=True)
 
     pos = ParentalManyToManyField('cms.POSLabel', blank=True)
 
-    morph_related_words = RichTextField(blank=True, null=True)
-
-    ranking_freq = RichTextField(blank=True, null=True)
-
-    first_attest = RichTextField(blank=True, null=True)
-
-    hist_freq = RichTextField(blank=True, null=True)
-
+    morph_related_words = StreamField(RecordEntryStreamBlock, blank=True)
+    ranking_freq = StreamField(RecordEntryStreamBlock, blank=True)
+    first_attest = StreamField(RecordEntryStreamBlock, blank=True)
+    hist_freq = StreamField(
+        RecordEntryStreamBlock, blank=True,
+        help_text='historical frequency (per million words)')
     hist_freq_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.SET_NULL,
@@ -221,13 +217,10 @@ class RecordEntry(Page):
         help_text='Pre-rendered graph will take priority over manual data\
             inputted above.'
     )
-
-    semantic_history = RichTextField(blank=True, null=True)
-    collocational_history = RichTextField(blank=True, null=True)
-
-    diatopic_variation = RichTextField(blank=True, null=True)
-
-    diaphasic_variation = RichTextField(blank=True, null=True)
+    semantic_history = StreamField(RecordEntryStreamBlock, blank=True)
+    collocational_history = StreamField(RecordEntryStreamBlock, blank=True)
+    diatopic_variation = StreamField(RecordEntryStreamBlock, blank=True)
+    diaphasic_variation = StreamField(RecordEntryStreamBlock, blank=True)
 
     search_fields = Page.search_fields + [
     ]
@@ -243,25 +236,23 @@ RecordEntry.content_panels = [
     FieldPanel('title', classname='full title'),
     SnippetChooserPanel('language'),
     FieldPanel('lemma'),
-    FieldPanel('variants'),
+    StreamFieldPanel('variants'),
     FieldPanel('pos', widget=forms.CheckboxSelectMultiple),
-    FieldPanel('morph_related_words'),
-    FieldPanel('ranking_freq'),
-    FieldPanel('first_attest'),
+    StreamFieldPanel('morph_related_words'),
+    StreamFieldPanel('ranking_freq'),
+    StreamFieldPanel('first_attest'),
     MultiFieldPanel(
         [
-            FieldPanel('hist_freq'),
+            StreamFieldPanel('hist_freq'),
             ImageChooserPanel('hist_freq_image')
         ],
         heading='Historical Frequency',
         classname="collapsible collapsed"
     ),
-
-
-    FieldPanel('semantic_history'),
-    FieldPanel('collocational_history'),
-    FieldPanel('diatopic_variation'),
-    FieldPanel('diaphasic_variation'),
+    StreamFieldPanel('semantic_history'),
+    StreamFieldPanel('collocational_history'),
+    StreamFieldPanel('diatopic_variation'),
+    StreamFieldPanel('diaphasic_variation'),
 ]
 
 

@@ -140,3 +140,8 @@ class CMSStreamBlock(StreamBlock):
     d3 = D3Block(icon='media', label='D3 Visualisation')
 
     table = TableBlock()
+
+
+class RecordEntryStreamBlock(StreamBlock):
+    text = RichTextBlock(icon='pilcrow')
+    html = AlignedHTMLBlock(icon='code', label='Raw HTML', required=False)
