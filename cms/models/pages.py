@@ -205,9 +205,8 @@ class RecordEntry(Page):
     morph_related_words = StreamField(RecordEntryStreamBlock, blank=True)
     ranking_freq = StreamField(RecordEntryStreamBlock, blank=True)
     first_attest = StreamField(RecordEntryStreamBlock, blank=True)
-    hist_freq = StreamField(
-        RecordEntryStreamBlock, blank=True,
-        help_text='historical frequency (per million words)')
+    hist_freq = StreamField(RecordEntryStreamBlock, blank=True,
+                            verbose_name='Historical frequency')
     hist_freq_image = models.ForeignKey(
         'wagtailimages.Image',
         on_delete=models.SET_NULL,
@@ -246,7 +245,7 @@ RecordEntry.content_panels = [
             StreamFieldPanel('hist_freq'),
             ImageChooserPanel('hist_freq_image')
         ],
-        heading='Historical Frequency',
+        heading='Historical Frequency (per million words)',
         classname="collapsible collapsed"
     ),
     StreamFieldPanel('semantic_history'),
