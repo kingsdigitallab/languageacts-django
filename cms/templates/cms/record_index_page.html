@@ -84,9 +84,11 @@
   This list should be in alphabetical order by default
   Other filters will be available
   {% endcomment %}
+  {% if page.object %}
   <li>
-    <a href="{% pageurl page %}" class="entry">{{ page }}</a>
+    <a href="{% pageurl page.object %}" class="entry">{{ page.object }}</a>
   </li>
+  {% endif %}
   {% endfor %}
 </ul>
 {% endblock %}
