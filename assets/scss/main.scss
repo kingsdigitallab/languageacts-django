@@ -56,6 +56,10 @@ button i,
     font-size: rem-calc(12);
 }
 
+.monospace {
+    font-family: $font-family-monospace;
+}
+
 .ninety {
     float: left;
     width: 90%;
