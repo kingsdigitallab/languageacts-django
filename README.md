@@ -1,5 +1,19 @@
 # Language Acts and Worldmaking
 
+## 4.0.1 Release
+* Added monospace style
+
+## 4.0 Release
+* Bug fixes
+* Converting record page types to streamfields
+* Added raw html functionality to record page type
+* Added colour picker
+* D3js implementation
+* Upgrade to Django2 and Python3
+* Updated models
+* Updated provisioning
+* Fixed search results (removed duplication)
+
 ## 3.1.1 Release
 Minor release
 * Bug fixes
