@@ -1,5 +1,8 @@
 # Language Acts and Worldmaking
 
+## 4.0.1 Release
+* Added monospace style
+
 ## 4.0 Release
 * Bug fixes
 * Converting record page types to streamfields
