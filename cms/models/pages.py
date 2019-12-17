@@ -588,6 +588,8 @@ PastEventIndexPage.promote_panels = Page.promote_panels
 
 
 class EventTag(TaggedItemBase):
+    name = models.CharField(
+        max_length=2048, blank=True, null=True)
     content_object = ParentalKey('Event', related_name='tagged_items')
 
 
