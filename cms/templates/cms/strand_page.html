@@ -64,7 +64,7 @@
                         <div class="card-section">
                             <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                             <p class="meta info byline blog">
-                                Posted by <a href="{# routablepageurl self.blog_index.specific 'author' self.owner #}">{{ page.owner }}</a><br>
+                                Posted by <strong>{{ page.owner }}</strong><br>
                                 <time datetime="{{ page.specific.date }}">
                                 {{ page.specific.date|date:'j b Y' }}</time>
 
@@ -85,6 +85,8 @@
         {% endif %}
 
         {% elif request.GET.content == 'events' %}
+
+        <p>{{ page.events_contextual_information|safe }}</p>
 
         {% if events %}
             <header class="section-header">

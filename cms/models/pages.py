@@ -82,6 +82,8 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class StrandPage(IndexPage, WithStreamField):
+    events_contextual_information = RichTextField(blank=True, null=True)
+
     subpage_types = ['IndexPage', 'RichTextPage', 'RecordIndexPage']
 
     search_fields = Page.search_fields + [
@@ -104,6 +106,11 @@ class StrandPage(IndexPage, WithStreamField):
             self.title)
 
         return context
+
+
+StrandPage.content_panels = [
+    FieldPanel('events_contextual_information'),
+]
 
 
 class RecordIndexPage(Page):
@@ -729,8 +736,8 @@ class TagResults(RoutablePageMixin, Page):
 
         # Get counts
         context['result_count'] = (
-            blog.count() + events.count()
-            + news.count() + pages.count())
+            blog.count() + events.count() +
+            news.count() + pages.count())
 
         return render(request, self.get_template(request),
                       context)
