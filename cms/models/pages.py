@@ -82,7 +82,9 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class StrandPage(IndexPage, WithStreamField):
+    blogs_contextual_information = RichTextField(blank=True, null=True)
     events_contextual_information = RichTextField(blank=True, null=True)
+    news_contextual_information = RichTextField(blank=True, null=True)
 
     subpage_types = ['IndexPage', 'RichTextPage', 'RecordIndexPage']
 
@@ -109,7 +111,9 @@ class StrandPage(IndexPage, WithStreamField):
 
 
 StrandPage.content_panels = [
+    FieldPanel('blogs_contextual_information'),
     FieldPanel('events_contextual_information'),
+    FieldPanel('news_contextual_information'),
 ]
 
 
