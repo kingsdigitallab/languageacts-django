@@ -56,6 +56,11 @@
             <header class="section-header">
               <h3>Blog Posts</h3>
             </header>
+
+            {% if page.blogs_contextual_information %}
+            <p>{{ page.blogs_contextual_information|safe }}</p>
+            {% endif %}
+
             {% if blog_posts %}
             <div class="row small-up-1 medium-up-2" data-equalizer="blogpostheight" data-equalize-by-row="true" data-equalize-on="medium">
                 {% for page in blog_posts %}
@@ -86,28 +91,35 @@
 
         {% elif request.GET.content == 'events' %}
 
-        {% if page.events_contextual_information %}<p>{{ page.events_contextual_information|safe }}</p>{% endif %}
+        <header class="section-header">
+          <h3>Events</h3>
+        </header>
+
+        {% if page.events_contextual_information %}
+        <p>{{ page.events_contextual_information|safe }}</p>
+        {% endif %}
 
         {% if events %}
-            <header class="section-header">
-              <h3>Events</h3>
-            </header>
-
             {% include "cms/includes/event_index_page_children.html" with events=events %}
         {% endif %}
 
         {% if past_events %}
             <header class="section-header">
-              <h3>Past Events</h3>
+              <h3>Past</h3>
             </header>
 
             {% include "cms/includes/event_index_page_children.html" with events=past_events %}
         {% endif %}
 
         {% elif request.GET.content == 'news' %}
+
         <header class="section-header">
           <h3>News</h3>
         </header>
+
+        {% if page.news_contextual_information %}
+        <p>{{ page.news_contextual_information|safe }}</p>
+        {% endif %}
 
         {% if news_posts %}
         
