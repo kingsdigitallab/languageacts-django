@@ -86,7 +86,7 @@
 
         {% elif request.GET.content == 'events' %}
 
-        <p>{{ page.events_contextual_information|safe }}</p>
+        {% if page.events_contextual_information %}<p>{{ page.events_contextual_information|safe }}</p>{% endif %}
 
         {% if events %}
             <header class="section-header">
