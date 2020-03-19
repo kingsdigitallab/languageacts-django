@@ -13,4 +13,4 @@ libsass==0.13.2
 django-kdl-ldap
 psycopg2-binary
 redis
-wagtail
+wagtail>=2.7,<2.8
