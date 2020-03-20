@@ -9,7 +9,7 @@
 
     {% if obj.tags.all %}
     {% for tag in obj.tags.all %}
-    <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+    <span class="label"><a href="/tagged-pages/?tag={{ tag.name|urlencode }}" aria-label="{{ tag.name }}">{{ tag.name }}</a></span>
     {% endfor %}
     {% endif %}
 </div>

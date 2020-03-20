@@ -31,6 +31,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.skip-main {
+    font-size: 1px;
+    position: absolute;
+    top:-25px;
+}
+
+.buttonforicons {
+    font-family: 'FontAwesome';
+}
+
 a.more {
     i {
         font-size: rem-calc(12);
@@ -195,7 +205,7 @@ time {
 
 .intro {
     font-size: rem-calc(20);
-    color: scale-color($dark-gray, $lightness: -20%);
+    color: scale-color($dark-gray, $lightness: -50%);
 }
 
 .responsive-object {
@@ -229,7 +239,7 @@ time {
 /***/
 
 .meta {
-    color: scale-color($dark-gray, $lightness: -20%);
+    color: scale-color($dark-gray, $lightness: -50%);
     font-style: italic;
 
     &.info {
@@ -249,14 +259,14 @@ time {
 
     .label {
         // background: rgba($dark-blue, .1);
-        background: scale-color($light-blue, $lightness: -10%);
+        background: scale-color($light-blue, $lightness: -60%);
         border-radius: 2px;
         line-height: rem-calc(18);
         margin-bottom: rem-calc(3px);
         white-space: normal;
 
         &.secondary {
-            background: scale-color($secondary-color, $lightness: -10%);
+            background: scale-color($secondary-color, $lightness: -50%);
 
             &:hover {
                 background: rgba($dark-blue, .55);
@@ -375,6 +385,9 @@ nav {
         &:hover {
             background: scale-color($primary-color, $lightness: 70%);
         }
+        &:focus {
+            border-bottom: 1px solid $white;
+        }
     }
 }
 
@@ -391,7 +404,7 @@ nav {
     }
 
     a {
-        color: scale-color($dark-gray, $lightness: -30%) !important;
+        color: scale-color($dark-gray, $lightness: -50%) !important;
         font-weight: 400 !important;
 
         &:hover {
@@ -429,7 +442,7 @@ nav {
 .homepage {
     section.main {
         .rich-text:first-child p:first-of-type {
-            color: scale-color($dark-gray, $lightness: -20%);
+            color: #575757;
             font-size: rem-calc(20);
             text-align: center;
         }
@@ -442,11 +455,11 @@ section.main {
 
     a {
         border-bottom: 1px solid transparent;
-        color: $secondary-color;
+        color: #3e5c6b;
         font-weight: 700;
 
         &:hover {
-            border-bottom: 1px dotted $secondary-color;
+            border-bottom: 1px dotted #3e5c6b;
         }
 
         &.more {
@@ -462,7 +475,7 @@ section.main {
     }
 
     h1 {
-        color: $bright-blue;
+        color: scale-color($bright-blue, $lightness:-50%);
     }
 }
 
@@ -817,14 +830,14 @@ footer {
     }
 
     .credits {
-        color: scale-color($dark-gray, $lightness: -30%);
+        color: scale-color($dark-gray, $lightness: -50%);
         font-size: rem-calc(12);
         font-style: italic;
         padding-top: rem-calc(6);
 
         a {
             font-weight: 700;
-            color: scale-color($dark-gray, $lightness: -30%);
+            color: scale-color($dark-gray, $lightness: -90%);
             &:hover {
                 color: $secondary-color;
             }
@@ -839,7 +852,7 @@ footer {
 /* Twitter */
 
 .twitter-list {
-    color: scale-color($dark-gray, $lightness: -30%);
+    color: scale-color($dark-gray, $lightness: -80%);
     margin-bottom: rem-calc(16);
 
     h2,
@@ -856,7 +869,7 @@ footer {
         }
 
         a {
-            color: $dark-gray;
+            color: scale-color($dark-gray, $lightness: -50%);
             font-weight: normal;
 
             &:hover {
@@ -874,7 +887,7 @@ footer {
     }
 
     .retweet {
-        color: scale-color($dark-gray, $lightness: -20%);
+        color: scale-color($dark-gray, $lightness: -50%);
 
         &:before {
             content: "\f079";
@@ -1174,7 +1187,7 @@ Animating the logo's diactrics
 }
 
 .Travelling.Concepts {
-    color: $dark-brown;
+    color: scale-color($dark-brown, $lightness: -50%);
 
     &:before {
         background: $dark-brown;
@@ -1200,7 +1213,7 @@ Animating the logo's diactrics
 }
 
 .Digital.Mediations {
-    color: scale-color($orange, $lightness: -30%);
+    color: scale-color($orange, $lightness: -80%);
 
     &:before {
         background: $orange;
@@ -1208,12 +1221,13 @@ Animating the logo's diactrics
 
     button,
     .button {
-        background: $orange;
+        background: scale-color($orange, $lightness: -40%);
+        color: $white;
     }
 }
 
 .Loaded.Meanings {
-    color: scale-color($bright-blue, $lightness: -30%);
+    color: scale-color($bright-blue, $lightness: -80%);
 
     &:before {
         background: $bright-blue;
@@ -1222,11 +1236,12 @@ Animating the logo's diactrics
     button,
     .button {
         background: $bright-blue;
+        color: #0f0f0f;
     }
 }
 
 .Diasporic.Identities {
-    color: scale-color($yellow, $lightness: -70%);
+    color: scale-color($yellow, $lightness: -80%);
 
     &:before {
         background: $yellow;
@@ -1241,7 +1256,7 @@ Animating the logo's diactrics
 }
 
 .Language.Transitions {
-    color: scale-color($turquoise, $lightness: -30%);
+    color: scale-color($turquoise, $lightness: -80%);
 
     &:before {
         background: $turquoise;
@@ -1249,7 +1264,8 @@ Animating the logo's diactrics
 
     button,
     .button {
-        background: $turquoise;
+        background: scale-color($turquoise, $lightness: -30%);
+        color: $white;
     }
 }
 

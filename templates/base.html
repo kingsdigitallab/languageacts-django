@@ -21,6 +21,7 @@
   {% endblock %}
 </head>
 <body{% block bodyclass %}{% endblock %}>
+  <div role="complementary" class="skip-main"><a href="#maincontent">Skip to main content</a></div> 
   <header class="top-header">
     {% include 'includes/header.html' %}
   </header>
@@ -28,6 +29,7 @@
   <nav>
     {% include 'includes/navigation.html' %}
   </nav>
+  <div id="maincontent" tabindex="0"></div>
 
   <div class="row">
     <div class="small-12 large-12 columns">

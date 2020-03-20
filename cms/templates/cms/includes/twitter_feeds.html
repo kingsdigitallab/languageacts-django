@@ -48,7 +48,7 @@
             <p>{{ tweet|tweet_to_html }}</p>
             <p class="tweet-datetime clearfix">
                 <a href="//twitter.com/intent/like?tweet_id={{ tweet.id_str }}" class="like">
-                    <i class="fa fa-heart"></i>
+                    <button aria-label="to like the post" class="buttonforicons"></button>
                 </a>
                 <a href="//twitter.com/{{ screen_name }}/status/{{ tweet.id_str }}" class="float-right">
                     {{ tweet.created_at|tweet_date:'d M Y' }}
