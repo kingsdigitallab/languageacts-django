@@ -14,7 +14,7 @@
             {% endif %}
 
             <div class="card-section">
-                <div role="heading" aria-level="1"><a href="{% pageurl page %}">{{ page.title }}</a></div>
+                <div role="heading" aria-level="1" class="title"><a href="{% pageurl page %}">{{ page.title }}</a></div>
                 <p class="byline newspost">
                     <time datetime="{{ page.specific.date }}">
                     {{ page.specific.date|date:'j b Y' }}</time>

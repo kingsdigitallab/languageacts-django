@@ -455,11 +455,11 @@ section.main {
 
     a {
         border-bottom: 1px solid transparent;
-        color: #3e5c6b;
+        color: #3b5663;
         font-weight: 700;
 
         &:hover {
-            border-bottom: 1px dotted #3e5c6b;
+            border-bottom: 1px dotted #3b5663;
         }
 
         &.more {
@@ -531,7 +531,11 @@ article {
     position: relative;
 
     &.blog {
-        background: $light-yellow;
+        background: scale-color($light-yellow, $lightness: 20%);
+
+        .title {
+            font-size: 2rem;
+        }
 
         &:before {
             color: $dark-gray;
@@ -569,6 +573,11 @@ article {
 
     &.news {
         position: relative;
+
+        .title {
+            font-size: 2rem;
+        }
+        
         &:before {
             background: $white;
             border-radius: 0 0 0 50%;
