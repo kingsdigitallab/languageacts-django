@@ -23,6 +23,7 @@ from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.snippets.models import register_snippet
 
 from .behaviours import WithFeedImage, WithStreamField
 from .streamfield import CMSStreamBlock, RecordEntryStreamBlock
@@ -164,7 +165,6 @@ RecordIndexPage.promote_panels = Page.promote_panels
 
 
 class RecordPage(Page):
-
     latin_lemma = RichTextField(blank=True, null=True)
 
     latin_pos = ParentalManyToManyField('cms.POSLabel', blank=True)
@@ -332,19 +332,47 @@ class BlogPostTag(TaggedItemBase):
     content_object = ParentalKey('BlogPost', related_name='tagged_items')
 
 
+@register_snippet
+class BlogGuestAuthor(models.Model):
+    author_name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.author_name
+
+
 class BlogPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     guest = models.BooleanField(default=False, verbose_name="Guest Post")
+    guest_author = models.ForeignKey('BlogGuestAuthor',
+                                     verbose_name="Guest post author",
+                                     blank=True, null=True,
+                                     on_delete=models.SET_NULL,
+                                     help_text='Create new author in snippets')
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
         index.RelatedFields('tags', [
-                            index.SearchField('name'),
-                            index.SearchField('slug'),
-                            ]),
+            index.SearchField('name'),
+            index.SearchField('slug'),
+        ]),
     ]
+
+    @property
+    def get_author(self):
+        """
+        Return the blog post's author, either a guest author or user owner
+        """
+        if self.guest:
+            if self.guest_author:
+                return self.guest_author
+            else:
+                return 'Guest'
+        else:
+            if self.owner:
+                return self.owner
+            return ''
 
     subpage_types = []
 
@@ -378,7 +406,10 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 BlogPost.content_panels = [
     FieldPanel('title', classname='full title'),
     FieldPanel('date'),
-    FieldPanel('guest'),
+    MultiFieldPanel([
+        FieldPanel('guest'),
+        FieldPanel('guest_author'),
+    ]),
     StreamFieldPanel('body'),
 ]
 
@@ -387,6 +418,10 @@ BlogPost.promote_panels = Page.promote_panels + [
     ImageChooserPanel('feed_image'),
 
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
+]
+
+BlogPost.settings_panels = Page.settings_panels + [
+    FieldPanel('owner'),
 ]
 
 
@@ -452,9 +487,9 @@ class NewsPost(Page, WithStreamField, WithFeedImage):
         index.SearchField('body'),
         index.SearchField('date'),
         index.RelatedFields('tags', [
-                            index.SearchField('name'),
-                            index.SearchField('slug'),
-                            ]),
+            index.SearchField('name'),
+            index.SearchField('slug'),
+        ]),
     ]
 
     subpage_types = []
@@ -512,9 +547,9 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
         today = date.today()
         events = Event.objects.live().filter(
             Q(date_from__gte=today) | (
-                Q(date_to__isnull=False) & Q(
-                    date_to__gte=today))).order_by(
-            'date_from')
+                Q(date_to__isnull=False) & Q(date_to__gte=today)
+            )
+        ).order_by('date_from')
         return events
 
     @route(r'^$')
@@ -562,9 +597,9 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
         today = date.today()
         events = Event.objects.live().filter(
             Q(date_from__lt=today) & (
-                Q(date_to__isnull=True) | Q(
-                    date_to__lt=today))).order_by(
-            '-date_from')
+                Q(date_to__isnull=True) | Q(date_to__lt=today)
+            )
+        ).order_by('-date_from')
         return events
 
     @route(r'^$')
@@ -619,9 +654,9 @@ class Event(Page, WithStreamField, WithFeedImage):
         index.SearchField('date_from'),
         index.SearchField('date_to'),
         index.RelatedFields('tags', [
-                            index.SearchField('name'),
-                            index.SearchField('slug'),
-                            ]),
+            index.SearchField('name'),
+            index.SearchField('slug'),
+        ]),
     ]
 
     subpage_types = []
@@ -637,8 +672,9 @@ class Event(Page, WithStreamField, WithFeedImage):
             today = date.today()
             return self.objects.filter(tags__name=tag).filter(
                 Q(date_from__gte=today) | (
-                    Q(date_to__isnull=False) & Q(
-                        date_to__gte=today))).order_by('date_from')
+                    Q(date_to__isnull=False) & Q(date_to__gte=today)
+                )
+            ).order_by('date_from')
         else:
             return self.objects.none()
 
@@ -651,7 +687,9 @@ class Event(Page, WithStreamField, WithFeedImage):
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__gte=today) | (
                         Q(date_to__isnull=False) & Q(
-                            date_to__gte=today))).order_by('date_from')
+                            date_to__gte=today)
+                    )
+                ).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -665,8 +703,9 @@ class Event(Page, WithStreamField, WithFeedImage):
                 strand = StrandPage.objects.get(title=strand_name)
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__lt=today) | (
-                        Q(date_to__isnull=False) & Q(
-                            date_to__lt=today))).order_by('date_from')
+                        Q(date_to__isnull=False) & Q(date_to__lt=today)
+                    )
+                ).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
         else:
@@ -740,8 +779,8 @@ class TagResults(RoutablePageMixin, Page):
 
         # Get counts
         context['result_count'] = (
-            blog.count() + events.count() +
-            news.count() + pages.count())
+            blog.count() + events.count() + news.count() + pages.count()
+        )
 
         return render(request, self.get_template(request),
                       context)

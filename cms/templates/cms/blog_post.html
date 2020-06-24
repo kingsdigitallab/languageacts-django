@@ -19,7 +19,7 @@
 <article class="post" id="post{{ self.id }}">
     <header>
         {% block blog_post_author %}
-        <p class="byline blog">Posted by <strong>{% if self.owner and not self.guest %}{{ self.owner }}{% else %}Guest{% endif %}</strong> on 
+        <p class="byline blog">Posted by <strong>{% if self.owner and not self.guest %}{{ self.owner }}{% elif self.guest and self.guest_author %}{{ self.guest_author }} {% else %}Guest{% endif %}</strong> on
             <time datetime="{{ self.date }}">{{ self.date|date:'j b Y' }}</time>
 
             {% are_comments_allowed as allow_comments %}
