@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 import logging
 from datetime import date
-
+# from django.contrib.auth.models import User
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -319,6 +319,20 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
             }
         )
 
+    @route(r'^author/(?P<author>[\w\- ]+)/$')
+    def author(self, request, author=None):
+        if author:
+            posts = self.posts.filter(author=author)
+            return render(
+                request, self.get_template(request), {
+                    'self': self, 'posts': _paginate(request, posts),
+                    'filter_type': 'author', 'filter': author
+                }
+            )
+        else:
+            logger.error('invalid Author')
+            return self.all_posts()
+
 
 BlogIndexPage.content_panels = [
     FieldPanel('title', classname='full title'),
@@ -333,8 +347,10 @@ class BlogPostTag(TaggedItemBase):
 
 
 @register_snippet
-class BlogGuestAuthor(models.Model):
-    author_name = models.CharField(max_length=512)
+class BlogAuthor(models.Model):
+    author_name = models.CharField(max_length=512, default='')
+    first_name = models.CharField(max_length=512, default='')
+    last_name = models.CharField(max_length=512, default='')
 
     def __str__(self):
         return self.author_name
@@ -345,11 +361,11 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     guest = models.BooleanField(default=False, verbose_name="Guest Post")
-    guest_author = models.ForeignKey('BlogGuestAuthor',
-                                     verbose_name="Guest post author",
-                                     blank=True, null=True,
-                                     on_delete=models.SET_NULL,
-                                     help_text='Create new author in snippets')
+    author = models.ForeignKey('BlogAuthor',
+                               verbose_name="Guest post author",
+                               blank=True, null=True,
+                               on_delete=models.SET_NULL,
+                               help_text='Create new author in snippets')
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
@@ -358,21 +374,6 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
             index.SearchField('slug'),
         ]),
     ]
-
-    @property
-    def get_author(self):
-        """
-        Return the blog post's author, either a guest author or user owner
-        """
-        if self.guest:
-            if self.guest_author:
-                return self.guest_author
-            else:
-                return 'Guest'
-        else:
-            if self.owner:
-                return self.owner
-            return ''
 
     subpage_types = []
 
@@ -388,6 +389,11 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
                 tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
             return self.objects.none()
+
+    @classmethod
+    def get_by_author(self, author=None):
+        # Try username first
+        self.objects.live().filter(author__author_name=author)
 
     @classmethod
     def get_by_strand(self, strand_name=None):
@@ -408,7 +414,7 @@ BlogPost.content_panels = [
     FieldPanel('date'),
     MultiFieldPanel([
         FieldPanel('guest'),
-        FieldPanel('guest_author'),
+        FieldPanel('author'),
     ]),
     StreamFieldPanel('body'),
 ]

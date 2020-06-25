@@ -1,36 +1,44 @@
 {% if pages %}
-{% load cms_tags wagtailcore_tags %}
+    {% load cms_tags wagtailcore_tags %}
+    <ul class="menu vertical subnav">
 
-<ul class="menu vertical subnav">
-    {% with pages|get_section as index %}
-    <li class="top-level">
-        <a href="{% pageurl index %}"{% if page.url == self.url %}
-             class="active"{% endif %}>
-            {{ index.title }}
-        </a>
-    </li>
-    {% for page in index.get_children.live.in_menu %}
-    <li>
-        <a href="{% pageurl page %}" class="ninety{% if page.url == self.url %} active{% endif %}">
-            {{ page.title }}
-        </a>
-        {% if page.get_children.live.exists %}
-        <span class="toggler close added"></span>
-        {% endif %}
-
-        <ul class="vertical menu nested hide content">
-            {% for sub in page.get_children.live.in_menu|order_by:'title' %} 
-            <li>
-                <a href="{% pageurl sub %}"{% if sub.url == self.url %} class="active"{% endif %}>
-                    {{ sub.title }}
+        {% with pages|get_section as index %}
+            <li class="top-level">
+                <a href="{% pageurl index %}"{% if page.url == self.url %}
+                   class="active"{% endif %}>
+                    {{ index.title }}
                 </a>
+            <li class="top-level">
+                <a href="{% pageurl index %}"{% if page.url == self.url %}
+                   class="active"{% endif %}>
+                    {{ index.title }}
+                </a>
+            <ul class="vertical menu nested">
+                <li>Main strands xadsfvsda</li>
+            </ul>
             </li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% endfor %}
+            {% for page in index.get_children.live.in_menu %}
+                <li>
+                    <a href="{% pageurl page %}" class="ninety{% if page.url == self.url %} active{% endif %}">
+                        {{ page.title }}
+                    </a>
+                    {% if page.get_children.live.exists %}
+                        <span class="toggler close added"></span>
+                    {% endif %}
 
-    {% endwith %}
-</ul>
+                    <ul class="vertical menu nested hide content">
+                        {% for sub in page.get_children.live.in_menu|order_by:'title' %}
+                            <li>
+                                <a href="{% pageurl sub %}"{% if sub.url == self.url %} class="active"{% endif %}>
+                                    {{ sub.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+
+        {% endwith %}
+    </ul>
 
 {% endif %}

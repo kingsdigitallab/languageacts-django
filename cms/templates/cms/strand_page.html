@@ -7,6 +7,7 @@
 {% block main %}
 <div class="row" data-equalizer="sidebar" data-equalize-on="medium">
     <div class="small-12 large-3 columns subnav" data-equalizer-watch="sidebar">
+
         {% block index_page_children %}
         {% include "cms/includes/index_page_children.html" with pages=self %}
         {% endblock %}
@@ -69,7 +70,7 @@
                         <div class="card-section">
                             <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                             <p class="meta info byline blog">
-                                Posted by <strong>{{ page.owner }}</strong><br>
+                                Posted by <strong>{{ page.get_author }}</strong><br>
                                 <time datetime="{{ page.specific.date }}">
                                 {{ page.specific.date|date:'j b Y' }}</time>
 
@@ -122,7 +123,7 @@
         {% endif %}
 
         {% if news_posts %}
-        
+
         <div class="row news-block small-up-1 medium-up-2" data-equalizer="newsheight" data-equalize-by-row="true" data-equalize-on="medium">
         {% for page in news_posts %}
         <div class="column column-block">
@@ -156,7 +157,7 @@
         </div>
         {% endfor %}
         </div>
-        
+
         {% else %}
         <p>There are no news items published at the moment.</p>
         {% endif %}
