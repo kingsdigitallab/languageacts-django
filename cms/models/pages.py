@@ -387,6 +387,32 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
         # Find closest ancestor which is a blog index
         return BlogIndexPage.objects.ancestor_of(self).last()
 
+    def save(self, *args, **kwargs):
+        if not self.author:
+            # set the author to either the current user
+            # or if guest is checked, the generic guest author
+            if self.guest:
+                try:
+                    self.author = BlogAuthor.objects.get(author_name='guest')
+                except ObjectDoesNotExist:
+                    logger.error("Generic Guest Author does not exist!")
+                    return
+            else:
+                try:
+                    self.author = BlogAuthor.objects.get(
+                        author_name=self.owner.username
+                    )
+                except ObjectDoesNotExist:
+                    # Author for this user does not exist, create one
+                    author, created = BlogAuthor.objects.get_or_create(
+                        author_name=self.owner.username,
+                        first_name=self.owner.first_name,
+                        last_name=self.owner.last_name,
+                    )
+                    self.author = author
+
+        super().save(*args, **kwargs)
+
     @classmethod
     def get_by_tag(self, tag=None):
         today = date.today()
