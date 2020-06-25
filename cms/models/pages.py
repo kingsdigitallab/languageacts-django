@@ -322,7 +322,7 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
     @route(r'^author/(?P<author>[\w\- ]+)/$')
     def author(self, request, author=None):
         if author:
-            posts = self.posts.filter(author=author)
+            posts = self.posts.filter(author__author_name=author)
             return render(
                 request, self.get_template(request), {
                     'self': self, 'posts': _paginate(request, posts),
@@ -360,15 +360,21 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
     date = models.DateField()
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
-    guest = models.BooleanField(default=False, verbose_name="Guest Post")
+    guest = models.BooleanField(default=False,
+                                verbose_name="Guest Post",
+                                help_text='Create new guest author in snippets'
+                                )
     author = models.ForeignKey('BlogAuthor',
-                               verbose_name="Guest post author",
+                               verbose_name="Author",
                                blank=True, null=True,
                                on_delete=models.SET_NULL,
-                               help_text='Create new author in snippets')
+                               help_text=("select guest author or leave blank"
+                                          " for default user")
+                               )
     search_fields = Page.search_fields + [
         index.SearchField('body'),
         index.SearchField('date'),
+        index.SearchField('author'),
         index.RelatedFields('tags', [
             index.SearchField('name'),
             index.SearchField('slug'),
@@ -392,8 +398,9 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_author(self, author=None):
-        # Try username first
-        self.objects.live().filter(author__author_name=author)
+        if author:
+            return self.objects.live().filter(author__author_name=author)
+        return self.objects.none()
 
     @classmethod
     def get_by_strand(self, strand_name=None):
