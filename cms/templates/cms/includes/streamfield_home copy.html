@@ -1,7 +1,0 @@
-{% load wagtailcore_tags %}
-
-{% for block in blocks %}
-    {% if block.block_type != 'home' %}
-        {% include_block block %}
-    {% endif %}
-{% endfor %}
