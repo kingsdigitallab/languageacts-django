@@ -10,6 +10,10 @@
 
 {% include "cms/includes/streamfield_nohome.html" with blocks=self.body %}
 
+{% include "cms/includes/carousel.html" %}
+
+{% comment %}
+
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 
@@ -18,6 +22,8 @@
 
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
+
+{% endcomment %}
 
 <h2>Our Research Strands</h2>
 

@@ -1,0 +1,73 @@
+{% load cms_tags staticfiles wagtailcore_tags %}
+
+<div class="orbit" role="region" aria-label="Slide 1" data-orbit data-auto-play="false">
+  <div class="orbit-wrapper">
+    <div class="orbit-controls">
+      <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>&#9664;&#xFE0E;</button>
+      <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
+    </div>
+    <ul class="orbit-container">
+      <li class="is-active orbit-slide">
+        <figure class="orbit-figure">
+            <a href="#">
+                <img class="orbit-image" src="{% static 'media/original_images/2018_08_SKYE_Ragadawn_SGerrard-8883.jpg' %}" alt="Landscape">
+            </a>
+            <figcaption class="orbit-caption">Optional caption, slide 1</figcaption>
+        </figure>
+        <div class="orbit-slide-content">
+            <p><em>Language Acts and Worldmaking</em> is a flagship project funded by the AHRC <em>Open World Research Initiative</em>, which aims to regenerate and transform modern language learning by foregrounding language's power to shape how we live and make our worlds.</p>
+        </div>
+      </li>
+      <li class="orbit-slide">
+        <figure class="orbit-figure">
+            <a href="#">
+                <img class="orbit-image" src="https://placehold.it/1200x600/888?text=Slide-2" alt="Placeholder">
+            </a>
+            <figcaption class="orbit-caption">Optional caption, slide 2</figcaption>
+        </figure>
+        <div class="orbit-slide-content">
+            <h2>Latest news</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <a class="button secondary expanded">Read more</a>
+        </div>
+      </li>
+      <li class="orbit-slide">
+        <figure class="orbit-figure">
+            <a href="#">
+                <img class="orbit-image" src="https://placehold.it/1200x600/777?text=Slide-3" alt="Placeholder">
+            </a>
+        </figure>
+        <div class="orbit-slide-content">
+            <h2>Upcoming event</h2>
+            <p><strong>Can we get the one that it's happening nearest the date of visiting the site?</strong></p>
+
+            <a class="button secondary expanded">Read more</a>
+        </div>
+      </li>
+      <li class="orbit-slide">
+        <figure class="orbit-figure">
+            <a href="#">
+                <img class="orbit-image" src="https://placehold.it/1200x600/666&text=Slide-4" alt="Placeholder">
+            </a>
+            <figcaption class="orbit-caption">Optional caption, slide 4</figcaption>
+        </figure>
+        <div class="orbit-slide-content">
+            <h2>Latest blog</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <a class="button secondary expanded">Read more</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <nav class="orbit-bullets">
+    <button class="is-active" data-slide="0">
+      <span class="show-for-sr">First slide details.</span>
+      <span class="show-for-sr" data-slide-active-label>Current Slide</span>
+    </button>
+    <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>
+    <button data-slide="2"><span class="show-for-sr">Third slide details.</span></button>
+    <button data-slide="3"><span class="show-for-sr">Fourth slide details.</span></button>
+  </nav>
+</div>
