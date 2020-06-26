@@ -583,12 +583,13 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     @property
     def events(self):
         # Events that have not ended.
+        """
         today = date.today()
-        events = Event.objects.live().filter(
-            Q(date_from__gte=today) | (
+        Q(date_from__gte=today) | (
                 Q(date_to__isnull=False) & Q(date_to__gte=today)
             )
-        ).order_by('date_from')
+        """
+        events = Event.objects.live().filter().order_by('-date_from')
         return events
 
     @route(r'^$')
