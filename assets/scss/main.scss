@@ -12,9 +12,6 @@
 
 @include foundation-everything;
 
-/** Your custom scss here **/
-
-
 /** Globals **/
 
 a.exsource
@@ -435,6 +432,30 @@ nav {
         }
     }
 }
+
+// Carousel
+.orbit-container {
+    background: $primary-color;
+    color: $white;
+
+    button,
+    .button {
+        margin: 0;
+    }
+}
+
+.orbit-figure {
+    height: 100%;
+    position: relative;
+}
+
+.orbit-slide-content {
+    padding: 1rem;
+}
+
+// .orbit-caption {
+//     position: relative;
+// }
 
 /** Main content **/
 
@@ -1060,6 +1081,25 @@ Animating the logo's diactrics
         form {
             padding-top: rem-calc(32);
         }
+    }
+
+    // Carousel
+
+    .orbit-figure {
+        display: inline-block;
+        float: left;
+        height: 400px;
+        width: 60%;
+
+        img {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .orbit-slide-content {
+        display: inline-block;
+        width: 38%;
     }
 }
 
