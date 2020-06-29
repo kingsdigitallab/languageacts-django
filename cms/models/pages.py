@@ -705,6 +705,12 @@ class Event(Page, WithStreamField, WithFeedImage):
         # Find closest ancestor which is a blog index
         return EventIndexPage.objects.ancestor_of(self).last()
 
+    @property
+    def is_past(self):
+        return date.today() > self.date_from and (
+            self.date_to is None or date.today() > self.date_to
+        )
+
     @classmethod
     def get_by_tag(self, tag=None):
 
