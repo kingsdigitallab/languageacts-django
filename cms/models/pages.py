@@ -838,16 +838,17 @@ class SlideBlock(BaseSlideBlock):
     image = ImageChooserBlock(required=True)
     caption = blocks.CharBlock(required=False)
 
-    @property
-    def slide_data(self):
-        """ Fields for slide template"""
-        data = {'title': self.title, 'description': self.description,
-                'url': self.url}
-        if self.image:
-            data['image'] = self.image
-        if self.caption:
-            data['caption'] = self.caption
-        return data
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context['title'] = value['title']
+        context['description'] = value['description']
+        context['url'] = value['url']
+        context['image'] = value['image']
+        context['caption'] = value['caption']
+        return context
+
+    class Meta:
+        template = 'cms/blocks/slide_block.html'
 
 
 class PageSlideBlock(BaseSlideBlock):
@@ -963,23 +964,20 @@ class LatestNewsSlideBlock(blocks.StaticBlock):
         admin_text = 'Latest news'
         template = 'cms/blocks/slide_block.html'
 
-    @property
-    def slide_data(self):
-        post = None
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
         posts = NewsPost.objects.filter(live=True).order_by('-date')
         if posts and posts.count() > 0:
             post = posts[0]
         else:
             post = self.news['page']
-        if post:
-            data = {'title': post.title,
-                    'description': post.description,
-                    'url': post.url}
-            if post.feed_image:
-                data['image'] = post.feed_image
-                data['caption'] = post.feed_image.caption
-            return data
-        return {}
+        context['page'] = post
+        context['title'] = post.title
+        context['description'] = post.search_description
+        context['url'] = post.url
+        context['image'] = post.feed_image
+        # context['caption'] = post.feed_image.caption
+        return context
 
 
 class LatestBlogSlideBlock(blocks.StaticBlock):
@@ -1008,15 +1006,16 @@ class CarouselBlock(blocks.StreamBlock):
     slides = SlideBlock(label='Slide with image', icon='image')
     page_slide = PageSlideBlock(label='Page slide', icon='doc-empty')
     blog_slide = BlogSlideBlock(label='Blog slide', icon='edit')
-    news_slide = NewsSlideBlock(label='News slide', icon='doc-full')
+    latest_news = LatestNewsSlideBlock()
     event_slide = EventSlideBlock(label='Event slide', icon='date')
 
     class Meta:
         template = 'cms/blocks/carousel_block.html'
+        icon = 'image'
 
 
 class CarouselCMSStreamBlock(CMSStreamBlock):
-    carousel = CarouselBlock(icon='image')
+    carousel = CarouselBlock()
 
 
 class HomePage(Page):

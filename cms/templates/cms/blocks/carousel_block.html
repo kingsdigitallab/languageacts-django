@@ -1,5 +1,4 @@
 {% load cms_tags staticfiles wagtailcore_tags %}
-<h2>CCC: {{ value.name }} </h2>
 <div class="orbit" role="region" aria-label="Slide 1" data-orbit data-auto-play="false">
   <div class="orbit-wrapper">
     <div class="orbit-controls">
@@ -8,14 +7,17 @@
     </div>
     <ul class="orbit-container">
 
-    {% for slide in value.news_slide %}
-        {% include_block slide %}
+    {% for slide in value %}
+        {{ slide.block_type  }}
+
+            {% include_block slide %}
+
     {% endfor %}
         <!-- slide from wagtail -->
     </ul>
   </div>
   <nav class="orbit-bullets">
-      {% for slide in value.blocks %}
+      {% for slide in value %}
           <button {% if forloop.counter0 == 0 %}class="is-active"{% endif %} data-slide="{{ forloop.counter0 }}">
             <span class="show-for-sr">{{ slide.slide_data.title }}.</span>
             {% if forloop.counter0 == 0 %}<span class="show-for-sr" data-slide-active-label>Current Slide</span>{% endif %}
