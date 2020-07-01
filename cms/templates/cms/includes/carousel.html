@@ -7,56 +7,51 @@
       <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
     </div>
     <ul class="orbit-container">
-      <li class="is-active orbit-slide">
+        <!-- slide from wagtail -->
+
+        <!-- latest news -->
+      <li class="orbit-slide">
         <figure class="orbit-figure">
-            <a href="#">
-                <img class="orbit-image" src="{% static 'media/original_images/2018_08_SKYE_Ragadawn_SGerrard-8883.jpg' %}" alt="Landscape">
+            <a href="{% pageurl carousel_news %}">
+                <img class="orbit-image" src="{{ carousel_news.feed_image}}" alt="{{ carousel_news.feed_image.title}}">
             </a>
-            <figcaption class="orbit-caption">Optional caption, slide 1</figcaption>
+            <figcaption class="orbit-caption">{{ carousel_news.title}}</figcaption>
         </figure>
         <div class="orbit-slide-content">
-            <p><em>Language Acts and Worldmaking</em> is a flagship project funded by the AHRC <em>Open World Research Initiative</em>, which aims to regenerate and transform modern language learning by foregrounding language's power to shape how we live and make our worlds.</p>
+            <h2>{{ carousel_news.title}}</h2>
+            <p>{{ carousel_news.search_description|truncatewords:60 }}</p>
+
+            <a href="{% pageurl carousel_news %}" class="button secondary expanded">Read more</a>
+        </div>
+      </li>
+        <!-- upcoming event -->
+      <li class="orbit-slide">
+        <figure class="orbit-figure">
+            <a href="{% pageurl carousel_event %}">
+                <img class="orbit-image" src="{{ carousel_event.feed_image}}" alt="{{ carousel_event.feed_image.title}}">
+            </a>
+            <figcaption class="orbit-caption">{{ carousel_event.title}}</figcaption>
+        </figure>
+        <div class="orbit-slide-content">
+            <h2>{% if carousel_event.is_past %}Recent event: {% endif %}{{ carousel_event.title}}</h2>
+            <p>{{ carousel_event.search_description|truncatewords:60 }}</p>
+
+            <a href="{% pageurl carousel_event %}" class="button secondary expanded">Read more</a>
         </div>
       </li>
       <li class="orbit-slide">
+          <!-- last post -->
         <figure class="orbit-figure">
-            <a href="#">
-                <img class="orbit-image" src="https://placehold.it/1200x600/888?text=Slide-2" alt="Placeholder">
+            <a href="{% pageurl carousel_post %}">
+                <img class="orbit-image" src="{{ carousel_post.feed_image}}" alt="{{ carousel_post.feed_image.title}}">
             </a>
-            <figcaption class="orbit-caption">Optional caption, slide 2</figcaption>
+            <figcaption class="orbit-caption">{{ carousel_post.title}}</figcaption>
         </figure>
         <div class="orbit-slide-content">
-            <h2>Latest news</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h2>{{ carousel_post.title}}</h2>
+            <p>{{ carousel_post.search_description|truncatewords:60 }}</p>
 
-            <a class="button secondary expanded">Read more</a>
-        </div>
-      </li>
-      <li class="orbit-slide">
-        <figure class="orbit-figure">
-            <a href="#">
-                <img class="orbit-image" src="https://placehold.it/1200x600/777?text=Slide-3" alt="Placeholder">
-            </a>
-        </figure>
-        <div class="orbit-slide-content">
-            <h2>Upcoming event</h2>
-            <p><strong>Can we get the one that it's happening nearest the date of visiting the site?</strong></p>
-
-            <a class="button secondary expanded">Read more</a>
-        </div>
-      </li>
-      <li class="orbit-slide">
-        <figure class="orbit-figure">
-            <a href="#">
-                <img class="orbit-image" src="https://placehold.it/1200x600/666&text=Slide-4" alt="Placeholder">
-            </a>
-            <figcaption class="orbit-caption">Optional caption, slide 4</figcaption>
-        </figure>
-        <div class="orbit-slide-content">
-            <h2>Latest blog</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-            <a class="button secondary expanded">Read more</a>
+            <a href="{% pageurl carousel_post %}" class="button secondary expanded">Read more</a>
         </div>
       </li>
     </ul>

@@ -10,10 +10,10 @@
 
 {% include "cms/includes/streamfield_nohome.html" with blocks=self.body %}
 
-{% include "cms/includes/carousel.html" %}
+
 
 {% comment %}
-
+{% include "cms/includes/carousel.html" %}
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 

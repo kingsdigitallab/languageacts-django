@@ -12,11 +12,13 @@ from django.db.models import Q
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from modelcluster.tags import ClusterTaggableManager
+from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
     FieldPanel, MultiFieldPanel, StreamFieldPanel
 )
+from wagtail.core import blocks
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Page
@@ -24,9 +26,8 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
-
 from .behaviours import WithFeedImage, WithStreamField
-from .streamfield import CMSStreamBlock, RecordEntryStreamBlock
+from .streamfield import RecordEntryStreamBlock, CMSStreamBlock
 
 logger = logging.getLogger(__name__)
 
@@ -44,26 +45,6 @@ def _paginate(request, items):
         items = paginator.page(1)
 
     return items
-
-
-class HomePage(Page, WithStreamField):
-    search_fields = Page.search_fields + [
-        index.SearchField('body'),
-    ]
-
-    subpage_types = [
-        'BlogIndexPage', 'EventIndexPage', 'IndexPage',
-        'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage',
-        'StrandPage', 'TagResults'
-    ]
-
-
-HomePage.content_panels = [
-    FieldPanel('title', classname='full title'),
-    StreamFieldPanel('body'),
-]
-
-HomePage.promote_panels = Page.promote_panels
 
 
 class IndexPage(Page, WithStreamField):
@@ -96,7 +77,7 @@ class StrandPage(IndexPage, WithStreamField):
     def show_filtered_content(self):
         return True
 
-    def get_context(self, request):
+    def get_context(self, request, *args, **kwargs):
         context = super(StrandPage, self).get_context(request)
 
         context['blog_posts'] = BlogPost.get_by_strand(
@@ -124,7 +105,7 @@ class RecordIndexPage(Page):
 
     subpage_types = ['RecordPage']
 
-    def get_context(self, request):
+    def get_context(self, request, *args, **kwargs):
         context = super(RecordIndexPage, self).get_context(request)
 
         # Get selected facets
@@ -838,3 +819,222 @@ IndexPage.content_panels = [
 ]
 
 IndexPage.promote_panels = Page.promote_panels
+
+
+""" Carousel Blocks """
+
+
+class BaseSlideBlock(blocks.StructBlock):
+    class Meta:
+        abstract = True
+        template = 'cms/blocks/slide_block.html'
+
+
+class SlideBlock(BaseSlideBlock):
+    """A Base Block to define a slide to be used in a carousel """
+    title = blocks.CharBlock(required=True)
+    description = blocks.CharBlock(required=False)
+    url = blocks.URLBlock(required=False)
+    image = ImageChooserBlock(required=True)
+    caption = blocks.CharBlock(required=False)
+
+    @property
+    def slide_data(self):
+        """ Fields for slide template"""
+        data = {'title': self.title, 'description': self.description,
+                'url': self.url}
+        if self.image:
+            data['image'] = self.image
+        if self.caption:
+            data['caption'] = self.caption
+        return data
+
+
+class PageSlideBlock(BaseSlideBlock):
+    """Block that links to a wagtail page"""
+    page = blocks.PageChooserBlock(required=True)
+    image = ImageChooserBlock(required=True)
+    caption = blocks.CharBlock(required=False)
+
+    @property
+    def slide_data(self):
+        """ Fields for slide template"""
+        data = {'title': self.title, 'description': self.description,
+                'url': self.url}
+        if self.image:
+            data['image'] = self.image
+        if self.caption:
+            data['caption'] = self.caption
+        return data
+
+
+class BlogSlideBlock(BaseSlideBlock):
+    """Link to blog pages
+    use_latest overrides selection to show most recent post"""
+    page = blocks.PageChooserBlock(required=False, page_type=BlogPost)
+
+    @property
+    def slide_data(self):
+        """ Fields for slide template"""
+        data = {'title': self.page.value.title,
+                'description': self.page.value.description,
+                'url': self.page.value.url}
+        if self.page.value.feed_image:
+            data['image'] = self.page.value.feed_image
+        if self.page.value.feed_image:
+            data['caption'] = self.page.value.feed_image.caption
+        return data
+
+
+class NewsSlideBlock(BaseSlideBlock):
+    """Link to news pages
+    use_latest overrides selection to show most recent post"""
+
+    page = blocks.PageChooserBlock(required=False, page_type=NewsPost)
+
+    @property
+    def slide_data(self):
+        """ Fields for slide template"""
+        data = {'title': self.page.value.title,
+                'description': self.page.value.description,
+                'url': self.page.value.url}
+        if self.page.value.feed_image:
+            data['image'] = self.page.value.feed_image
+        if self.page.value.feed_image:
+            data['caption'] = self.page.value.feed_image.caption
+        return data
+
+    class Meta:
+        template = 'cms/blocks/slide_block.html'
+
+
+class EventSlideBlock(BaseSlideBlock):
+    """Slide based on event
+    if use_upcoming template will show most_recent upcoming event """
+    page = blocks.PageChooserBlock(required=True, page_type=Event)
+
+    @property
+    def slide_data(self):
+        """ Fields for slide template"""
+        data = {'title': self.page.value.title,
+                'description': self.page.value.description,
+                'url': self.page.value.url}
+        if self.page.value.feed_image:
+            data['image'] = self.page.value.feed_image
+        if self.page.value.feed_image:
+            data['caption'] = self.page.value.feed_image.caption
+        return data
+
+
+class UpcomingEventSlideBlock(blocks.StaticBlock):
+    class Meta:
+        icon = 'user'
+        label = 'Upcoming event'
+        admin_text = 'Soonest upcoming event'
+        template = 'cms/blocks/slide_block.html'
+
+    @property
+    def slide_data(self):
+        event = None
+        if Event.objects.live().filter(
+            date_from__gte=date.today()
+        ).order_by('date_from').count() > 0:
+            event = Event.objects.live().filter(
+                date_from__gte=date.today()
+            ).order_by('date_from')[0]
+        elif Event.objects.live().order_by('-date_from').count() > 0:
+            # No upcoming events, use most recent instead
+            event = Event.objects.live().order_by('-date_from')[0]
+        if event:
+            data = {'title': event.title,
+                    'description': event.description,
+                    'url': event.url}
+            if event.feed_image:
+                data['image'] = event.feed_image
+                data['caption'] = event.caption
+            return data
+        return {}
+
+
+class LatestNewsSlideBlock(blocks.StaticBlock):
+    class Meta:
+        icon = 'user'
+        label = 'Latest news'
+        admin_text = 'Latest news'
+        template = 'cms/blocks/slide_block.html'
+
+    @property
+    def slide_data(self):
+        post = None
+        posts = NewsPost.objects.filter(live=True).order_by('-date')
+        if posts and posts.count() > 0:
+            post = posts[0]
+        else:
+            post = self.news['page']
+        if post:
+            data = {'title': post.title,
+                    'description': post.description,
+                    'url': post.url}
+            if post.feed_image:
+                data['image'] = post.feed_image
+                data['caption'] = post.feed_image.caption
+            return data
+        return {}
+
+
+class LatestBlogSlideBlock(blocks.StaticBlock):
+    class Meta:
+        icon = 'edit'
+        label = 'Latest blog post'
+        admin_text = 'Latest blog post'
+        template = 'cms/blocks/slide_block.html'
+
+    @property
+    def slide_data(self):
+        posts = BlogPost.objects.filter(live=True).order_by('-date')
+        if posts and posts.count() > 0:
+            post = posts[0]
+            data = {'title': post.title,
+                    'description': post.description,
+                    'url': post.url}
+            if post.feed_image:
+                data['image'] = post.feed_image
+                data['caption'] = post.feed_image.caption
+            return data
+        return {}
+
+
+class CarouselBlock(blocks.StreamBlock):
+    slides = SlideBlock(label='Slide with image', icon='image')
+    page_slide = PageSlideBlock(label='Page slide', icon='doc-empty')
+    blog_slide = BlogSlideBlock(label='Blog slide', icon='edit')
+    news_slide = NewsSlideBlock(label='News slide', icon='doc-full')
+    event_slide = EventSlideBlock(label='Event slide', icon='date')
+
+    class Meta:
+        template = 'cms/blocks/carousel_block.html'
+
+
+class CarouselCMSStreamBlock(CMSStreamBlock):
+    carousel = CarouselBlock(icon='image')
+
+
+class HomePage(Page):
+    body = StreamField(CarouselCMSStreamBlock())
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
+    subpage_types = [
+        'BlogIndexPage', 'EventIndexPage', 'IndexPage',
+        'NewsIndexPage', 'PastEventIndexPage', 'RichTextPage',
+        'StrandPage', 'TagResults'
+    ]
+
+
+HomePage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    StreamFieldPanel('body'),
+]
+
+HomePage.promote_panels = Page.promote_panels

@@ -1,0 +1,21 @@
+{% load cms_tags staticfiles wagtailcore_tags %}
+
+<li class="is-active orbit-slide">
+        <figure class="orbit-figure">
+            <a href="#">
+                <img class="orbit-image" src="{{ value.slide_data.image.url }}" alt="Landscape">
+            </a>
+            {% if value.slide_data.image_caption %}
+            <figcaption class="orbit-caption">{{ value.slide_data.image_caption }}</figcaption>
+            {% endif %}
+        </figure>
+        <div class="orbit-slide-content">
+            <h2>{{ value.title}}</h2>
+            {% if value.description %}
+            <p>{{ value.description|truncatewords:60 }}</p>
+            {% endif %}
+            {% if value.get_url %}
+            <a href="" class="button secondary expanded">Read more</a>
+            {% endif %}
+        </div>
+      </li>
