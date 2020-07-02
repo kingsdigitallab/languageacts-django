@@ -825,24 +825,40 @@ IndexPage.promote_panels = Page.promote_panels
 
 
 class BaseSlideBlock(blocks.StructBlock):
+    """Core methods for all carousel slides"""
     class Meta:
         abstract = True
         template = 'cms/blocks/slide_block.html'
 
+    @staticmethod
+    def get_slide_data_from_page(context, post):
+        """Extract slide data from page with feedimage"""
+        context['page'] = post
+        context['title'] = post.title
+        context['description'] = post.search_description
+        context['url'] = post.url
+        if post.feed_image:
+            context['image'] = post.feed_image
+        return context
+
 
 class SlideBlock(BaseSlideBlock):
-    """A Base Block to define a slide to be used in a carousel """
+    """A basic slide to be used in a carousel block"""
     title = blocks.CharBlock(required=True)
     description = blocks.CharBlock(required=False)
     url = blocks.URLBlock(required=False)
+    page = blocks.PageChooserBlock(required=False, help_text='Overrides url')
     image = ImageChooserBlock(required=True)
-    caption = blocks.CharBlock(required=False)
+    caption = blocks.CharBlock(required=False, label='Image caption')
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
         context['title'] = value['title']
         context['description'] = value['description']
-        context['url'] = value['url']
+        if 'page' in value:
+            context['url'] = value['page'].url
+        else:
+            context['url'] = value['url']
         context['image'] = value['image']
         context['caption'] = value['caption']
         return context
@@ -851,59 +867,36 @@ class SlideBlock(BaseSlideBlock):
         template = 'cms/blocks/slide_block.html'
 
 
-class PageSlideBlock(BaseSlideBlock):
-    """Block that links to a wagtail page"""
-    page = blocks.PageChooserBlock(required=True)
-    image = ImageChooserBlock(required=True)
-    caption = blocks.CharBlock(required=False)
-
-    @property
-    def slide_data(self):
-        """ Fields for slide template"""
-        data = {'title': self.title, 'description': self.description,
-                'url': self.url}
-        if self.image:
-            data['image'] = self.image
-        if self.caption:
-            data['caption'] = self.caption
-        return data
-
-
 class BlogSlideBlock(BaseSlideBlock):
     """Link to blog pages
     use_latest overrides selection to show most recent post"""
     page = blocks.PageChooserBlock(required=False, page_type=BlogPost)
+    caption = blocks.CharBlock(required=False)
 
-    @property
-    def slide_data(self):
-        """ Fields for slide template"""
-        data = {'title': self.page.value.title,
-                'description': self.page.value.description,
-                'url': self.page.value.url}
-        if self.page.value.feed_image:
-            data['image'] = self.page.value.feed_image
-        if self.page.value.feed_image:
-            data['caption'] = self.page.value.feed_image.caption
-        return data
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_slide_data_from_page(
+            context,
+            value['page']
+        )
+        context['caption'] = value['caption']
+        return context
 
 
 class NewsSlideBlock(BaseSlideBlock):
     """Link to news pages
     use_latest overrides selection to show most recent post"""
-
     page = blocks.PageChooserBlock(required=False, page_type=NewsPost)
+    caption = blocks.CharBlock(required=False)
 
-    @property
-    def slide_data(self):
-        """ Fields for slide template"""
-        data = {'title': self.page.value.title,
-                'description': self.page.value.description,
-                'url': self.page.value.url}
-        if self.page.value.feed_image:
-            data['image'] = self.page.value.feed_image
-        if self.page.value.feed_image:
-            data['caption'] = self.page.value.feed_image.caption
-        return data
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_slide_data_from_page(
+            context,
+            value['page']
+        )
+        context['caption'] = value['caption']
+        return context
 
     class Meta:
         template = 'cms/blocks/slide_block.html'
@@ -913,32 +906,27 @@ class EventSlideBlock(BaseSlideBlock):
     """Slide based on event
     if use_upcoming template will show most_recent upcoming event """
     page = blocks.PageChooserBlock(required=True, page_type=Event)
+    caption = blocks.CharBlock(required=False)
 
-    @property
-    def slide_data(self):
-        """ Fields for slide template"""
-        data = {'title': self.page.value.title,
-                'description': self.page.value.description,
-                'url': self.page.value.url}
-        if self.page.value.feed_image:
-            data['image'] = self.page.value.feed_image
-        if self.page.value.feed_image:
-            data['caption'] = self.page.value.feed_image.caption
-        return data
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_slide_data_from_page(context, value)
+        context['caption'] = value['caption']
+        return context
 
 
 class UpcomingEventSlideBlock(blocks.StaticBlock):
     class Meta:
-        icon = 'user'
+        icon = 'calendar'
         label = 'Upcoming event'
-        admin_text = 'Soonest upcoming event'
+        admin_text = 'Show next upcoming event'
         template = 'cms/blocks/slide_block.html'
 
-    @property
-    def slide_data(self):
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
         event = None
         if Event.objects.live().filter(
-            date_from__gte=date.today()
+                date_from__gte=date.today()
         ).order_by('date_from').count() > 0:
             event = Event.objects.live().filter(
                 date_from__gte=date.today()
@@ -947,35 +935,7 @@ class UpcomingEventSlideBlock(blocks.StaticBlock):
             # No upcoming events, use most recent instead
             event = Event.objects.live().order_by('-date_from')[0]
         if event:
-            data = {'title': event.title,
-                    'description': event.description,
-                    'url': event.url}
-            if event.feed_image:
-                data['image'] = event.feed_image
-                data['caption'] = event.caption
-            return data
-        return {}
-
-
-class LatestNewsSlideBlock(blocks.StaticBlock):
-    class Meta:
-        icon = 'user'
-        label = 'Latest news'
-        admin_text = 'Latest news'
-        template = 'cms/blocks/slide_block.html'
-
-    def get_context(self, value, parent_context=None):
-        context = super().get_context(value, parent_context=parent_context)
-        posts = NewsPost.objects.filter(live=True).order_by('-date')
-        if posts and posts.count() > 0:
-            post = posts[0]
-        else:
-            post = self.news['page']
-        context['page'] = post
-        context['title'] = post.title
-        context['description'] = post.search_description
-        context['url'] = post.url
-        context['image'] = post.feed_image
+            context = BaseSlideBlock.get_slide_data_from_page(context, event)
         # context['caption'] = post.feed_image.caption
         return context
 
@@ -987,26 +947,42 @@ class LatestBlogSlideBlock(blocks.StaticBlock):
         admin_text = 'Latest blog post'
         template = 'cms/blocks/slide_block.html'
 
-    @property
-    def slide_data(self):
+    def get_post(self):
         posts = BlogPost.objects.filter(live=True).order_by('-date')
         if posts and posts.count() > 0:
-            post = posts[0]
-            data = {'title': post.title,
-                    'description': post.description,
-                    'url': post.url}
-            if post.feed_image:
-                data['image'] = post.feed_image
-                data['caption'] = post.feed_image.caption
-            return data
-        return {}
+            return posts[0]
+        return None
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_slide_data_from_page(
+            context,
+            self.get_post()
+        )
+        # context['caption'] = post.feed_image.caption
+        return context
+
+
+class LatestNewsSlideBlock(LatestBlogSlideBlock):
+    class Meta:
+        icon = 'doc-empty-inverse'
+        label = 'Latest news'
+        admin_text = 'Latest news'
+        template = 'cms/blocks/slide_block.html'
+
+    def get_post(self):
+        posts = NewsPost.objects.filter(live=True).order_by('-date')
+        if posts and posts.count() > 0:
+            return posts[0]
+        return None
 
 
 class CarouselBlock(blocks.StreamBlock):
-    slides = SlideBlock(label='Slide with image', icon='image')
-    page_slide = PageSlideBlock(label='Page slide', icon='doc-empty')
+    slides = SlideBlock(label='Slide', icon='image')
     blog_slide = BlogSlideBlock(label='Blog slide', icon='edit')
     latest_news = LatestNewsSlideBlock()
+    latest_post = LatestBlogSlideBlock()
+    next_event = UpcomingEventSlideBlock()
     event_slide = EventSlideBlock(label='Event slide', icon='date')
 
     class Meta:

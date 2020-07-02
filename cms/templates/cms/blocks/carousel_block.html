@@ -6,25 +6,17 @@
       <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
     </div>
     <ul class="orbit-container">
-
-    {% for slide in value %}
-        {{ slide.block_type  }}
-
-            {% include_block slide %}
-
-    {% endfor %}
-        <!-- slide from wagtail -->
+        {% for slide in value %}
+                {% include_block slide %}
+        {% endfor %}
     </ul>
   </div>
   <nav class="orbit-bullets">
       {% for slide in value %}
           <button {% if forloop.counter0 == 0 %}class="is-active"{% endif %} data-slide="{{ forloop.counter0 }}">
-            <span class="show-for-sr">{{ slide.slide_data.title }}.</span>
+            <span class="show-for-sr">{{ slide.title }}.</span>
             {% if forloop.counter0 == 0 %}<span class="show-for-sr" data-slide-active-label>Current Slide</span>{% endif %}
         </button>
-
       {% endfor %}
-
-
   </nav>
 </div>
