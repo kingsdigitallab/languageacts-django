@@ -917,7 +917,7 @@ class EventSlideBlock(BaseSlideBlock):
 
 class UpcomingEventSlideBlock(blocks.StaticBlock):
     class Meta:
-        icon = 'calendar'
+        icon = 'date'
         label = 'Upcoming event'
         admin_text = 'Show next upcoming event'
         template = 'cms/blocks/slide_block.html'
