@@ -5,7 +5,6 @@ install:
 - pip install tox-travis
 script:
 - tox
-- coverage run manage.py test
 notifications:
   slack:
     rooms:
