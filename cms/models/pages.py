@@ -855,7 +855,7 @@ class SlideBlock(BaseSlideBlock):
         context = super().get_context(value, parent_context=parent_context)
         context['title'] = value['title']
         context['description'] = value['description']
-        if 'page' in value:
+        if 'page' in value and value['page'] is not None:
             context['url'] = value['page'].url
         else:
             context['url'] = value['url']
