@@ -5,6 +5,7 @@ install:
 - pip install tox-travis
 script:
 - tox
+- coverage run manage.py test
 notifications:
   slack:
     rooms:
@@ -12,4 +13,4 @@ notifications:
     on_success: change
     on_failure: always
 after_success:
- - django coveralls
+ - coveralls
