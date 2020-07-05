@@ -3,6 +3,9 @@ python:
 - 3.5
 install:
 - pip install tox-travis
+- pip install coveralls
+- pip install python-coveralls
+
 script:
 - tox
 notifications:
