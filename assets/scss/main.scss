@@ -37,6 +37,10 @@ a.more {
 
 button,
 .button {
+    &:hover {
+        cursor: pointer;
+    }
+
     &.label-like {
         background: $turquoise;
         color: $white;
@@ -592,6 +596,16 @@ article {
 
         img {
             width: 100% !important;
+        }
+    }
+
+    &.past-event {
+        background: #e8e8e8;
+
+        opacity: 0.8;
+
+        h3 a {
+            color: #666;
         }
     }
 }
