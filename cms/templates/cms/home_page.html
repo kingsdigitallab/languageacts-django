@@ -10,6 +10,10 @@
 
 {% include "cms/includes/streamfield_nohome.html" with blocks=self.body %}
 
+
+
+{% comment %}
+{% include "cms/includes/carousel.html" %}
 {% get_news_preview as news_posts %}
 {% include "cms/includes/news_preview.html" with pages=news_posts %}
 
@@ -18,6 +22,10 @@
 
 {% get_blog_posts_preview as blog_posts %}
 {% include "cms/includes/blog_post_preview.html" with pages=blog_posts %}
+
+{% endcomment %}
+
+<h2>Our Research Strands</h2>
 
 <ol class="custom-counter">
     <div class="row small-up-1 medium-up-2 large-up-3" data-equalizer data-equalizer

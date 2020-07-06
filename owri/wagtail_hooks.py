@@ -394,7 +394,6 @@ def insert_editor_js_colour():
     js_includes = js_includes + format_html_join(
         '\n',
         '<link rel="stylesheet" href="{0}{1}"/>',  # NOQA
-        ((settings.STATIC_URL, filename)
-         for filename in css_files)
-        )
+        ((settings.STATIC_URL, filename)for filename in css_files)
+    )
     return js_includes

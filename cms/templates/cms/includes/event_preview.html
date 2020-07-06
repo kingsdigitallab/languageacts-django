@@ -5,7 +5,7 @@
     data-equalize-by-row="true" data-equalize-on="medium">
     {% for event in events %}
     <div class="column column-block">
-        <div class="card event" data-equalizer-watch="eventheight">
+        <div class="card event{% if event.is_past  %} past-event{% endif %}" data-equalizer-watch="eventheight">
             <div class="card-section">
                 <h3 class="title"><a href="{% pageurl event %}">{{ event.title }}</a></h3>
                 <div class="row collapse meta info">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="small-11 columns">
                         <time datetime="{{ page.specific.date }}">
-                        {{ event.date_from|date:'j b Y' }} 
+                        {{ event.date_from|date:'j b Y' }}
                         {% if event.date_to %} - {{ event.date_to|date:'j b Y' }}{% endif %}<br>
                         {{ event.time|date:'H:i' }} 
                         {% if event.time_end %} - {{ event.time_end|date:'H:i' }}{% endif %}

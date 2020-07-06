@@ -3,4 +3,9 @@ django-debug-toolbar
 Fabric3
 flake8
 ipython
+mypy
+coverage
+django_coverage_plugin
+coveralls
+python-coveralls
 tox
