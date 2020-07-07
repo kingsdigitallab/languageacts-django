@@ -5,7 +5,7 @@
 {{ block.super }}
 
 {% block index_page_children %}
-{% include "cms/includes/event_index_page_children.html" with events=self.events %}
+{% include "cms/includes/event_index_page_children.html" with events=paginated_events %}
 {% endblock %}
 
 {% endblock %}

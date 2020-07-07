@@ -4,6 +4,7 @@
 {% block eventitem %}
 {% include "cms/includes/event_preview.html" %}
 {% endblock %}
+    {% include "cms/includes/pagination.html" with pages=events %}
 {% else %}
 <p>There are no events planned for the immediate future.</p>
 {% endif %}

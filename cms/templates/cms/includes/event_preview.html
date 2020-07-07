@@ -3,7 +3,7 @@
 <div class="row events-block small-up-1 medium-up-2" 
     data-equalizer="eventheight" 
     data-equalize-by-row="true" data-equalize-on="medium">
-    {% for event in events %}
+    {% for event in events.object_list %}
     <div class="column column-block">
         <div class="card event{% if event.is_past  %} past-event{% endif %}" data-equalizer-watch="eventheight">
             <div class="card-section">
