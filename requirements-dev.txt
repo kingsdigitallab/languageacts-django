@@ -8,4 +8,5 @@ coverage
 django_coverage_plugin
 coveralls
 python-coveralls
+factory_boy
 tox

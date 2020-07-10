@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -260,6 +260,16 @@ RichTextPage.content_panels = [
 RichTextPage.promote_panels = Page.promote_panels
 
 
+@register_snippet
+class BlogAuthor(models.Model):
+    author_name = models.CharField(max_length=512, default='')
+    first_name = models.CharField(max_length=512, default='')
+    last_name = models.CharField(max_length=512, default='')
+
+    def __str__(self):
+        return self.author_name
+
+
 class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
@@ -300,19 +310,20 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
             }
         )
 
+    def get_author(self, author: BlogAuthor) -> QuerySet:
+        if author:
+            return self.posts.filter(author__author_name=author)
+        return BlogAuthor.objects.none()
+
     @route(r'^author/(?P<author>[\w\- ]+)/$')
     def author(self, request, author=None):
-        if author:
-            posts = self.posts.filter(author__author_name=author)
-            return render(
-                request, self.get_template(request), {
-                    'self': self, 'posts': _paginate(request, posts),
-                    'filter_type': 'author', 'filter': author
-                }
-            )
-        else:
-            logger.error('invalid Author')
-            return self.all_posts()
+        posts = self.get_author(author)
+        return render(
+            request, self.get_template(request), {
+                'self': self, 'posts': _paginate(request, posts),
+                'filter_type': 'author', 'filter': author
+            }
+        )
 
 
 BlogIndexPage.content_panels = [
@@ -325,16 +336,6 @@ BlogIndexPage.promote_panels = Page.promote_panels
 
 class BlogPostTag(TaggedItemBase):
     content_object = ParentalKey('BlogPost', related_name='tagged_items')
-
-
-@register_snippet
-class BlogAuthor(models.Model):
-    author_name = models.CharField(max_length=512, default='')
-    first_name = models.CharField(max_length=512, default='')
-    last_name = models.CharField(max_length=512, default='')
-
-    def __str__(self):
-        return self.author_name
 
 
 class BlogPost(Page, WithStreamField, WithFeedImage):
@@ -578,7 +579,8 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
         events = self.events
 
         return render(request, self.get_template(request),
-                      {'self': self, 'events': _paginate(request, events)})
+                      {'self': self, 'paginated_events': _paginate(
+                          request, events)})
 
     @route(r'^tag/(?P<tag>[\w\- ]+)/$')
     def tag(self, request, tag=None):
