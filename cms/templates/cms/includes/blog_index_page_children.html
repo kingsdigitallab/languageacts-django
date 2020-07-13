@@ -11,7 +11,7 @@
             <div class="card-section">
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="meta info byline blog">
-                    Posted by <a href="{% routablepageurl self "author" author=page.author %}"> <strong>{{ page.author }}</strong></a><br>
+                    Posted by <a href="{% routablepageurl self "author" author=page.author.as_uri %}"> <strong>{{ page.author }}</strong></a><br>
                     <time datetime="{{ page.specific.date }}">
                     {{ page.specific.date|date:'j b Y' }}</time>
 

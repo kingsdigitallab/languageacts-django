@@ -8,7 +8,7 @@
                 <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
                 <p class="byline blogpost">
                     <p class="byline blog">
-                    Posted by <a href="{% routablepageurl page.get_index_page "author" author=page.author %}"> <strong>{{ page.author }}</strong></a></p>
+                    Posted by <a href="{% routablepageurl page.get_index_page "author" author=page.author.as_uri %}"> <strong>{{ page.author }}</strong></a></p>
 
                     {% if page.search_description %}
                     <p>{{ page.search_description|safe }}</p>

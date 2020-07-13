@@ -266,6 +266,16 @@ class BlogAuthor(models.Model):
     first_name = models.CharField(max_length=512, default='')
     last_name = models.CharField(max_length=512, default='')
 
+    @property
+    def as_uri(self):
+        """ Change author name for inclusion in search url"""
+        return self.author_name.replace(" ", "_")
+
+    @staticmethod
+    def uri_to_name(uri):
+        """ Reverse above for display and searching"""
+        return uri.replace("_", " ")
+
     def __str__(self):
         return self.author_name
 
@@ -310,9 +320,11 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
             }
         )
 
-    def get_author(self, author: BlogAuthor) -> QuerySet:
+    def get_author(self, author: str) -> QuerySet:
         if author:
-            return self.posts.filter(author__author_name=author)
+            return self.posts.filter(
+                author__author_name=BlogAuthor.uri_to_name(author)
+            )
         return BlogAuthor.objects.none()
 
     @route(r'^author/(?P<author>[\w\- ]+)/$')
