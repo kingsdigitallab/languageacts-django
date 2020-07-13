@@ -1,16 +1,16 @@
 from cms.models.pages import (
     BlogIndexPage, EventIndexPage, HomePage, IndexPage, NewsIndexPage,
     PastEventIndexPage, RichTextPage, StrandPage, _paginate, TagResults,
-    BlogPost, BlogAuthor
+    BlogAuthor
 )
+# BlogPost,
 from datetime import date
 from django.urls import reverse
 from django.test import RequestFactory, TestCase
 from wagtail.tests.utils import WagtailPageTests
 from cms.tests.factories import (
-    BlogIndexPageFactory,
-    BlogPostFactory,
-    BlogAuthorFactory
+    BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
+    NewsIndexPageFactory, NewsPostFactory
 )
 from wagtail.core.models import Page
 
@@ -67,23 +67,37 @@ class TestRichTextPage(WagtailPageTests):
         self.assertAllowedSubpageTypes(RichTextPage, {})
 
 
+"""
+class TestBlogPost(TestCase):
+    def test_get_index_page(self):
+        self.fail()
+
+    def test_save(self):
+        self.fail()
+
+    def test_get_by_tag(self):
+        self.fail()
+
+    def test_get_by_author(self):
+        self.fail()
+
+    def test_get_by_strand(self):
+        self.fail()
+
+
+class TestNewsPost(TestCase):
+    def test_get_index_page(self):
+        self.fail()
+
+    def test_get_by_tag(self):
+        self.fail()
+
+    def test_get_by_strand(self):
+        self.fail()
+"""
+
+
 """ View and route Tests"""
-
-
-def build_blog_index_page() -> BlogIndexPage:
-    return BlogIndexPageFactory.build()
-
-
-def create_blog_post(
-        post_title: str = None, live: bool = True) -> BlogPost:
-    if post_title:
-        return BlogPostFactory(title=post_title, live=live)
-    else:
-        return BlogPostFactory(live=live)
-
-
-def create_blog_post_today(post_title='Posted Today') -> BlogPostFactory:
-    return BlogPostFactory(date=date.today(), title=post_title)
 
 
 class TestBlogIndexPage(TestCase):
@@ -171,15 +185,20 @@ class TestBlogIndexPage(TestCase):
         self.assertQuerysetEqual(authors, BlogAuthor.objects.none())
         # Create new author, should have no posts
         new_author = BlogAuthorFactory()
-        authors = self.blog_index_page.get_author(new_author)
+        authors = self.blog_index_page.get_author(new_author.as_uri)
         self.assertQuerysetEqual(authors, BlogAuthor.objects.none())
         # existing author_2, should have 2 posts
-        authors = self.blog_index_page.get_author(self.author_2)
+        authors = self.blog_index_page.get_author(self.author_2.as_uri)
         self.assertEqual(authors.count(), 2)
 
     def test_author(self) -> None:
-        #
-        pass
+        response = self.client.get(
+            self.blog_index_page.url + self.blog_index_page.reverse_subpage(
+                'author',
+                kwargs={'author': self.author_1.as_uri}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
 
 
 class TestSearchView(TestCase):
@@ -191,5 +210,65 @@ class TestSearchView(TestCase):
         response = self.client.get(reverse(self.search_view_name))
         self.assertEqual(response.status_code, 200)
 
+
+class TestNewsIndexPage(TestCase):
+    model = NewsIndexPage
+    index_title = 'News Index Test'
+    today_post_title = 'Posted Today'
+
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.home_page.add_child(
+            instance=NewsIndexPageFactory.build(
+                title=self.index_title
+            )
+        )
+        self.routeable_index_page = NewsIndexPage.objects.get(
+            title=self.index_title)
+        self.routeable_index_page.add_child(
+            instance=NewsPostFactory.build(
+            )
+        )
+        self.post_2 = NewsPostFactory.build(
+            title=self.today_post_title,
+            date=date.today()
+        )
+        self.routeable_index_page.add_child(
+            instance=self.post_2
+        )
+        self.post_3 = NewsPostFactory.build()
+        self.routeable_index_page.add_child(
+            instance=self.post_3
+        )
+
+    def test_posts(self) -> None:
+        self.assertEqual(self.routeable_index_page.posts.count(), 3)
+        # set post live to false
+        post_3 = self.routeable_index_page.posts[2]
+        post_3.live = False
+        post_3.save()
+        # Should only get 2 posts
+        self.assertEqual(self.routeable_index_page.posts.count(), 2)
+        # First post should be most recent
+        self.assertEqual(
+            str(self.today_post_title), str(self.routeable_index_page.posts[0])
+        )
+
+    def test_all_posts(self) -> None:
+        response = self.client.get(
+            self.routeable_index_page.url
+            + self.routeable_index_page.reverse_subpage(
+                'all_posts')
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+"""
+    def test_all_posts(self):
+        self.fail()
+
+    def test_tag(self):
+        self.fail()
+"""
 
 """ Block function tests """
