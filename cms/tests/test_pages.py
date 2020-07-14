@@ -185,17 +185,17 @@ class TestBlogIndexPage(TestCase):
         self.assertQuerysetEqual(authors, BlogAuthor.objects.none())
         # Create new author, should have no posts
         new_author = BlogAuthorFactory()
-        authors = self.blog_index_page.get_author(new_author.as_uri)
+        authors = self.blog_index_page.get_author(new_author.author_slug)
         self.assertQuerysetEqual(authors, BlogAuthor.objects.none())
         # existing author_2, should have 2 posts
-        authors = self.blog_index_page.get_author(self.author_2.as_uri)
+        authors = self.blog_index_page.get_author(self.author_2.author_slug)
         self.assertEqual(authors.count(), 2)
 
     def test_author(self) -> None:
         response = self.client.get(
             self.blog_index_page.url + self.blog_index_page.reverse_subpage(
                 'author',
-                kwargs={'author': self.author_1.as_uri}
+                kwargs={'author': self.author_1.author_slug}
             )
         )
         self.assertEqual(response.status_code, 200)

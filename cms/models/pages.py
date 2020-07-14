@@ -28,6 +28,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 from .behaviours import WithFeedImage, WithStreamField
 from .streamfield import RecordEntryStreamBlock, CMSStreamBlock
+from django.utils.text import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -265,16 +266,12 @@ class BlogAuthor(models.Model):
     author_name = models.CharField(max_length=512, default='')
     first_name = models.CharField(max_length=512, default='')
     last_name = models.CharField(max_length=512, default='')
+    author_slug = models.CharField(max_length=512, default='')
 
-    @property
-    def as_uri(self):
-        """ Change author name for inclusion in search url"""
-        return self.author_name.replace(" ", "_")
-
-    @staticmethod
-    def uri_to_name(uri):
-        """ Reverse above for display and searching"""
-        return uri.replace("_", " ")
+    def save(self, *args, **kwargs):
+        # update author slug
+        self.author_slug = slugify(self.author_name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.author_name
@@ -315,19 +312,19 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
 
         return render(
             request, self.get_template(request), {
-                'self': self, 'posts': _paginate(request, posts),
+                'se lf': self, 'posts': _paginate(request, posts),
                 'filter_type': 'tag', 'filter': tag
             }
         )
 
-    def get_author(self, author: str) -> QuerySet:
-        if author:
+    def get_author(self, author_slug: str) -> QuerySet:
+        if author_slug:
             return self.posts.filter(
-                author__author_name=BlogAuthor.uri_to_name(author)
+                author__author_slug=author_slug
             )
         return BlogAuthor.objects.none()
 
-    @route(r'^author/(?P<author>[\w\-\_ ]+)/$')
+    @route(r'^author/(?P<author>[\w\-\_ ]*)/$')
     def author(self, request, author=None):
         posts = self.get_author(author)
         return render(
