@@ -301,7 +301,7 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
         return render(request, self.get_template(request),
                       {'self': self, 'posts': _paginate(request, posts)})
 
-    @route(r'^tag/(?P<tag>[\w\-\_ ]+)/$')
+    @route(r'^tag/(?P<tag>[\w\- ]+)/$')
     def tag(self, request, tag=None):
         if not tag:
             # Invalid tag filter
@@ -312,7 +312,7 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
 
         return render(
             request, self.get_template(request), {
-                'se lf': self, 'posts': _paginate(request, posts),
+                'self': self, 'posts': _paginate(request, posts),
                 'filter_type': 'tag', 'filter': tag
             }
         )
@@ -324,7 +324,7 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
             )
         return BlogAuthor.objects.none()
 
-    @route(r'^author/(?P<author>[\w\-\_ ]*)/$')
+    @route(r'^author/(?P<author>[\w\- ]*)/$')
     def author(self, request, author=None):
         posts = self.get_author(author)
         return render(
