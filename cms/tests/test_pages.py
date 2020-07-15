@@ -10,7 +10,8 @@ from django.test import RequestFactory, TestCase
 from wagtail.tests.utils import WagtailPageTests
 from cms.tests.factories import (
     BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
-    NewsIndexPageFactory, NewsPostFactory
+    NewsIndexPageFactory, NewsPostFactory,
+    EventIndexPageFactory, EventFactory
 )
 from wagtail.core.models import Page
 
@@ -95,7 +96,6 @@ class TestNewsPost(TestCase):
     def test_get_by_strand(self):
         self.fail()
 """
-
 
 """ View and route Tests"""
 
@@ -262,13 +262,86 @@ class TestNewsIndexPage(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_tag(self):
+        test_tag_label = 'test_tag'
+        self.post_2.tags.add(test_tag_label)
+        self.post_2.save()
+        # Bad tag, we should get nothing
+        response = self.client.get(
+            self.routeable_index_page.url
+            + self.routeable_index_page.reverse_subpage(
+                'tag',
+                kwargs={'tag': 'test_taeg'}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(
+            self.routeable_index_page.url
+            + self.routeable_index_page.reverse_subpage(
+                'tag',
+                kwargs={'tag': test_tag_label}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
 
-"""
-    def test_all_posts(self):
-        self.fail()
+
+class TestEventIndexPage(TestCase):
+
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.home_page.add_child(
+            instance=EventIndexPageFactory.build(
+                title='Event Index Test'
+            )
+        )
+        self.event_index = EventIndexPage.objects.get(
+            title='Event Index Test'
+        )
+        self.event_index.add_child(
+            instance=EventFactory.build()
+        )
+        self.event_2 = EventFactory.build(
+            title='Event Today',
+            date_from=date.today()
+        )
+        self.event_index.add_child(
+            instance=self.event_2
+        )
+
+    def test_events(self):
+        events = self.event_index.events
+        self.assertEqual(events.count(), 2)
+        self.assertEqual(events[0].title, 'Event Today')
+
+    def test_all_events(self):
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'all_events')
+        )
+        self.assertEqual(response.status_code, 200)
 
     def test_tag(self):
-        self.fail()
-"""
+        test_tag_label = 'test_tag'
+        self.event_2.tags.add(test_tag_label)
+        self.event_2.save()
+        # Bad tag, we should get nothing
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'tag',
+                kwargs={'tag': 'test_taeg'}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'tag',
+                kwargs={'tag': test_tag_label}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
 
 """ Block function tests """

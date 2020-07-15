@@ -593,12 +593,6 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     @property
     def events(self):
         # Events that have not ended.
-        """
-        today = date.today()
-        Q(date_from__gte=today) | (
-                Q(date_to__isnull=False) & Q(date_to__gte=today)
-            )
-        """
         events = Event.objects.live().filter().order_by('-date_from')
         return events
 
@@ -615,9 +609,9 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
         if not tag:
             # Invalid tag filter
             logger.error('Invalid tag filter')
-            return self.all_posts(request)
+            return self.all_events(request)
 
-        posts = self.posts.filter(tags__name=tag)
+        posts = self.events.filter(tags__name=tag)
 
         return render(
             request, self.get_template(request), {
