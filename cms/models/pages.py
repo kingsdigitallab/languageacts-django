@@ -783,12 +783,12 @@ Event.content_panels = [
     FieldPanel('time'),
     FieldPanel('time_end'),
     FieldPanel('location'),
-
     StreamFieldPanel('body'),
 ]
 
 Event.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
+    ImageChooserPanel('feed_image'),
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 
