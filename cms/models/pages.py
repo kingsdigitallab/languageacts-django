@@ -344,7 +344,15 @@ BlogIndexPage.promote_panels = Page.promote_panels
 
 
 class BlogPostTag(TaggedItemBase):
-    content_object = ParentalKey('BlogPost', related_name='tagged_items')
+    content_object = ParentalKey(
+        'BlogPost',
+        on_delete=models.CASCADE, related_name='tagged_items')
+
+    @property
+    def name(self):
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class BlogPost(Page, WithStreamField, WithFeedImage):
@@ -446,7 +454,6 @@ BlogPost.content_panels = [
 BlogPost.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     ImageChooserPanel('feed_image'),
-
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 
@@ -506,7 +513,15 @@ NewsIndexPage.promote_panels = Page.promote_panels
 
 
 class NewsPostTag(TaggedItemBase):
-    content_object = ParentalKey('NewsPost', related_name='tagged_items')
+    content_object = ParentalKey(
+        'NewsPost', on_delete=models.CASCADE, related_name='tagged_items'
+    )
+
+    @property
+    def name(self):
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class NewsPost(Page, WithStreamField, WithFeedImage):
@@ -666,7 +681,14 @@ PastEventIndexPage.promote_panels = Page.promote_panels
 
 
 class EventTag(TaggedItemBase):
-    content_object = ParentalKey('Event', related_name='tagged_items')
+    content_object = ParentalKey(
+        'Event', on_delete=models.CASCADE, related_name='tagged_items')
+
+    @property
+    def name(self):
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class Event(Page, WithStreamField, WithFeedImage):
