@@ -1,8 +1,8 @@
 # EventIndexPage, HomePage, IndexPage, NewsIndexPage,
 import factory
 from cms.models.pages import (
-    BlogIndexPage, BlogPost, BlogAuthor,
-    NewsIndexPage, NewsPost, StrandPage,
+    BlogIndexPage, BlogPost, BlogAuthor, RichTextPage,
+    NewsIndexPage, NewsPost, StrandPage, IndexPage
 )
 
 
@@ -18,6 +18,20 @@ class StrandPageFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = StrandPage
+
+
+class IndexPageFactory(factory.DjangoModelFactory):
+    title = factory.Faker('sentence', nb_words=4)
+
+    class Meta:
+        model = IndexPage
+
+
+class RichTextPageFactory(factory.DjangoModelFactory):
+    title = factory.Faker('sentence', nb_words=4)
+
+    class Meta:
+        model = RichTextPage
 
 
 class BlogIndexPageFactory(factory.DjangoModelFactory):

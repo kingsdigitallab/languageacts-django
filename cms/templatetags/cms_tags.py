@@ -177,3 +177,14 @@ def get_request_parameters(context, exclude=None):
             params += '&{key}={value}'.format(key=key, value=value)
 
     return params
+
+
+@register.simple_tag
+def page_in_submenu(page: Page = None, parent: Page = None) -> bool:
+    """Return true if page parent is in page's children
+    (for sidebar menus) """
+    if page and parent:
+        for sub in parent.get_children().live().in_menu():
+            if sub.pk == page.pk:
+                return True
+    return False
