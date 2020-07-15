@@ -1,7 +1,7 @@
 {% load cms_tags %}
-{% comment %}
+
 {% get_request_parameters exclude="page" as params %}
-{% endcomment %}
+
 
 <ul class="pagination" role="navigation" aria-label="Pagination">
     <li class="arrow {% if not pages.has_previous %}unavailable{% endif %}">
