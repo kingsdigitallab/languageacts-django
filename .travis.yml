@@ -5,6 +5,8 @@ install:
 - pip install tox-travis
 - pip install coveralls
 - pip install python-coveralls
+- pip install coverage
+- pip install django_coverage_plugin
 
 script:
 - tox
