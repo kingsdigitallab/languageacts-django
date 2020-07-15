@@ -4,7 +4,6 @@ python:
 install:
 - pip install tox-travis
 - pip install coverage==4.5.4
-- pip install django_coverage_plugin
 - pip install coveralls
 - pip install python-coveralls
 
@@ -17,4 +16,4 @@ notifications:
     on_success: change
     on_failure: always
 after_success:
- - COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" django coveralls
+ - COVERALLS_REPO_TOKEN="$COVERALLS_REPO_TOKEN" coveralls
