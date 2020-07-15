@@ -4,6 +4,8 @@ python:
 install:
 - pip install tox-travis
 - pip install coverage==4.5.4
+- pip install django
+- pip install django_coverage_plugin
 - pip install coveralls
 - pip install python-coveralls
 
