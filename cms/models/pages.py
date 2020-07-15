@@ -350,6 +350,10 @@ class BlogPostTag(TaggedItemBase):
 
     @property
     def name(self):
+        """This has been added because of an error in
+        _edit_string_for_tags(tags) in taggit getting the parent object
+        not the tag, and failing with an Attribute Error. May need to be
+        revisited"""
         if self.tag:
             return self.tag.name
         return ''
