@@ -3,8 +3,4 @@ django-debug-toolbar
 Fabric3
 flake8
 ipython
-mypy
-factory_boy
-coverage
-django_coverage_plugin
 tox
