@@ -3,7 +3,7 @@ import factory
 from cms.models.pages import (
     BlogIndexPage, BlogPost, BlogAuthor, RichTextPage,
     NewsIndexPage, NewsPost, StrandPage, IndexPage,
-    EventIndexPage, Event
+    PastEventIndexPage, EventIndexPage, Event
 )
 
 
@@ -35,6 +35,15 @@ class EventIndexPageFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = EventIndexPage
+
+
+class PastEventIndexPageFactory(factory.DjangoModelFactory):
+    title = factory.Faker('sentence', nb_words=4)
+    path = "00010009"
+    depth = 2
+
+    class Meta:
+        model = PastEventIndexPage
 
 
 class EventFactory(factory.DjangoModelFactory):

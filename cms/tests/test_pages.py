@@ -11,7 +11,8 @@ from wagtail.tests.utils import WagtailPageTests
 from cms.tests.factories import (
     BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
     NewsIndexPageFactory, NewsPostFactory, StrandPageFactory,
-    EventIndexPageFactory, EventFactory, UserFactory
+    EventIndexPageFactory, PastEventIndexPageFactory,
+    EventFactory, UserFactory
 )
 from wagtail.core.models import Page
 
@@ -144,6 +145,9 @@ class TestBlogPost(TestCase):
         self.blog_1.save()
         self.assertQuerysetEqual(
             BlogPost.get_by_strand(None), BlogPost.objects.none())
+        self.assertQuerysetEqual(
+            BlogPost.get_by_strand('bad strand name'), BlogPost.objects.none()
+        )
         self.assertEqual(
             BlogPost.get_by_strand(strand_1).count(),
             1
@@ -195,6 +199,9 @@ class TestNewsPost(TestCase):
         self.news_1.save()
         self.assertQuerysetEqual(
             NewsPost.get_by_strand(None), NewsPost.objects.none())
+        self.assertQuerysetEqual(
+            NewsPost.get_by_strand('bad strand name'), NewsPost.objects.none()
+        )
         self.assertEqual(
             NewsPost.get_by_strand(strand_1).count(),
             1
@@ -419,6 +426,64 @@ class TestEventIndexPage(TestCase):
         events = self.event_index.events
         self.assertEqual(events.count(), 2)
         self.assertEqual(events[0].title, 'Event Today')
+
+    def test_all_events(self):
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'all_events')
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_tag(self):
+        test_tag_label = 'test_tag'
+        self.event_2.tags.add(test_tag_label)
+        self.event_2.save()
+        # Bad tag, we should get nothing
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'tag',
+                kwargs={'tag': 'test_taeg'}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(
+            self.event_index.url
+            + self.event_index.reverse_subpage(
+                'tag',
+                kwargs={'tag': test_tag_label}
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+
+class TestPastEventIndexPage(TestCase):
+
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.home_page.add_child(
+            instance=PastEventIndexPageFactory.build(
+                title='Event Index Test'
+            )
+        )
+        self.event_index = PastEventIndexPage.objects.get(
+            title='Event Index Test'
+        )
+        self.event_index.add_child(
+            instance=EventFactory.build()
+        )
+        self.event_2 = EventFactory.build(
+            title='Event Today',
+            date_from=date.today()
+        )
+        self.event_index.add_child(
+            instance=self.event_2
+        )
+
+    def test_events(self):
+        events = self.event_index.events
+        self.assertEqual(events.count(), 1)
 
     def test_all_events(self):
         response = self.client.get(

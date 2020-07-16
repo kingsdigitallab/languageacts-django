@@ -658,9 +658,9 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
         if not tag:
             # Invalid tag filter
             logger.error('Invalid tag filter')
-            return self.all_posts(request)
+            return self.all_events(request)
 
-        posts = self.posts.filter(tags__name=tag)
+        posts = self.events.filter(tags__name=tag)
 
         return render(
             request, self.get_template(request), {
