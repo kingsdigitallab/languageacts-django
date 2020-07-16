@@ -1,4 +1,6 @@
 # Language Acts and Worldmaking
+[![Build Status](https://travis-ci.org/kingsdigitallab/languageacts-django.svg?branch=develop)](https://travis-ci.org/kingsdigitallab/languageacts-django)
+[![Coverage Status](https://coveralls.io/repos/github/kingsdigitallab/languageacts-django/badge.svg?branch=develop)](https://coveralls.io/github/kingsdigitallab/languageacts-django?branch=develop)
 
 ## 4.0.1 Release
 * Added monospace style
