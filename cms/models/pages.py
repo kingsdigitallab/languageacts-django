@@ -417,32 +417,32 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_by_tag(self, tag=None):
+    def get_by_tag(cls, tag=None):
         today = date.today()
         if tag:
-            return self.objects.live().filter(
+            return cls.objects.live().filter(
                 tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
-            return self.objects.none()
+            return cls.objects.none()
 
     @classmethod
-    def get_by_author(self, author=None):
+    def get_by_author(cls, author=None):
         if author:
-            return self.objects.live().filter(author__author_name=author)
-        return self.objects.none()
+            return cls.objects.live().filter(author__author_name=author)
+        return cls.objects.none()
 
     @classmethod
-    def get_by_strand(self, strand_name=None):
+    def get_by_strand(cls, strand_name=None):
         today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.live().filter(
+                return cls.objects.live().filter(
                     strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
-                return self.objects.none()
+                return cls.objects.none()
         else:
-            return self.objects.none()
+            return cls.objects.none()
 
 
 BlogPost.content_panels = [

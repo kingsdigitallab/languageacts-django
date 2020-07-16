@@ -75,7 +75,7 @@ class BlogPostFactory(factory.DjangoModelFactory):
     title = factory.Faker('sentence', nb_words=4)
     path = factory.Sequence(lambda n: "00010009%04d" % n)
     author = factory.SubFactory(BlogAuthorFactory)
-    date = factory.Faker('date')
+    date = factory.Faker('past_date')
     live = True
     depth = 3
 
@@ -98,10 +98,18 @@ class NewsIndexPageFactory(factory.DjangoModelFactory):
 class NewsPostFactory(factory.DjangoModelFactory):
     title = factory.Faker('sentence', nb_words=4)
     path = factory.Sequence(lambda n: "00010009%04d" % n)
-    date = factory.Faker('date')
+    date = factory.Faker('past_date')
     live = True
     depth = 3
 
     class Meta:
         model = NewsPost
         django_get_or_create = ["title", "path", "depth"]
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    username = factory.Faker('name')
+
+    class Meta:
+        model = 'auth.User'
+        django_get_or_create = ('username',)

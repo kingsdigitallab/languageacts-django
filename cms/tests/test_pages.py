@@ -1,7 +1,7 @@
 from cms.models.pages import (
     BlogIndexPage, EventIndexPage, HomePage, IndexPage, NewsIndexPage,
     PastEventIndexPage, RichTextPage, StrandPage, _paginate, TagResults,
-    BlogAuthor
+    BlogAuthor, BlogPost, NewsPost
 )
 # BlogPost,
 from datetime import date
@@ -10,8 +10,8 @@ from django.test import RequestFactory, TestCase
 from wagtail.tests.utils import WagtailPageTests
 from cms.tests.factories import (
     BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
-    NewsIndexPageFactory, NewsPostFactory,
-    EventIndexPageFactory, EventFactory
+    NewsIndexPageFactory, NewsPostFactory, StrandPageFactory,
+    EventIndexPageFactory, EventFactory, UserFactory
 )
 from wagtail.core.models import Page
 
@@ -68,34 +68,141 @@ class TestRichTextPage(WagtailPageTests):
         self.assertAllowedSubpageTypes(RichTextPage, {})
 
 
-"""
 class TestBlogPost(TestCase):
-    def test_get_index_page(self):
-        self.fail()
 
-    def test_save(self):
-        self.fail()
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.home_page.add_child(
+            instance=BlogIndexPageFactory.build(
+                title='Blog Index Test'
+            )
+        )
+        self.author_1 = BlogAuthorFactory()
+        self.author_2 = BlogAuthorFactory()
+        self.blog_index_page = BlogIndexPage.objects.get(
+            title='Blog Index Test')
+        self.blog_1 = BlogPostFactory.build(
+            author=self.author_1,
+        )
+        self.blog_index_page.add_child(
+            instance=self.blog_1
+        )
 
-    def test_get_by_tag(self):
-        self.fail()
+    def test_get_index_page(self) -> None:
+        self.assertEqual(
+            self.blog_1.get_index_page(),
+            BlogIndexPage.objects.ancestor_of(self.blog_1).last()
+        )
 
-    def test_get_by_author(self):
-        self.fail()
+    def test_save(self) -> None:
+        self.blog_1.author = None
+        owner = UserFactory()
+        self.blog_1.owner = owner
+        # No author, not a guest, set owner
+        self.blog_1.save()
+        self.assertEqual(self.blog_1.author.author_name, owner.username)
+        # No author, guest
+        self.blog_1.author = None
+        self.blog_1.guest = True
+        self.blog_1.save()
+        self.assertEqual(self.blog_1.author.author_name, 'guest')
+        # New author, save as normal
+        author_3 = BlogAuthorFactory()
+        self.blog_1.author = author_3
+        self.blog_1.save()
+        self.assertEqual(
+            self.blog_1.author.author_name, author_3.author_name)
 
-    def test_get_by_strand(self):
-        self.fail()
+    def test_get_by_tag(self) -> None:
+        self.blog_1.tags.add('test-tag')
+        self.blog_1.save()
+        posts = BlogPost.get_by_tag('test-tag')
+        self.assertEqual(posts.count(), 1)
+        posts = BlogPost.get_by_tag('bad-tag')
+        self.assertQuerysetEqual(posts, BlogPost.objects.none())
+
+    def test_get_by_author(self) -> None:
+        self.assertQuerysetEqual(
+            BlogPost.get_by_author(None), BlogPost.objects.none())
+        self.assertEqual(
+            BlogPost.get_by_author(self.author_1).count(), 1)
+        self.assertQuerysetEqual(
+            BlogPost.get_by_author(BlogAuthorFactory()),
+            BlogPost.objects.none()
+        )
+
+    def test_get_by_strand(self) -> None:
+        strand_1 = StrandPageFactory.build()
+        strand_2 = StrandPageFactory.build()
+        self.home_page.add_child(
+            instance=strand_1
+        )
+        self.home_page.add_child(
+            instance=strand_2
+        )
+        self.blog_1.strands.add(strand_1)
+        self.blog_1.save()
+        self.assertQuerysetEqual(
+            BlogPost.get_by_strand(None), BlogPost.objects.none())
+        self.assertEqual(
+            BlogPost.get_by_strand(strand_1).count(),
+            1
+        )
+        self.assertEqual(BlogPost.get_by_strand(strand_1)[0], self.blog_1)
+        self.assertQuerysetEqual(
+            BlogPost.get_by_strand(strand_2), BlogPost.objects.none())
 
 
 class TestNewsPost(TestCase):
-    def test_get_index_page(self):
-        self.fail()
 
-    def test_get_by_tag(self):
-        self.fail()
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.news_index = NewsIndexPageFactory.build(
+            title='News Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.news_index
+        )
+        self.news_1 = NewsPostFactory.build()
+        self.news_index.add_child(
+            instance=self.news_1
+        )
 
-    def test_get_by_strand(self):
-        self.fail()
-"""
+    def test_get_index_page(self) -> None:
+        self.assertEqual(
+            self.news_1.get_index_page(),
+            NewsIndexPage.objects.ancestor_of(self.news_1).last()
+        )
+
+    def test_get_by_tag(self) -> None:
+        self.news_1.tags.add('test-tag')
+        self.news_1.save()
+        posts = NewsPost.get_by_tag('test-tag')
+        self.assertEqual(posts.count(), 1)
+        posts = NewsPost.get_by_tag('bad-tag')
+        self.assertQuerysetEqual(posts, NewsPost.objects.none())
+
+    def test_get_by_strand(self) -> None:
+        strand_1 = StrandPageFactory.build()
+        strand_2 = StrandPageFactory.build()
+        self.home_page.add_child(
+            instance=strand_1
+        )
+        self.home_page.add_child(
+            instance=strand_2
+        )
+        self.news_1.strands.add(strand_1)
+        self.news_1.save()
+        self.assertQuerysetEqual(
+            NewsPost.get_by_strand(None), NewsPost.objects.none())
+        self.assertEqual(
+            NewsPost.get_by_strand(strand_1).count(),
+            1
+        )
+        self.assertEqual(NewsPost.get_by_strand(strand_1)[0], self.news_1)
+        self.assertQuerysetEqual(
+            NewsPost.get_by_strand(strand_2), NewsPost.objects.none())
+
 
 """ View and route Tests"""
 

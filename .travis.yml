@@ -3,7 +3,7 @@ python:
 - 3.5
 install:
 - pip install tox-travis
-- pip install coverage==4.5.4
+- pip install coverage==5
 - pip install django
 - pip install django_coverage_plugin
 - pip install coveralls
