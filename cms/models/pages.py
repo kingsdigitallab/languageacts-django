@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.shortcuts import render
 from haystack.query import SearchQuerySet
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -28,6 +28,7 @@ from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 from .behaviours import WithFeedImage, WithStreamField
 from .streamfield import RecordEntryStreamBlock, CMSStreamBlock
+from django.utils.text import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -260,6 +261,22 @@ RichTextPage.content_panels = [
 RichTextPage.promote_panels = Page.promote_panels
 
 
+@register_snippet
+class BlogAuthor(models.Model):
+    author_name = models.CharField(max_length=512, default='')
+    first_name = models.CharField(max_length=512, default='')
+    last_name = models.CharField(max_length=512, default='')
+    author_slug = models.CharField(max_length=512, default='')
+
+    def save(self, *args, **kwargs):
+        # update author slug
+        self.author_slug = slugify(self.author_name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.author_name
+
+
 class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
@@ -300,19 +317,22 @@ class BlogIndexPage(RoutablePageMixin, Page, WithStreamField):
             }
         )
 
-    @route(r'^author/(?P<author>[\w\- ]+)/$')
-    def author(self, request, author=None):
-        if author:
-            posts = self.posts.filter(author__author_name=author)
-            return render(
-                request, self.get_template(request), {
-                    'self': self, 'posts': _paginate(request, posts),
-                    'filter_type': 'author', 'filter': author
-                }
+    def get_author(self, author_slug: str) -> QuerySet:
+        if author_slug:
+            return self.posts.filter(
+                author__author_slug=author_slug
             )
-        else:
-            logger.error('invalid Author')
-            return self.all_posts()
+        return BlogAuthor.objects.none()
+
+    @route(r'^author/(?P<author>[\w\- ]*)/$')
+    def author(self, request, author=None):
+        posts = self.get_author(author)
+        return render(
+            request, self.get_template(request), {
+                'self': self, 'posts': _paginate(request, posts),
+                'filter_type': 'author', 'filter': author
+            }
+        )
 
 
 BlogIndexPage.content_panels = [
@@ -324,17 +344,19 @@ BlogIndexPage.promote_panels = Page.promote_panels
 
 
 class BlogPostTag(TaggedItemBase):
-    content_object = ParentalKey('BlogPost', related_name='tagged_items')
+    content_object = ParentalKey(
+        'BlogPost',
+        on_delete=models.CASCADE, related_name='tagged_items')
 
-
-@register_snippet
-class BlogAuthor(models.Model):
-    author_name = models.CharField(max_length=512, default='')
-    first_name = models.CharField(max_length=512, default='')
-    last_name = models.CharField(max_length=512, default='')
-
-    def __str__(self):
-        return self.author_name
+    @property
+    def name(self):
+        """This has been added because of an error in
+        _edit_string_for_tags(tags) in taggit getting the parent object
+        not the tag, and failing with an Attribute Error. May need to be
+        revisited"""
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class BlogPost(Page, WithStreamField, WithFeedImage):
@@ -395,32 +417,32 @@ class BlogPost(Page, WithStreamField, WithFeedImage):
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_by_tag(self, tag=None):
+    def get_by_tag(cls, tag=None):
         today = date.today()
         if tag:
-            return self.objects.live().filter(
+            return cls.objects.live().filter(
                 tags__name=tag).filter(date__lte=today).order_by('-date')
         else:
-            return self.objects.none()
+            return cls.objects.none()
 
     @classmethod
-    def get_by_author(self, author=None):
+    def get_by_author(cls, author=None):
         if author:
-            return self.objects.live().filter(author__author_name=author)
-        return self.objects.none()
+            return cls.objects.live().filter(author__author_name=author)
+        return cls.objects.none()
 
     @classmethod
-    def get_by_strand(self, strand_name=None):
+    def get_by_strand(cls, strand_name=None):
         today = date.today()
         if strand_name:
             try:
                 strand = StrandPage.objects.get(title=strand_name)
-                return self.objects.live().filter(
+                return cls.objects.live().filter(
                     strands=strand).filter(date__lte=today).order_by('-date')
             except ObjectDoesNotExist:
-                return self.objects.none()
+                return cls.objects.none()
         else:
-            return self.objects.none()
+            return cls.objects.none()
 
 
 BlogPost.content_panels = [
@@ -436,7 +458,6 @@ BlogPost.content_panels = [
 BlogPost.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
     ImageChooserPanel('feed_image'),
-
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 
@@ -470,7 +491,7 @@ class NewsIndexPage(RoutablePageMixin, Page, WithStreamField):
         return render(request, self.get_template(request),
                       {'self': self, 'posts': _paginate(request, posts)})
 
-    @route(r'^tag/(?P<tag>[\w\- ]+)/$')
+    @route(r'^tag/(?P<tag>[\w\-\_ ]+)/$')
     def tag(self, request, tag=None):
         if not tag:
             # Invalid tag filter
@@ -496,7 +517,15 @@ NewsIndexPage.promote_panels = Page.promote_panels
 
 
 class NewsPostTag(TaggedItemBase):
-    content_object = ParentalKey('NewsPost', related_name='tagged_items')
+    content_object = ParentalKey(
+        'NewsPost', on_delete=models.CASCADE, related_name='tagged_items'
+    )
+
+    @property
+    def name(self):
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class NewsPost(Page, WithStreamField, WithFeedImage):
@@ -564,12 +593,6 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
     @property
     def events(self):
         # Events that have not ended.
-        """
-        today = date.today()
-        Q(date_from__gte=today) | (
-                Q(date_to__isnull=False) & Q(date_to__gte=today)
-            )
-        """
         events = Event.objects.live().filter().order_by('-date_from')
         return events
 
@@ -578,16 +601,17 @@ class EventIndexPage(RoutablePageMixin, Page, WithStreamField):
         events = self.events
 
         return render(request, self.get_template(request),
-                      {'self': self, 'events': _paginate(request, events)})
+                      {'self': self, 'paginated_events': _paginate(
+                          request, events)})
 
     @route(r'^tag/(?P<tag>[\w\- ]+)/$')
     def tag(self, request, tag=None):
         if not tag:
             # Invalid tag filter
             logger.error('Invalid tag filter')
-            return self.all_posts(request)
+            return self.all_events(request)
 
-        posts = self.posts.filter(tags__name=tag)
+        posts = self.events.filter(tags__name=tag)
 
         return render(
             request, self.get_template(request), {
@@ -634,9 +658,9 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
         if not tag:
             # Invalid tag filter
             logger.error('Invalid tag filter')
-            return self.all_posts(request)
+            return self.all_events(request)
 
-        posts = self.posts.filter(tags__name=tag)
+        posts = self.events.filter(tags__name=tag)
 
         return render(
             request, self.get_template(request), {
@@ -655,7 +679,14 @@ PastEventIndexPage.promote_panels = Page.promote_panels
 
 
 class EventTag(TaggedItemBase):
-    content_object = ParentalKey('Event', related_name='tagged_items')
+    content_object = ParentalKey(
+        'Event', on_delete=models.CASCADE, related_name='tagged_items')
+
+    @property
+    def name(self):
+        if self.tag:
+            return self.tag.name
+        return ''
 
 
 class Event(Page, WithStreamField, WithFeedImage):
@@ -746,12 +777,12 @@ Event.content_panels = [
     FieldPanel('time'),
     FieldPanel('time_end'),
     FieldPanel('location'),
-
     StreamFieldPanel('body'),
 ]
 
 Event.promote_panels = Page.promote_panels + [
     FieldPanel('tags'),
+    ImageChooserPanel('feed_image'),
     FieldPanel('strands', widget=forms.CheckboxSelectMultiple),
 ]
 

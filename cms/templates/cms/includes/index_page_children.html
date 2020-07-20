@@ -14,11 +14,12 @@
         <a href="{% pageurl page %}" class="ninety{% if page.url == self.url %} active{% endif %}">
             {{ page.title }}
         </a>
+        {% page_in_submenu self page as in_submenu %}
         {% if page.get_children.live.exists %}
-        <span class="toggler close added"></span>
+        <span class="toggler {% if in_submenu %}open{% else %}close{% endif %} added"></span>
         {% endif %}
 
-        <ul class="vertical menu nested hide content">
+        <ul class="vertical menu nested {% if in_submenu %}show{% else %}hide{% endif %} content">
             {% for sub in page.get_children.live.in_menu %}
             <li>
                 <a href="{% pageurl sub %}"{% if sub.url == self.url %} class="active"{% endif %}>
