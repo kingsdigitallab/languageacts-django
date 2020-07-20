@@ -5,7 +5,7 @@
     <div class="column column-block">
         <div class="card blog" data-equalizer-watch="blogpostheight">
             <div class="card-section">
-                <h3 class="title"><a href="{% pageurl page %}">{{ page.title }}</a></h3>
+                <div role="heading" aria-level="2" class="title"><a href="{% pageurl page %}">{{ page.title }}</a></div>
                 <p class="byline blogpost">
                     <p class="byline blog">
                     Posted by <a href="{% routablepageurl page.get_index_page "author" author=page.author.author_slug %}"> <strong>{{ page.author }}</strong></a></p>

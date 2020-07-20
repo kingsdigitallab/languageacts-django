@@ -130,7 +130,7 @@
                 {% if page.specific.feed_image %}
                 {% image page.specific.feed_image max-600x300 as tmp_image %}
                 <div class="image-container">
-                    <a href="{% pageurl page %}">
+                    <a href="{% pageurl page %}" aria-label="{% pageurl page %}">
                         <img src="{{ tmp_image.url }}" alt="{{ tmp_image.alt }}">
                     </a>
                 </div>
