@@ -366,10 +366,6 @@ header.top-header {
 
 /** Navigation **/
 
-// nav {
-//     margin-bottom: rem-calc(24);
-// }
-
 .top-bar {
 
     &::before {
@@ -386,6 +382,10 @@ header.top-header {
             border-bottom: 1px solid $white;
         }
     }
+}
+
+.dropdown > li > .menu {
+    background: white;
 }
 
 .subnav {
