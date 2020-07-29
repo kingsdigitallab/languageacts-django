@@ -8,6 +8,18 @@
     {% for page in menu_pages %}
     <li{% if page.active %} class="active"{% endif %}>
         <a href="{% pageurl page %}">{{ page.title }}</a>
+        {# sub-pages #}
+        {% with page.get_children.live.in_menu.specific as children %}
+            {% if children %}
+                <ul class="vertical menu">
+                    {% for child in children %}
+                        <li{% if child.active %} class="active"{% endif %}>
+                            <a href="{% pageurl child %}">{{ child.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </li>
     {% endfor %}
 </ul>
@@ -31,6 +43,18 @@
     {% for page in menu_pages %}
     <li{% if page.active %} class="active" {% endif %}>
         <a href="{% pageurl page %}">{{ page.title }}</a>
+        {# sub-pages #}
+        {% with page.get_children.live.in_menu.specific as children %}
+            {% if children %}
+                <ul class="vertical menu">
+                    {% for child in children %}
+                        <li{% if child.active %} class="active"{% endif %}>
+                            <a href="{% pageurl child %}">{{ child.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </li>
     {% endfor %}
 </ul>
