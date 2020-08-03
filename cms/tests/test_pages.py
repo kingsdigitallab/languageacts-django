@@ -1,20 +1,22 @@
+# BlogPost,
+from datetime import date
+
+import factory
 from cms.models.pages import (
     BlogIndexPage, EventIndexPage, HomePage, IndexPage, NewsIndexPage,
     PastEventIndexPage, RichTextPage, StrandPage, _paginate, TagResults,
-    BlogAuthor, BlogPost, NewsPost
+    BlogAuthor, BlogPost, NewsPost, Event
 )
-# BlogPost,
-from datetime import date
-from django.urls import reverse
-from django.test import RequestFactory, TestCase
-from wagtail.tests.utils import WagtailPageTests
 from cms.tests.factories import (
     BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
     NewsIndexPageFactory, NewsPostFactory, StrandPageFactory,
     EventIndexPageFactory, PastEventIndexPageFactory,
     EventFactory, UserFactory
 )
+from django.test import RequestFactory, TestCase
+from django.urls import reverse
 from wagtail.core.models import Page
+from wagtail.tests.utils import WagtailPageTests
 
 
 class TestPages(TestCase):
@@ -36,6 +38,42 @@ class TestPages(TestCase):
         request = factory.get('/test?page=a')
         self.assertEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                          _paginate(request, items).object_list)
+
+
+class TestStrandPage(TestCase):
+
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.blog_index_page = BlogIndexPageFactory.build(
+            title='Blog Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.blog_index_page
+        )
+
+    def test_show_filtered_content(self):
+        strand_1 = StrandPageFactory.build()
+        self.assertTrue(strand_1.show_filtered_content())
+
+    def test_get_context(self):
+        strand_1 = StrandPageFactory.build()
+        self.home_page.add_child(
+            instance=strand_1
+        )
+        self.blog_1 = BlogPostFactory.build(
+            author=BlogAuthorFactory()
+        )
+        self.blog_index_page.add_child(
+            instance=self.blog_1
+        )
+        self.blog_1.strands.add(strand_1)
+        self.blog_1.save()
+        factory = RequestFactory()
+        request = factory.get('/test_strand')
+        context = strand_1.get_context(request)
+        blog_posts = context['blog_posts']
+        self.assertEqual(blog_posts.count(), 1)
+        self.assertEqual(blog_posts[0], self.blog_1)
 
 
 class TestHomePage(WagtailPageTests):
@@ -515,5 +553,72 @@ class TestPastEventIndexPage(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+
+class TestEventTag(TestCase):
+    def test_name(self):
+        pass
+
+
+class TestEvent(TestCase):
+
+    def setUp(self) -> None:
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.home_page.add_child(
+            instance=EventIndexPageFactory.build(
+                title='Event Index Test'
+            )
+        )
+        self.event_index = EventIndexPage.objects.get(
+            title='Event Index Test'
+        )
+        self.event_index.add_child(
+            instance=EventFactory.build(
+                date_from=factory.Faker('past_date')
+            )
+        )
+        self.event_2 = EventFactory.build(
+            title='Event Today',
+            date_from=date.today()
+        )
+        self.event_index.add_child(
+            instance=self.event_2
+        )
+
+    def test_get_index_page(self):
+        self.assertEqual(self.event_index, self.event_2.get_index_page())
+
+    def test_is_past(self):
+        self.assertFalse(self.event_2.is_past)
+
+    def test_get_by_strand(self):
+        pass
+
+    def test_get_by_tag(self):
+        test_tag_label = 'test_tag'
+        self.event_2.tags.add(test_tag_label)
+        self.event_2.save()
+        events = Event.get_by_tag(test_tag_label)
+        self.assertEqual(events.count(), 1)
+
+    def test_get_past_by_strand(self):
+        strand_title = 'test_strand'
+        strand_1 = StrandPageFactory.build(
+            title=strand_title
+        )
+        self.home_page.add_child(
+            instance=strand_1
+        )
+        self.event_2.strands.add(strand_1)
+        self.event_2.save()
+        events = Event.get_by_strand(strand_title)
+        self.assertEqual(events.count(), 1)
+
+
+# todo finish once haystack test added
+# class TestRecordIndexPage(TestCase):
+#
+#     def test_get_context(self):
+#         factory = RequestFactory()
+#         request = factory.get('/test?selected_facets=first_letter:E')
 
 """ Block function tests """
