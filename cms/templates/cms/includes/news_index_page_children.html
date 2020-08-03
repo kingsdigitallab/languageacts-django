@@ -5,6 +5,7 @@
 
 {% block newsitem %}
 {% include "cms/includes/news_preview.html" %}
+    {% include "cms/includes/pagination.html" with pages=posts %}
 {% endblock %}
 {% else %}
 <p>There are no news items published at the moment.</p>
