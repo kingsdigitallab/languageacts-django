@@ -1,9 +1,12 @@
+from datetime import date
+
+from cms.models.pages import (
+    BlogPost, Event, NewsPost, HomePage, BlogIndexPage,
+    NewsIndexPage, EventIndexPage
+)
 from django import template
 from django.conf import settings
-
-from cms.models.pages import BlogPost, Event, NewsPost, HomePage
 from wagtail.core.models import Page
-from datetime import date
 
 register = template.Library()
 
@@ -11,7 +14,7 @@ register = template.Library()
 @register.filter
 def get_section(current_page):
     homepage = HomePage.objects.first()
-    current_section = Page.objects.ancestor_of(current_page, inclusive=True)\
+    current_section = Page.objects.ancestor_of(current_page, inclusive=True) \
         .child_of(homepage).first()
     return current_section
 
@@ -118,6 +121,16 @@ def has_view_restrictions(page):
     """Returns True if the page has view restrictions set up, False
     otherwise."""
     return page.view_restrictions.count() > 0
+
+
+@register.simple_tag
+def show_children_in_menu(page):
+    """ Force certain page types to never show children in menu"""
+    if (type(page.specific) == BlogIndexPage
+            or type(page.specific) == NewsIndexPage
+            or type(page.specific) == EventIndexPage):
+        return False
+    return True
 
 
 @register.inclusion_tag('cms/tags/main_menu.html', takes_context=True)
