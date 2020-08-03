@@ -28,6 +28,9 @@
     {% endfor %}
 </div>
 {% endblock %}
+
+{% include "cms/includes/pagination.html" with pages=posts %}
+
 {% else %}
 <p>There are no blog posts.</p>
 
