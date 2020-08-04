@@ -23,6 +23,7 @@ class StrandPageFactory(factory.DjangoModelFactory):
 
 class IndexPageFactory(factory.DjangoModelFactory):
     title = factory.Faker('sentence', nb_words=4)
+    live = False
 
     class Meta:
         model = IndexPage

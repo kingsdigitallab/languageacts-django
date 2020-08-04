@@ -99,6 +99,15 @@ class TestIndexPage(WagtailPageTests):
     def test_subpage_types(self):
         self.assertAllowedSubpageTypes(IndexPage, {IndexPage, RichTextPage})
 
+    # def test_render(self) -> None:
+    #     import pdb
+    #     pdb.set_trace()
+    #     ip = IndexPage.objects.all()[0]
+    #     response = self.client.get(
+    #         ip.url
+    #     )
+    #     self.assertEqual(response.status_code, 200)
+
 
 class TestRichTextPage(WagtailPageTests):
     fixtures = ['tests.json']

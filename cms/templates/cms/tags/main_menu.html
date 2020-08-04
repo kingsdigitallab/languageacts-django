@@ -9,20 +9,7 @@
         <li{% if page.active %} class="active"{% endif %}>
             <a href="{% pageurl page %}">{{ page.title }}</a>
             {# sub-pages #}
-            {% show_children_in_menu page as show_children %}
-            {% if show_children %}
-                {% with page.get_children.live.in_menu.specific as children %}
-                    {% if children %}
-                        <ul class="vertical menu">
-                            {% for child in children %}
-                                <li{% if child.active %} class="active"{% endif %}>
-                                    <a href="{% pageurl child %}">{{ child.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
-            {% endif %}
+            {% show_children_in_menu page %}
         </li>
     {% endfor %}
 </ul>
@@ -48,20 +35,7 @@
         <li{% if page.active %} class="active" {% endif %}>
             <a href="{% pageurl page %}">{{ page.title }}</a>
             {# sub-pages #}
-            {% show_children_in_menu page as show_children %}
-            {% if show_children %}
-                {% with page.get_children.live.in_menu.specific as children %}
-                    {% if children %}
-                        <ul class="vertical menu">
-                            {% for child in children %}
-                                <li{% if child.active %} class="active"{% endif %}>
-                                    <a href="{% pageurl child %}">{{ child.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
-            {% endif %}
+            {% show_children_in_menu page %}
         </li>
     {% endfor %}
 </ul>

@@ -123,14 +123,21 @@ def has_view_restrictions(page):
     return page.view_restrictions.count() > 0
 
 
-@register.simple_tag
+@register.inclusion_tag(
+    'cms/tags/show_children_in_menu.html', takes_context=False)
 def show_children_in_menu(page):
     """ Force certain page types to never show children in menu"""
+    show_children = True
+    children = None
     if (type(page.specific) == BlogIndexPage
             or type(page.specific) == NewsIndexPage
             or type(page.specific) == EventIndexPage):
-        return False
-    return True
+        show_children = False
+    if show_children:
+        children = page.get_children().live().in_menu().specific()
+    return {
+        'page': page, 'show_children': show_children, 'children': children
+    }
 
 
 @register.inclusion_tag('cms/tags/main_menu.html', takes_context=True)
