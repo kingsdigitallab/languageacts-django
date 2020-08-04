@@ -1,0 +1,15 @@
+{% extends "cms/base.html" %}
+{% load wagtailcore_tags %}
+
+{% block meta_title %}Search Results{% endblock %}
+
+{# Not a fan of this, but it's the least hacky way to feed the title back. #}
+{% block title %}
+    <header class="section-header">
+        <h1>Search Results for: {{ q }}</h1>
+    </header>
+{% endblock %}
+
+{% block main %}
+{% include "cms/includes/search_results.html" %}
+{% endblock %}

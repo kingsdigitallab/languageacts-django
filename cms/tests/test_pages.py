@@ -1,5 +1,6 @@
 # BlogPost,
 from datetime import date
+from unittest.mock import MagicMock, create_autospec, patch
 
 import factory
 from cms.models.pages import (
@@ -13,9 +14,13 @@ from cms.tests.factories import (
     EventIndexPageFactory, PastEventIndexPageFactory,
     EventFactory, UserFactory
 )
+from cms.views.search import SearchView
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from wagtail.core.models import Page
+from wagtail.search.backends.elasticsearch2 import Elasticsearch2SearchResults
 from wagtail.tests.utils import WagtailPageTests
 
 
@@ -366,10 +371,88 @@ class TestSearchView(TestCase):
     search_view_name = 'search'
     fixtures = ['tests.json']
 
+    def setUp(self):
+        """Set up a mock results class for basic results test"""
+        self.home_page, created = Page.objects.get_or_create(id=2)
+        self.event_2 = EventFactory.build(
+            title='Event Today',
+            date_from=date.today()
+        )
+        self.event_index = EventIndexPageFactory.build(
+            title='Event Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.event_index
+        )
+        self.event_index.add_child(instance=self.event_2)
+        self.strand_1 = StrandPageFactory.build()
+        self.home_page.add_child(
+            instance=self.strand_1
+        )
+        self.event_2.strands.add(self.strand_1)
+        self.event_2.tags.add('test_tag')
+        self.event_2.save()
+        self.mock_qs = MagicMock(spec=Elasticsearch2SearchResults)
+        self.mock_qs.return_value = [self.event_2]
+        self.request = RequestFactory().get('/test?q=Lang')
+
     def test_search_view(self) -> None:
         # Test without q
         response = self.client.get(reverse(self.search_view_name))
         self.assertEqual(response.status_code, 200)
+
+    def test_get_context_data(self) -> None:
+        search_view = SearchView()
+        search_view.setup(self.request)
+        with patch(
+                'wagtail.core.models.PageQuerySet.search') as mock_search:
+            mock_search.return_value = [self.event_2]
+            context = search_view.get_context_data()
+        self.assertIn('q', context)
+        self.assertIn('results_qs', context)
+        self.assertGreater(len(context['results_qs']), 0)
+        self.assertIn(self.event_2, context['results_qs'])
+
+    def test_search_results_template(self) -> None:
+        # results.paginator.count
+        mock_results = MagicMock()
+        mock_paginator = create_autospec(Paginator, return_value='fishy')
+        mock_paginator.count = 1
+        mock_paginator.number = 2
+        mock_paginator.num_pages = 3
+        mock_paginator.has_previous = True
+        mock_paginator.has_next = True
+        mock_results.paginator = mock_paginator
+
+        # results = paginator.get_page(page)
+        rendered = render_to_string(
+            'cms/includes/search_results.html', {
+                'request': self.request,
+                'results': mock_results,
+                'results_qs': self.mock_qs
+            })
+        self.assertIn(self.event_2.title, rendered)
+        self.assertIn("tags plain", rendered)
+        # nav links
+        self.assertIn('next', rendered)
+        self.assertIn('previous', rendered)
+        mock_results.paginator = None
+
+        rendered = render_to_string(
+            'cms/includes/search_results.html', {
+                'request': self.request,
+                'results': None,
+                'results_qs': self.mock_qs
+            })
+        self.assertIn("No search term", rendered)
+        rendered = render_to_string(
+            'cms/includes/search_results.html', {
+                'request': self.request,
+                'results': None,
+                'q': 'test',
+                'results_qs': self.mock_qs
+            })
+        self.assertIn("No results found", rendered)
 
 
 class TestNewsIndexPage(TestCase):
@@ -580,10 +663,11 @@ class TestEvent(TestCase):
         self.event_index = EventIndexPage.objects.get(
             title='Event Index Test'
         )
+        self.event_1 = EventFactory.build(
+            date_from=factory.Faker('past_date')
+        )
         self.event_index.add_child(
-            instance=EventFactory.build(
-                date_from=factory.Faker('past_date')
-            )
+            instance=self.event_1
         )
         self.event_2 = EventFactory.build(
             title='Event Today',
@@ -591,6 +675,13 @@ class TestEvent(TestCase):
         )
         self.event_index.add_child(
             instance=self.event_2
+        )
+        self.strand_title = 'test_strand'
+        self.strand_1 = StrandPageFactory.build(
+            title=self.strand_title
+        )
+        self.home_page.add_child(
+            instance=self.strand_1
         )
 
     def test_get_index_page(self):
@@ -600,7 +691,11 @@ class TestEvent(TestCase):
         self.assertFalse(self.event_2.is_past)
 
     def test_get_by_strand(self):
-        pass
+        self.event_2.strands.add(self.strand_1)
+        self.event_2.save()
+        events = Event.get_by_strand(self.strand_title)
+        self.assertEqual(events.count(), 1)
+        self.assertIn(self.event_2, events)
 
     def test_get_by_tag(self):
         test_tag_label = 'test_tag'
@@ -610,17 +705,11 @@ class TestEvent(TestCase):
         self.assertEqual(events.count(), 1)
 
     def test_get_past_by_strand(self):
-        strand_title = 'test_strand'
-        strand_1 = StrandPageFactory.build(
-            title=strand_title
-        )
-        self.home_page.add_child(
-            instance=strand_1
-        )
-        self.event_2.strands.add(strand_1)
-        self.event_2.save()
-        events = Event.get_by_strand(strand_title)
+        self.event_1.strands.add(self.strand_1)
+        self.event_1.save()
+        events = Event.get_past_by_strand(self.strand_title)
         self.assertEqual(events.count(), 1)
+        self.assertIn(self.event_1, events)
 
 
 # todo finish once haystack test added

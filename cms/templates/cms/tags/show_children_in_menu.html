@@ -1,0 +1,11 @@
+{% load wagtailcore_tags %}
+    {% if children and show_children %}
+        <ul class="vertical menu">
+            {% for child in children %}
+                <li{% if child.active %} class="active"{% endif %}>
+                    <a href="{% pageurl child %}">{{ child.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+

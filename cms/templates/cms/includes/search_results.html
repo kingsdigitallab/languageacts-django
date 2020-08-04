@@ -1,0 +1,58 @@
+{% if results.paginator.count %}
+
+    <ol class="search-results">
+        {% for result in results_qs %}
+            <li><h4><a href="{{ result.url }}">{{ result }}</a></h4>
+                {% if result.specific.search_description %}
+                    <p>{{ result.specific.search_description|safe }}</p>
+                {% endif %}
+
+
+                {% if result.specific.strands.all or result.specific.tags.all %}
+                    <div class="tags plain">
+                        {% if result.specific.strands.all %}
+                            {% for strand in result.specific.strands.all %}
+                                <span class="label secondary"><a href="/tagged-pages/?tag={{ strand.title|urlencode }}"
+                                                                 class="strand">{{ strand.title }}</a></span>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if result.specific.tags.all %}
+                            {% for tag in result.specific.tags.all %}
+                                <span class="label"><a
+                                        href="/tagged-pages/?tag={{ tag.name|urlencode }}">{{ tag.name }}</a></span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+
+    <div class="pag">
+        {% if results.has_previous %}
+            <span class="prev">
+            <a href="?q={{ q }}&amp;page=1">&laquo; first</a> /
+            <a href="?q={{ q }}&amp;page={{ results.previous_page_number }}">previous</a>
+        </span>
+        {% endif %}
+
+        <span class="current">
+            Page {{ results.number }} of {{ results.paginator.num_pages }}.
+        </span>
+
+        {% if results.has_next %}
+            <span class="next">
+            <a href="?q={{ q }}&amp;page={{ results.next_page_number }}">next</a> /
+            <a href="?q={{ q }}&amp;page={{ results.paginator.num_pages }}">last &raquo;</a>
+        </span>
+        {% endif %}
+    </div>
+
+{% else %}
+    {% if q %}
+        <p>No results found for <i>{{ q }}</i>.</p>
+    {% else %}
+        <p>No search term supplied.</p>
+    {% endif %}
+{% endif %}

@@ -5,7 +5,7 @@ from wagtail.core.models import Page
 
 
 class SearchView(TemplateView):
-    template_name = ('cms/search_results.html')
+    template_name = ('cms/search_results_page.html')
 
     def get_context_data(self, **kwargs):
         context = super(SearchView,
