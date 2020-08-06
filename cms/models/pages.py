@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import logging
 from datetime import date
+
 # from django.contrib.auth.models import User
 from django import forms
 from django.conf import settings
@@ -10,25 +11,26 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.shortcuts import render
+from django.utils.text import slugify
 from haystack.query import SearchQuerySet
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
     FieldPanel, MultiFieldPanel, StreamFieldPanel
 )
-from wagtail.core import blocks
-from wagtail.images.blocks import ImageChooserBlock
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Page
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
+
 from .behaviours import WithFeedImage, WithStreamField
 from .streamfield import RecordEntryStreamBlock, CMSStreamBlock
-from django.utils.text import slugify
 
 logger = logging.getLogger(__name__)
 
@@ -48,12 +50,36 @@ def _paginate(request, items):
     return items
 
 
-class IndexPage(Page, WithStreamField):
+class StrandChildMixin(object):
+    """Quick mixin to get a parent strand from Treebeard(wagtail)
+    parent tree.  Looks at all ancestors"""
+
+    @property
+    def parent_strands(self):
+        return StrandPage.objects.ancestor_of(self).specific()
+
+    def add_parent_strand_content_to_context(self, context):
+        if self.parent_strands.count() > 0:
+            # Right now this assumes 1 strand parent
+            # will need to be refactored IF strands manymany actually used
+            for strand in self.parent_strands:
+                context['strand'] = strand
+                context = StrandPage.get_strand_related_content(
+                    context, strand.title)
+        return context
+
+
+class IndexPage(StrandChildMixin, Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
     ]
     strands = ParentalManyToManyField('cms.StrandPage', blank=True)
     subpage_types = ['IndexPage', 'RichTextPage']
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(IndexPage, self).get_context(request)
+        context = self.add_parent_strand_content_to_context(context)
+        return context
 
 
 IndexPage.content_panels = [
@@ -78,18 +104,24 @@ class StrandPage(IndexPage, WithStreamField):
     def show_filtered_content(self):
         return True
 
+    @classmethod
+    def get_strand_related_content(cls, context: dict, title: str) -> dict:
+        """ Add posts, events, news for strand to context"""
+        if context and title:
+            context['blog_posts'] = BlogPost.get_by_strand(
+                title)
+            context['events'] = Event.get_by_strand(
+                title)
+            context['past_events'] = Event.get_past_by_strand(
+                title)
+            context['news_posts'] = NewsPost.get_by_strand(
+                title)
+        return context
+
     def get_context(self, request, *args, **kwargs):
         context = super(StrandPage, self).get_context(request)
-
-        context['blog_posts'] = BlogPost.get_by_strand(
-            self.title)
-        context['events'] = Event.get_by_strand(
-            self.title)
-        context['past_events'] = Event.get_past_by_strand(
-            self.title)
-        context['news_posts'] = NewsPost.get_by_strand(
-            self.title)
-
+        context['strand'] = self
+        context = StrandPage.get_strand_related_content(context, self.title)
         return context
 
 
@@ -245,12 +277,17 @@ RecordEntry.content_panels = [
 ]
 
 
-class RichTextPage(Page, WithStreamField):
+class RichTextPage(StrandChildMixin, Page, WithStreamField):
     search_fields = Page.search_fields + [
         index.SearchField('body'),
     ]
 
     subpage_types = []
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(RichTextPage, self).get_context(request)
+        context = self.add_parent_strand_content_to_context(context)
+        return context
 
 
 RichTextPage.content_panels = [
@@ -641,9 +678,8 @@ class PastEventIndexPage(RoutablePageMixin, Page, WithStreamField):
         # Events that have not ended.
         today = date.today()
         events = Event.objects.live().filter(
-            Q(date_from__lt=today) & (
-                Q(date_to__isnull=True) | Q(date_to__lt=today)
-            )
+            Q(date_from__lt=today) & (Q(date_to__isnull=True) | Q(
+                date_to__lt=today))
         ).order_by('-date_from')
         return events
 
@@ -725,13 +761,11 @@ class Event(Page, WithStreamField, WithFeedImage):
 
     @classmethod
     def get_by_tag(self, tag=None):
-
         if tag:
             today = date.today()
             return self.objects.filter(tags__name=tag).filter(
-                Q(date_from__gte=today) | (
-                    Q(date_to__isnull=False) & Q(date_to__gte=today)
-                )
+                Q(date_from__gte=today)
+                | (Q(date_to__isnull=False) & Q(date_to__gte=today))
             ).order_by('date_from')
         else:
             return self.objects.none()
@@ -744,9 +778,7 @@ class Event(Page, WithStreamField, WithFeedImage):
                 strand = StrandPage.objects.get(title=strand_name)
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__gte=today) | (
-                        Q(date_to__isnull=False) & Q(
-                            date_to__gte=today)
-                    )
+                        Q(date_to__isnull=False) & Q(date_to__gte=today))
                 ).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
@@ -761,8 +793,7 @@ class Event(Page, WithStreamField, WithFeedImage):
                 strand = StrandPage.objects.get(title=strand_name)
                 return self.objects.filter(strands=strand).filter(
                     Q(date_from__lt=today) | (
-                        Q(date_to__isnull=False) & Q(date_to__lt=today)
-                    )
+                        Q(date_to__isnull=False) & Q(date_to__lt=today))
                 ).order_by('date_from')
             except ObjectDoesNotExist:
                 return self.objects.none()
@@ -851,12 +882,12 @@ IndexPage.content_panels = [
 
 IndexPage.promote_panels = Page.promote_panels
 
-
 """ Carousel Blocks """
 
 
 class BaseSlideBlock(blocks.StructBlock):
     """Core methods for all carousel slides"""
+
     class Meta:
         abstract = True
         template = 'cms/blocks/slide_block.html'

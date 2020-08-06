@@ -30,6 +30,28 @@
         </ul>
     </li>
     {% endfor %}
+        {# Strand related content, moved from strand_page #}
+        {% if news_posts %}
+            <li>
+                <a href="{% pageurl strand %}?content=news" {% if request.GET.content == 'news' %}class="active"{% endif %}>
+                    {{ strand.title }} News
+                </a>
+            </li>
+            {% endif %}
+            {% if events or past_events %}
+            <li>
+                <a href="{% pageurl strand %}?content=events" {% if request.GET.content == 'events' %}class="active"{% endif %}>
+                    {{ strand.title }} Events
+                </a>
+            </li>
+            {% endif %}
+            {% if blog_posts %}
+            <li>
+                <a href="{% pageurl strand %}?content=blog" {% if request.GET.content == 'blog' %}class="active"{% endif %}>
+                    {{ strand.title }} Blog Posts
+                </a>
+            </li>
+            {% endif %}
 
     {% endwith %}
 </ul>

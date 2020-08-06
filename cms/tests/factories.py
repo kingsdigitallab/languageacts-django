@@ -3,7 +3,7 @@ import factory
 from cms.models.pages import (
     BlogIndexPage, BlogPost, BlogAuthor, RichTextPage,
     NewsIndexPage, NewsPost, StrandPage, IndexPage,
-    PastEventIndexPage, EventIndexPage, Event
+    PastEventIndexPage, EventIndexPage, Event, HomePage
 )
 
 
@@ -19,6 +19,18 @@ class StrandPageFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = StrandPage
+
+
+class HomePageFactory(factory.DjangoModelFactory):
+    title = factory.Faker('sentence', nb_words=4)
+    body = "[]"
+    live = True
+    show_in_menus = True
+    path = "00010009"
+    depth = 2
+
+    class Meta:
+        model = HomePage
 
 
 class IndexPageFactory(factory.DjangoModelFactory):
