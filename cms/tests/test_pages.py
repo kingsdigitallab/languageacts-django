@@ -1,5 +1,6 @@
 # BlogPost,
 from datetime import date
+from typing import Union, Optional
 from unittest.mock import MagicMock, create_autospec, patch
 
 import factory
@@ -22,6 +23,40 @@ from django.urls import reverse
 from wagtail.core.models import Page
 from wagtail.search.backends.elasticsearch2 import Elasticsearch2SearchResults
 from wagtail.tests.utils import WagtailPageTests
+
+""" Helper functions to make trees of wagtail objects for tests  """
+
+
+def create_site_root() -> Page:
+    home_page, created = Page.objects.get_or_create(id=2)
+    return home_page
+
+
+def create_blog_index(parent: Optional[Page],
+                      title: str = 'Default Blog Index') -> [Page,
+                                                             BlogIndexPage]:
+    if parent is None:
+        parent = create_site_root()
+    index = BlogIndexPageFactory.build(
+        title=title
+    )
+    parent.add_child(
+        instance=index
+    )
+    return parent, index
+
+
+def create_blog_post(
+        parent: Optional[BlogIndexPage], author: BlogAuthor, **kwargs
+) -> [Union[BlogIndexPage, None], BlogPost]:
+    if parent is None:
+        parent = create_blog_index('Default Blog Index')
+    blog_1 = BlogPostFactory.build(**kwargs)
+    blog_1.author = author
+    parent.add_child(
+        instance=blog_1
+    )
+    return parent, blog_1
 
 
 class TestPages(TestCase):
@@ -123,23 +158,13 @@ class TestRichTextPage(WagtailPageTests):
 
 class TestBlogPost(TestCase):
 
-    def setUp(self) -> None:
-        self.home_page, created = Page.objects.get_or_create(id=2)
-        self.home_page.add_child(
-            instance=BlogIndexPageFactory.build(
-                title='Blog Index Test'
-            )
-        )
-        self.author_1 = BlogAuthorFactory()
-        self.author_2 = BlogAuthorFactory()
-        self.blog_index_page = BlogIndexPage.objects.get(
-            title='Blog Index Test')
-        self.blog_1 = BlogPostFactory.build(
-            author=self.author_1,
-        )
-        self.blog_index_page.add_child(
-            instance=self.blog_1
-        )
+    @classmethod
+    def setUpTestData(cls):
+        cls.author_1 = BlogAuthorFactory()
+        cls.author_2 = BlogAuthorFactory()
+        cls.home_page, cls.blog_index_page = create_blog_index(None)
+        cls.blog_index_page, cls.blog_1 = create_blog_post(
+            cls.blog_index_page, cls.author_1)
 
     def test_get_index_page(self) -> None:
         self.assertEqual(
@@ -720,3 +745,25 @@ class TestEvent(TestCase):
 #         request = factory.get('/test?selected_facets=first_letter:E')
 
 """ Block function tests """
+
+# class TestSlideBlock(TestCase):
+#
+#     @classmethod
+#     def setUpTestData(cls):
+#         cls.author_1 = BlogAuthorFactory()
+#         cls.author_2 = BlogAuthorFactory()
+#         cls.site_root = create_site_root()
+#         cls.home_page = HomePageFactory.build()
+#         cls.site_root.add_child(
+#             instance=cls.home_page
+#         )
+#         cls.home_page, cls.blog_index_page = create_blog_index(None)
+#         cls.blog_index_page, cls.blog_1 = create_blog_post(
+#             cls.blog_index_page, cls.author_1)
+#
+#     def test_context(self):
+#         # Set up carousel page stream field
+#         self.home_page.body = nested_form_data({'content': streamfield([
+#             ('slides', 'Hello, world'),
+#         ])})
+#         self.home_page.save()
