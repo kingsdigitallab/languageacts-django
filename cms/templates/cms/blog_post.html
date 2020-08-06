@@ -19,7 +19,7 @@
 <article class="post" id="post{{ self.id }}">
     <header>
         {% block blog_post_author %}
-        <p class="byline blog">Posted by <a href="{% routablepageurl self.get_index_page "author" author=self.author.author_slug %}"> <strong>{{ self.author }}</strong></a> on
+        <p class="byline blog">Posted by {% comment %}<a href="{% routablepageurl self.get_index_page "author" author=self.author.author_name %}"> {% endcomment %}<strong>{{ self.author.first_name }} {{ self.author.last_name }}</strong>{% comment %}</a>{% endcomment %} on
             <time datetime="{{ self.date }}">{{ self.date|date:'j b Y' }}</time>
 
             {% are_comments_allowed as allow_comments %}
