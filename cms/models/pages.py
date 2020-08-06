@@ -920,7 +920,7 @@ class SlideBlock(BaseSlideBlock):
     """A basic slide to be used in a carousel block"""
     title = blocks.CharBlock(required=True)
     heading = blocks.CharBlock(required=False, default='')
-    description = blocks.CharBlock(required=False)
+    description = blocks.RichTextBlock(required=False)
     url = blocks.URLBlock(required=False)
     page = blocks.PageChooserBlock(required=False, help_text='Overrides url')
     image = ImageChooserBlock(required=True)
