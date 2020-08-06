@@ -903,10 +903,23 @@ class BaseSlideBlock(blocks.StructBlock):
             context['image'] = post.feed_image
         return context
 
+    @staticmethod
+    def get_default_values(value: dict, context: dict) -> dict:
+        """Get the default slide fields from value dict
+        return context"""
+        if 'title' in value and value['title'] is not None:
+            context['title'] = value['title']
+        if 'description' in value and value['description'] is not None:
+            context['description'] = value['description']
+        if 'heading' in value and value['heading'] is not None:
+            context['heading'] = value['heading']
+        return context
+
 
 class SlideBlock(BaseSlideBlock):
     """A basic slide to be used in a carousel block"""
     title = blocks.CharBlock(required=True)
+    heading = blocks.CharBlock(required=False, default='')
     description = blocks.CharBlock(required=False)
     url = blocks.URLBlock(required=False)
     page = blocks.PageChooserBlock(required=False, help_text='Overrides url')
@@ -915,8 +928,7 @@ class SlideBlock(BaseSlideBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
-        context['title'] = value['title']
-        context['description'] = value['description']
+        context = BaseSlideBlock.get_default_values(value, context)
         if 'page' in value and value['page'] is not None:
             context['url'] = value['page'].url
         else:
@@ -934,9 +946,11 @@ class BlogSlideBlock(BaseSlideBlock):
     use_latest overrides selection to show most recent post"""
     page = blocks.PageChooserBlock(required=False, page_type=BlogPost)
     caption = blocks.CharBlock(required=False)
+    heading = blocks.CharBlock(required=False, default='Blog')
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_default_values(value, context)
         context = BaseSlideBlock.get_slide_data_from_page(
             context,
             value['page']
@@ -950,13 +964,17 @@ class NewsSlideBlock(BaseSlideBlock):
     use_latest overrides selection to show most recent post"""
     page = blocks.PageChooserBlock(required=False, page_type=NewsPost)
     caption = blocks.CharBlock(required=False)
+    heading = blocks.CharBlock(required=False, default='News')
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_default_values(value, context)
         context = BaseSlideBlock.get_slide_data_from_page(
             context,
             value['page']
         )
+        if 'heading' in value and value['heading'] is not None:
+            context['heading'] = value['heading']
         context['caption'] = value['caption']
         return context
 
@@ -969,10 +987,13 @@ class EventSlideBlock(BaseSlideBlock):
     if use_upcoming template will show most_recent upcoming event """
     page = blocks.PageChooserBlock(required=True, page_type=Event)
     caption = blocks.CharBlock(required=False)
+    heading = blocks.CharBlock(required=False, default='Event')
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
+        context = BaseSlideBlock.get_default_values(value, context)
         context = BaseSlideBlock.get_slide_data_from_page(context, value)
+
         context['caption'] = value['caption']
         return context
 
@@ -998,6 +1019,7 @@ class UpcomingEventSlideBlock(blocks.StaticBlock):
             event = Event.objects.live().order_by('-date_from')[0]
         if event:
             context = BaseSlideBlock.get_slide_data_from_page(context, event)
+        context['heading'] = 'Upcoming Event'
         # context['caption'] = post.feed_image.caption
         return context
 
@@ -1021,6 +1043,7 @@ class LatestBlogSlideBlock(blocks.StaticBlock):
             context,
             self.get_post()
         )
+        context['heading'] = 'Latest Post'
         # context['caption'] = post.feed_image.caption
         return context
 
@@ -1037,6 +1060,11 @@ class LatestNewsSlideBlock(LatestBlogSlideBlock):
         if posts and posts.count() > 0:
             return posts[0]
         return None
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        context['heading'] = 'Latest News'
+        return context
 
 
 class CarouselBlock(blocks.StreamBlock):
