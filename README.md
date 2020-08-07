@@ -2,6 +2,19 @@
 [![Build Status](https://travis-ci.org/kingsdigitallab/languageacts-django.svg?branch=develop)](https://travis-ci.org/kingsdigitallab/languageacts-django)
 [![Coverage Status](https://coveralls.io/repos/github/kingsdigitallab/languageacts-django/badge.svg?branch=develop)](https://coveralls.io/github/kingsdigitallab/languageacts-django?branch=develop)
 
+## 5.0 Release
+* Code refactoring
+* Bug fixes
+* Added carousel component
+* Reorganised homepage content display
+* Merged past and upcoming events index page
+* Improved accessibility
+* Added accessibility statement to the site
+* Added option to change author for blog posts
+* Added option for guest author on blog posts
+* Added dropdown menu on top level navigation (excluding blog, events and news)
+* Improved single record view for Loaded Meanings strand
+
 ## 4.0.1 Release
 * Added monospace style
 

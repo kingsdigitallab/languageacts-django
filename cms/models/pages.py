@@ -919,7 +919,11 @@ class BaseSlideBlock(blocks.StructBlock):
 class SlideBlock(BaseSlideBlock):
     """A basic slide to be used in a carousel block"""
     title = blocks.CharBlock(required=True)
-    heading = blocks.CharBlock(required=False, default='')
+    heading = blocks.CharBlock(
+        required=False,
+        default='',
+        label='Section heading'
+    )
     description = blocks.RichTextBlock(required=False)
     url = blocks.URLBlock(required=False)
     page = blocks.PageChooserBlock(required=False, help_text='Overrides url')
@@ -947,6 +951,7 @@ class BlogSlideBlock(BaseSlideBlock):
     page = blocks.PageChooserBlock(required=False, page_type=BlogPost)
     caption = blocks.CharBlock(required=False)
     heading = blocks.CharBlock(required=False, default='Blog')
+    css_class = 'blog-section'
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
@@ -956,6 +961,7 @@ class BlogSlideBlock(BaseSlideBlock):
             value['page']
         )
         context['caption'] = value['caption']
+        context['css_class'] = 'blog-section'
         return context
 
 
@@ -965,6 +971,7 @@ class NewsSlideBlock(BaseSlideBlock):
     page = blocks.PageChooserBlock(required=False, page_type=NewsPost)
     caption = blocks.CharBlock(required=False)
     heading = blocks.CharBlock(required=False, default='News')
+    css_class = 'news-section'
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
@@ -976,6 +983,7 @@ class NewsSlideBlock(BaseSlideBlock):
         if 'heading' in value and value['heading'] is not None:
             context['heading'] = value['heading']
         context['caption'] = value['caption']
+        context['css_class'] = 'news-section'
         return context
 
     class Meta:
@@ -988,6 +996,7 @@ class EventSlideBlock(BaseSlideBlock):
     page = blocks.PageChooserBlock(required=True, page_type=Event)
     caption = blocks.CharBlock(required=False)
     heading = blocks.CharBlock(required=False, default='Event')
+    css_class = 'events-section'
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
@@ -996,10 +1005,13 @@ class EventSlideBlock(BaseSlideBlock):
                                                           value['page'])
 
         context['caption'] = value['caption']
+        context['css_class'] = 'events-section'
         return context
 
 
 class UpcomingEventSlideBlock(blocks.StaticBlock):
+    css_class = 'events-section'
+
     class Meta:
         icon = 'date'
         label = 'Upcoming event'
@@ -1021,11 +1033,14 @@ class UpcomingEventSlideBlock(blocks.StaticBlock):
         if event:
             context = BaseSlideBlock.get_slide_data_from_page(context, event)
         context['heading'] = 'Upcoming Event'
+        context['css_class'] = 'events-section'
         # context['caption'] = post.feed_image.caption
         return context
 
 
 class LatestBlogSlideBlock(blocks.StaticBlock):
+    css_class = 'blog-section'
+
     class Meta:
         icon = 'edit'
         label = 'Latest blog post'
@@ -1045,11 +1060,14 @@ class LatestBlogSlideBlock(blocks.StaticBlock):
             self.get_post()
         )
         context['heading'] = 'Latest Post'
+        context['css_class'] = 'blog-section'
         # context['caption'] = post.feed_image.caption
         return context
 
 
 class LatestNewsSlideBlock(LatestBlogSlideBlock):
+    css_class = 'news-section'
+
     class Meta:
         icon = 'doc-empty-inverse'
         label = 'Latest news'
@@ -1065,6 +1083,7 @@ class LatestNewsSlideBlock(LatestBlogSlideBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
         context['heading'] = 'Latest News'
+        context['css_class'] = 'news-section'
         return context
 
 
@@ -1075,6 +1094,7 @@ class CarouselBlock(blocks.StreamBlock):
     latest_post = LatestBlogSlideBlock()
     next_event = UpcomingEventSlideBlock()
     event_slide = EventSlideBlock(label='Event slide', icon='date')
+    news_slide = NewsSlideBlock(label='News slide', icon='edit')
 
     class Meta:
         template = 'cms/blocks/carousel_block.html'

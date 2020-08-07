@@ -447,6 +447,15 @@ header.top-header {
 }
 
 // Carousel
+
+.orbit {
+    .meta {
+        color: white;
+        margin-bottom: 0;
+        margin-top: 1rem;
+    }
+}
+
 .orbit-container {
     background: $primary-color;
     color: $white;
@@ -466,9 +475,40 @@ header.top-header {
     padding: 1rem;
 }
 
-// .orbit-caption {
-//     position: relative;
-// }
+// Carousel section titles
+
+.blog-section,
+.events-section,
+.news-section {
+    // background: $light-gray;
+    // color: black;
+    // padding: .125rem .5rem;
+    &::before {
+        font-family: "FontAwesome";
+        font-size: rem-calc(16);
+    }
+}
+
+.blog-section {
+    &::before {        
+        color: $light-gray;
+        content: "\f02b";
+    }
+}
+
+.events-section {
+    &::before {        
+        color: $light-gray;
+        content: "\f073";
+    }
+}
+
+.news-section {
+    &::before {        
+        color: $light-gray;
+        content: "\f1ea";
+    }
+}
 
 /** Main content **/
 
