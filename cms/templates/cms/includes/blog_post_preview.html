@@ -9,7 +9,7 @@
                 <p class="meta info byline blog">
                     Posted by {% comment %}<a href="{% routablepageurl self "author" author=page.author.author_name %}"> {% endcomment %}<strong>{{ page.author.first_name }} {{page.author.last_name }}</strong>{% comment %}</a>{% endcomment %}<br>
                     <time datetime="{{ page.specific.date }}">
-                    {{ page.specific.date|date:'j b Y' }}</time>
+                    {{ page.specific.date|date:'j M Y' }}</time>
 
                     {% are_comments_allowed as allow_comments %}
                     {% if allow_comments %}
