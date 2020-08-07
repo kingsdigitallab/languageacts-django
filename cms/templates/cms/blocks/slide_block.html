@@ -1,22 +1,44 @@
 {% load cms_tags staticfiles wagtailcore_tags wagtailimages_tags  %}
 
 <li class="is-active orbit-slide">
-        <figure class="orbit-figure">
-            <a href="{{ url }}">
-                {% image image width-1024 as theimage %}
-                <img class="orbit-image" src="{{ theimage.url }}" width="{{ theimage.width }}" height="{{ theimage.height }}" alt="{{ theimage.alt }}">
-            </a>
-            {% if caption %}
-            <figcaption class="orbit-caption">{{ caption }}</figcaption>
-            {% endif %}
-        </figure>
-        <div class="orbit-slide-content">
-            <h2>{{ heading }} : {{ title}}</h2>
-            {% if description %}
-            <p>{{ description|truncatewords:60 }}</p>
-            {% endif %}
-            {% if url %}
-            <a href="{{ url }}" class="button secondary expanded">Read more</a>
-            {% endif %}
-        </div>
-      </li>
+    {% if image %}
+    <figure class="orbit-figure">
+        <a href="{{ url }}">
+            {% image image width-1024 as theimage %}
+            <img class="orbit-image" src="{{ theimage.url }}" width="{{ theimage.width }}" height="{{ theimage.height }}" alt="{{ theimage.alt }}">
+        </a>
+        {% if caption %}
+        <figcaption class="orbit-caption">{{ caption }}</figcaption>
+        {% endif %}
+    </figure>
+    <div class="orbit-slide-content">
+        {% if heading %}
+        <span class="section-heading{% if css_class %} {{ css_class }}{% endif %}">
+            {{ heading }}
+        </span>
+        {% endif %}
+        <h2>{{ title }}</h2>
+        {% if description %}
+        <p>{{ description|truncatewords:60 }}</p>
+        {% endif %}
+        {% if url %}
+        <a href="{{ url }}" class="button secondary expanded">Read more</a>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="orbit-slide-content">
+        {% if heading %}
+        <span class="section-heading{% if css_class %} {{ css_class }}{% endif %}">
+            {{ heading }}
+        </span>
+        {% endif %}
+        <h2>{{ title }}</h2>
+        {% if description %}
+        <p>{{ description|truncatewords:60 }}</p>
+        {% endif %}
+        {% if url %}
+        <a href="{{ url }}" class="button secondary expanded">Read more</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</li>
