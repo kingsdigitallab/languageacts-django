@@ -451,8 +451,10 @@ header.top-header {
 .orbit {
     .meta {
         color: white;
-        margin-bottom: 0;
-        margin-top: 1rem;
+        font-size: rem-calc(14);
+        line-height: 1.25;
+        margin-bottom: .25rem;
+        margin-top: .25rem;
     }
 }
 
@@ -472,7 +474,11 @@ header.top-header {
 }
 
 .orbit-slide-content {
-    padding: 1rem;
+    padding: .5rem 1rem;
+
+    h2 {
+        font-size: rem-calc(32);
+    }
 }
 
 // Carousel section titles

@@ -19,6 +19,8 @@
         </span>
         {% endif %}
 
+        <h2>{{ title }}</h2>
+
         {% if page.date %}
         <p class="meta">
             {{ page.date|date:'j M Y' }}
@@ -40,7 +42,11 @@
         </p>
         {% endif %}
 
-        <h2>{{ title }}</h2>
+        {% if page.location %}
+        <p class="meta">
+            <i class="fa fa-map-marker"></i> {{ page.location }}
+        </p>
+        {% endif %}
 
         {% if description %}
         <p>{{ description|truncatewords:40 }}</p>
