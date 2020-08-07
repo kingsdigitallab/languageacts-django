@@ -992,7 +992,8 @@ class EventSlideBlock(BaseSlideBlock):
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
         context = BaseSlideBlock.get_default_values(value, context)
-        context = BaseSlideBlock.get_slide_data_from_page(context, value)
+        context = BaseSlideBlock.get_slide_data_from_page(context,
+                                                          value['page'])
 
         context['caption'] = value['caption']
         return context
