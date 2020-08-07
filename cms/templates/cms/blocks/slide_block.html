@@ -43,7 +43,7 @@
         <h2>{{ title }}</h2>
 
         {% if description %}
-        <p>{{ description|truncatewords:50 }}</p>
+        <p>{{ description|truncatewords:40 }}</p>
         {% endif %}
         {% if url %}
         <a href="{{ url }}" class="button secondary expanded">Read more</a>
