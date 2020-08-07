@@ -18,9 +18,32 @@
             {{ heading }}
         </span>
         {% endif %}
+
+        {% if page.date %}
+        <p class="meta">
+            {{ page.date|date:'j M Y' }}
+            {% if page.author %}
+            - by <strong>{{ page.author.first_name }} {{ page.author.last_name }}</strong>
+            {% endif %}
+        </p>
+        {% endif %}
+
+        {% if page.date_from %}
+        <p class="meta">
+            <i class="fa fa-clock-o"></i>
+            <time datetime="{{ page.date }}">
+                {{ page.date_from|date:'j M Y' }}
+                {% if page.date_to %} - {{ page.date_to|date:'j M Y' }}{% endif %} / 
+                {{ page.time|date:'H:i' }} 
+                {% if page.time_end %} - {{ page.time_end|date:'H:i' }}{% endif %}
+            </time>
+        </p>
+        {% endif %}
+
         <h2>{{ title }}</h2>
+
         {% if description %}
-        <p>{{ description|truncatewords:60 }}</p>
+        <p>{{ description|truncatewords:50 }}</p>
         {% endif %}
         {% if url %}
         <a href="{{ url }}" class="button secondary expanded">Read more</a>
