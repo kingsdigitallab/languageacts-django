@@ -57,6 +57,18 @@ class TestPageInSubmenu(CMSTagsTestCase):
         self.assertTrue(cms_tags.page_in_submenu(page, self.top_page))
 
 
+class TestGetTogglerStatusPageInSubmenu(CMSTagsTestCase):
+
+    def test_get_toggler_status(self) -> None:
+        page = IndexPage.objects.get(title=self.test_page_title)
+        request = RequestFactory().get('test')
+        self.assertFalse(
+            cms_tags.get_toggler_status({'request': request}, page))
+        request = RequestFactory().get('test?toggler_open={}'.format(page.pk))
+        self.assertTrue(cms_tags.get_toggler_status(
+            {'request': request}, page))
+
+
 class TestGetRequestParameters(TestCase):
 
     def test_get_request_parameters(self) -> None:
