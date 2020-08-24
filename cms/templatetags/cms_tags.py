@@ -208,3 +208,18 @@ def page_in_submenu(page: Page = None, parent: Page = None) -> bool:
             if sub.pk == page.pk:
                 return True
     return False
+
+
+@register.simple_tag(takes_context=True)
+def get_toggler_status(context, page):
+    """Return open if menu in href, closed otherwise """
+    request = context['request']
+    if request and 'toggler_open' in request.GET:
+        try:
+            # Assumes only one open at a time
+            page_id = int(request.GET['toggler_open'])
+            if page.pk == page_id:
+                return True
+        except TypeError:
+            pass
+    return False

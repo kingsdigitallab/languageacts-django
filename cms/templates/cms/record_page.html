@@ -49,13 +49,14 @@ creating a single record page
 
 
     {% for page in self.get_languages %}
-    <h2 class="toggler close">
+        {% get_toggler_status page=page as is_open%}
+    <h2 class="toggler {% if is_open %}open{% else %}close{% endif %}">
       <a id="page-{{page.id}}">
         <i class="fa fa-link"></i> {{ page.specific.period}}
         {{page.specific.language}}</a>
     </h2>
 
-    <div class="content hide">
+    <div class="content {% if is_open %}show{% else %}hide{% endif %}">
       {% include "cms/includes/record_entry.html"  with record=page %}
     </div>
 
@@ -71,7 +72,7 @@ creating a single record page
     <h3>Languages</h3>
     <ul class="no-bullet">
       {% for page in self.get_children.live %}
-      <li><a href="#page-{{page.id}}"
+      <li><a href="{% pageurl self %}?toggler_open={{page.id}}"
           class="button label-like expanded">{{ page.specific.period }}
           {{ page.specific.language }}</a></li>
       {% endfor %}
