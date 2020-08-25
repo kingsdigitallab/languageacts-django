@@ -7,13 +7,15 @@ import factory
 from cms.models.pages import (
     BlogIndexPage, EventIndexPage, HomePage, IndexPage, NewsIndexPage,
     PastEventIndexPage, RichTextPage, StrandPage, _paginate, TagResults,
-    BlogAuthor, BlogPost, NewsPost, Event
+    BlogAuthor, BlogPost, NewsPost, Event, SlideBlock,
+    BlogSlideBlock, EventSlideBlock, NewsSlideBlock, UpcomingEventSlideBlock,
+    LatestBlogSlideBlock, LatestNewsSlideBlock
 )
 from cms.tests.factories import (
     BlogIndexPageFactory, BlogPostFactory, BlogAuthorFactory,
     NewsIndexPageFactory, NewsPostFactory, StrandPageFactory,
     EventIndexPageFactory, PastEventIndexPageFactory,
-    EventFactory, UserFactory
+    EventFactory, UserFactory, HomePageFactory
 )
 from cms.views.search import SearchView
 from django.core.paginator import Paginator
@@ -23,6 +25,12 @@ from django.urls import reverse
 from wagtail.core.models import Page
 from wagtail.search.backends.elasticsearch2 import Elasticsearch2SearchResults
 from wagtail.tests.utils import WagtailPageTests
+from django.core.files.images import ImageFile
+from django.core.files import File
+from wagtail.images.models import Image
+from django.core.files.storage import default_storage
+from wagtail.tests.utils.form_data import streamfield, nested_form_data
+import PIL
 
 """ Helper functions to make trees of wagtail objects for tests  """
 
@@ -30,6 +38,35 @@ from wagtail.tests.utils import WagtailPageTests
 def create_site_root() -> Page:
     home_page, created = Page.objects.get_or_create(id=2)
     return home_page
+
+
+def create_wagtail_test_image(uri, filename) -> Image:
+    # Create fake resource image to be uploaded
+    test_image = PIL.Image.new('RGB', size=(50, 50))
+    if default_storage.exists(uri) is False:
+        test_image.save(uri, 'JPEG')
+        # Add attached resource (currently only images)
+        try:
+            with open(uri, 'rb') as f:
+                if Image.objects.filter(title=filename).count() > 0:
+                    image = Image.objects.get(title=filename)
+                else:
+                    image = Image(
+                        title=filename,
+                        file=ImageFile(File(f), name=filename + '.jpg')
+                    )
+                    image.save()
+                image.get_rendition('width-400')
+                image.get_rendition('width-50')
+                return image
+        except FileNotFoundError:
+            return None
+
+
+def delete_wagtail_test_image(uri) -> None:
+    # Delete fake image
+    if default_storage.exists(uri):
+        default_storage.delete(uri)
 
 
 def create_blog_index(parent: Optional[Page],
@@ -746,24 +783,237 @@ class TestEvent(TestCase):
 
 """ Block function tests """
 
-# class TestSlideBlock(TestCase):
-#
-#     @classmethod
-#     def setUpTestData(cls):
-#         cls.author_1 = BlogAuthorFactory()
-#         cls.author_2 = BlogAuthorFactory()
-#         cls.site_root = create_site_root()
-#         cls.home_page = HomePageFactory.build()
-#         cls.site_root.add_child(
-#             instance=cls.home_page
-#         )
-#         cls.home_page, cls.blog_index_page = create_blog_index(None)
-#         cls.blog_index_page, cls.blog_1 = create_blog_post(
-#             cls.blog_index_page, cls.author_1)
-#
-#     def test_context(self):
-#         # Set up carousel page stream field
-#         self.home_page.body = nested_form_data({'content': streamfield([
-#             ('slides', 'Hello, world'),
-#         ])})
-#         self.home_page.save()
+
+class SlideBlockTestCase(TestCase):
+    test_image_filename = 'test_image'
+    uri = (default_storage.location
+           + '/images/' + test_image_filename + '.jpg')
+    orig_uri = (default_storage.location
+                + '/original_images/' + test_image_filename + '.jpg')
+
+    @classmethod
+    def setUpClass(cls):
+        create_wagtail_test_image(
+            uri=cls.uri, filename=cls.test_image_filename
+        )
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        delete_wagtail_test_image(cls.uri)
+        delete_wagtail_test_image(cls.orig_uri)
+        Image.objects.all().delete()
+
+    def setUp(self) -> None:
+        self.author_1 = BlogAuthorFactory()
+        self.author_2 = BlogAuthorFactory()
+        self.site_root = create_site_root()
+        self.home_page = HomePageFactory.build()
+        self.site_root.add_child(
+            instance=self.home_page
+        )
+        self.home_page, self.blog_index_page = create_blog_index(None)
+        self.blog_index_page, self.blog_1 = create_blog_post(
+            self.blog_index_page, self.author_1)
+        self.test_image = Image.objects.get(
+            title=self.test_image_filename
+        )
+        self.blog_1.feed_image = self.test_image
+        self.blog_1.save()
+
+    def defaultValueDict(self) -> dict:
+        value = {
+            'page': self.blog_index_page,
+            'image': self.test_image,
+            'caption': 'This is a test',
+        }
+        return value
+
+
+class TestSlideBlock(SlideBlockTestCase):
+
+    def test_get_default_values(self):
+        value_dict = {
+            'title': 'test title',
+            'description': 'test description',
+            'heading': 'test heading',
+        }
+        context = SlideBlock.get_default_values(value_dict, {})
+        self.assertIn('title', context)
+        self.assertIn('heading', context)
+        self.assertIn('description', context)
+        self.assertEqual('test title', context['title'])
+
+    def test_get_slide_data_from_page(self):
+        context = SlideBlock.get_slide_data_from_page({}, self.blog_1)
+        self.assertIn('page', context)
+        self.assertIn('image', context)
+        self.assertEqual(self.blog_1.title, context['title'])
+        self.assertEqual(
+            self.blog_1.search_description, context['description'])
+        self.assertEqual(context['image'], self.blog_1.feed_image)
+
+    def test_get_context(self):
+        # Set up carousel page stream field
+        self.home_page.body = nested_form_data({'content': streamfield([
+            ('slides', 'Hello, world'),
+        ])})
+        context = {}
+        value_dict = self.defaultValueDict()
+        sl = SlideBlock()
+        context = sl.get_context(value_dict)
+        self.assertIn('image', context)
+        self.assertEqual('This is a test', context['caption'])
+        self.assertEqual('/default-blog-index/', context['url'])
+        del value_dict['page']
+        value_dict['url'] = '/test-url/'
+        value_dict['title'] = 'test title'
+        value_dict['description'] = 'test description'
+        value_dict['heading'] = 'test heading'
+        context = sl.get_context(value_dict)
+        self.assertEqual('/test-url/', context['url'])
+
+
+class TestBlogSlideBlock(SlideBlockTestCase):
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        value_dict['page'] = self.blog_1
+        block = BlogSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('caption', context)
+        self.assertEqual(context['caption'], 'This is a test')
+
+
+class TestNewsSlideBlock(SlideBlockTestCase):
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        self.news_index = NewsIndexPageFactory.build(
+            title='News Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.news_index
+        )
+        self.news_2 = NewsPostFactory.build(
+            date=date.today(),
+            title='News Today'
+        )
+        self.news_index.add_child(
+            instance=self.news_2
+        )
+        value_dict['page'] = self.news_2
+        block = NewsSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('title', context)
+        self.assertEqual(context['title'], self.news_2.title)
+
+
+class EventSlideBlockTestCase(SlideBlockTestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.event_index = EventIndexPageFactory.build(
+            title='Event Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.event_index
+        )
+        self.event_1 = EventFactory.build(
+            date_from=factory.Faker('past_date')
+        )
+        self.event_index.add_child(
+            instance=self.event_1
+        )
+        self.event_2 = EventFactory.build(
+            title='Event Today',
+            date_from=date.today()
+        )
+        self.event_index.add_child(
+            instance=self.event_2
+        )
+
+
+class TestEventSlideBlock(EventSlideBlockTestCase):
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        value_dict['page'] = self.event_1
+        block = EventSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('caption', context)
+        self.assertEqual(context['caption'], 'This is a test')
+        self.assertIn('title', context)
+        self.assertEqual(context['title'], self.event_1.title)
+
+
+class TestUpcomingEventSlideBlock(EventSlideBlockTestCase):
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        del value_dict['page']
+        block = UpcomingEventSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('title', context)
+        # most recent upcoming event
+        self.assertEqual(context['title'], self.event_2.title)
+
+
+class TestLatestBlogSlideBlock(SlideBlockTestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.blog_2 = BlogPostFactory.build(
+            date=date.today(),
+            title='Posted Today'
+        )
+        self.blog_2.author = self.blog_1.author
+        self.blog_index_page.add_child(
+            instance=self.blog_2
+        )
+
+    def test_get_post(self):
+        block = LatestBlogSlideBlock()
+        post = block.get_post()
+        self.assertEqual(post.title, self.blog_2.title)
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        del value_dict['page']
+        block = LatestBlogSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('title', context)
+        # most recent upcoming event
+        self.assertEqual(context['title'], self.blog_2.title)
+
+
+class TestLatestNewsSlideBlock(SlideBlockTestCase):
+
+    def setUp(self) -> None:
+        super().setUp()
+        self.news_index = NewsIndexPageFactory.build(
+            title='News Index Test'
+        )
+        self.home_page.add_child(
+            instance=self.news_index
+        )
+        self.news_2 = NewsPostFactory.build(
+            date=date.today(),
+            title='News Today'
+        )
+        self.news_index.add_child(
+            instance=self.news_2
+        )
+
+    def test_get_post(self):
+        block = LatestNewsSlideBlock()
+        post = block.get_post()
+        self.assertEqual(post.title, self.news_2.title)
+
+    def test_get_context(self):
+        value_dict = self.defaultValueDict()
+        del value_dict['page']
+        block = LatestNewsSlideBlock()
+        context = block.get_context(value_dict)
+        self.assertIn('title', context)
+        # most recent news
+        self.assertEqual(context['title'], self.news_2.title)
