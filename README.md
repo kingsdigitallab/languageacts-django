@@ -14,6 +14,7 @@
 * Added option for guest author on blog posts
 * Added dropdown menu on top level navigation (excluding blog, events and news)
 * Improved single record view for Loaded Meanings strand
+* Nested menus now stay open on second level navigation 
 
 ## 4.0.1 Release
 * Added monospace style
