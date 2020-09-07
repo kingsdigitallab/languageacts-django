@@ -1,0 +1,5 @@
+# From https://stackoverflow.com/questions/115983/how-can-i-add-an-empty-directory-to-a-git-repository
+# Keep media files out of git but keep folder for testing in tox
+*
+# Except this file
+!.gitignore
