@@ -66,14 +66,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'haystack',
-
     'compressor',
     'modelcluster',
     'rest_framework',
     'taggit',
-
     'wagtail.core',
     'wagtail.admin',
     'wagtail.documents',
@@ -88,7 +85,6 @@ INSTALLED_APPS = [
     'wagtail.api',
     'wagtail.contrib.routable_page',
     'wagtail.contrib.table_block',
-
 ]
 
 INSTALLED_APPS += [
@@ -160,7 +156,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]

@@ -861,10 +861,10 @@ class TagResults(RoutablePageMixin, Page):
         news = news_tag | news_strand
 
         # Assign them
-        context['blog'] = blog
-        context['events'] = events
-        context['news'] = news
-        context['pages'] = pages
+        context['blog'] = blog.distinct()
+        context['events'] = events.distinct()
+        context['news'] = news.distinct()
+        context['pages'] = pages.distinct()
 
         # Get counts
         context['result_count'] = (
